@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
-    <persistence-unit name="cuba-component-data-import" transaction-type="RESOURCE_LOCAL">
-
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             version="2.0">
+    <persistence-unit name="cuba-component-data-import"
+                      transaction-type="RESOURCE_LOCAL">
+        <class>de.diedavids.cuba.dataimport.entity.ImportLog</class>
+        <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
+        <class>de.diedavids.cuba.dataimport.entity.ImportScenario</class>
     </persistence-unit>
 </persistence>
