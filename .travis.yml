@@ -1,0 +1,9 @@
+language: groovy
+jdk:
+  - oraclejdk8
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+script:
+ - ./gradlew check

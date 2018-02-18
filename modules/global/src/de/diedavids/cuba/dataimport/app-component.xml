@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
+               dependsOn="com.haulmont.cuba">
+    <module blocks="*"
+            name="global">
+        <artifact appJar="true"
+                  name="dataimport-global"/>
+        <property name="cuba.persistenceConfig"
+                  value="+de/diedavids/cuba/dataimport/persistence.xml"/>
+        <property name="cuba.metadataConfig"
+                  value="+de/diedavids/cuba/dataimport/metadata.xml"/>
+        <property name="cuba.viewsConfig"
+                  value="+de/diedavids/cuba/dataimport/views.xml"/>
+    </module>
+    <module blocks="core"
+            dependsOn="global"
+            name="core">
+        <artifact appJar="true"
+                  name="dataimport-core"/>
+        <property name="cuba.springContextConfig"
+                  value="+de/diedavids/cuba/dataimport/spring.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+de.diedavids.cuba.dataimport.core"/>
+    </module>
+    <module blocks="web,desktop"
+            dependsOn="global"
+            name="gui">
+        <artifact appJar="true"
+                  name="dataimport-gui"/>
+    </module>
+    <module blocks="web"
+            dependsOn="gui"
+            name="web">
+        <artifact appJar="true"
+                  name="dataimport-web"/>
+        <artifact classifier="web"
+                  configuration="webcontent"
+                  ext="zip"
+                  name="dataimport-web"/>
+        <property name="cuba.springContextConfig"
+                  value="+de/diedavids/cuba/dataimport/web-spring.xml"/>
+        <property name="cuba.dispatcherSpringContextConfig"
+                  value="+de/diedavids/cuba/dataimport/web-dispatcher-spring.xml"/>
+        <property name="cuba.windowConfig"
+                  value="+de/diedavids/cuba/dataimport/web-screens.xml"/>
+        <property name="cuba.menuConfig"
+                  value="+de/diedavids/cuba/dataimport/web-menu.xml"/>
+        <property name="cuba.permissionConfig"
+                  value="+de/diedavids/cuba/dataimport/web-permissions.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+de.diedavids.cuba.dataimport.web"/>
+    </module>
+</app-component>
