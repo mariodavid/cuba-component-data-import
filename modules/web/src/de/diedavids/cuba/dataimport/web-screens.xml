@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
-
     <include file="de/diedavids/cuba/dataimport/screens.xml"/>
-
+    <screen id="ddcdi$ImportLog.browse"
+            template="de/diedavids/cuba/dataimport/web/importlog/import-log-browse.xml"/>
+    <screen id="ddcdi$ImportScenario.edit"
+            template="de/diedavids/cuba/dataimport/web/importscenario/import-scenario-edit.xml"/>
+    <screen id="ddcdi$ImportScenario.browse"
+            template="de/diedavids/cuba/dataimport/web/importscenario/import-scenario-browse.xml"/>
 </screen-config>

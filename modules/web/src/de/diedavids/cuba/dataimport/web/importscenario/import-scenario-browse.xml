@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="de.diedavids.cuba.dataimport.web.importscenario.ImportScenarioBrowse"
+        focusComponent="importScenariosTable"
+        lookupComponent="importScenariosTable"
+        messagesPack="de.diedavids.cuba.dataimport.web.importscenario">
+    <dsContext>
+        <groupDatasource id="importScenariosDs"
+                         class="de.diedavids.cuba.dataimport.entity.ImportScenario"
+                         view="importScenario-view">
+            <query>
+                <![CDATA[select e from ddcdi$ImportScenario e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="importScenariosTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="importScenariosTable"
+                datasource="importScenariosDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="importScenariosTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="template"/>
+                <column id="comment"/>
+                <column id="importerBeanName"/>
+            </columns>
+            <rows datasource="importScenariosDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="importScenariosTable.create"/>
+                <button id="editBtn"
+                        action="importScenariosTable.edit"/>
+                <button id="removeBtn"
+                        action="importScenariosTable.remove"/>
+                <button id="btnImport"
+                        caption="msg://Import"
+                        icon="icons/wf-design-import.png"
+                        invoke="onBtnImportClick"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

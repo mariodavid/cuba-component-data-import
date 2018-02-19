@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-
+    <view class="de.diedavids.cuba.dataimport.entity.ImportLog"
+          extends="_local"
+          name="importLog-view">
+        <property name="file"
+                  view="_minimal"/>
+        <property name="records"
+                  view="_local"/>
+        <property name="scenario"
+                  view="_minimal"/>
+    </view>
+    <view class="de.diedavids.cuba.dataimport.entity.ImportScenario"
+          extends="_local"
+          name="importScenario-view">
+        <property name="logs"
+                  view="importLog-view"/>
+        <property name="template"
+                  view="_minimal"/>
+    </view>
 </views>

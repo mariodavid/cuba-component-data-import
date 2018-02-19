@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="de.diedavids.cuba.dataimport.web.importscenario.ImportScenarioEdit"
+        datasource="importScenarioDs"
+        focusComponent="fieldGroup"
+        messagesPack="de.diedavids.cuba.dataimport.web.importscenario">
+    <dsContext>
+        <datasource id="importScenarioDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportScenario"
+                    view="importScenario-view"/>
+
+        <collectionDatasource id="importersDs"
+                              allowCommit="false"
+                              class="de.diedavids.cuba.dataimport.entity.Importer"
+                              datasourceClass="de.diedavids.cuba.dataimport.web.datasources.ImportersDatasource"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="importScenarioDs"
+                    fieldCaptionWidth="150px">
+            <column width="250px">
+                <field id="name"/>
+                <field id="template"/>
+                <field id="importer"
+                       caption="msg://selectImporter"
+                       custom="true"
+                       required="true"/>
+            </column>
+        </fieldGroup>
+        <fieldGroup id="fieldGroupTextFields"
+                    datasource="importScenarioDs"
+                    fieldCaptionWidth="150px">
+            <column width="450px">
+                <field id="comment"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>
