@@ -1,8 +1,4 @@
-/*
- * TODO Copyright
- */
-
-package de.diedavids.cuba.dataimport.core.example;
+package de.diedavids.cuba.dataimport.core;
 
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Query;

@@ -9,15 +9,14 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.security.entity.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+
+@Ignore
 public class SampleIntegrationTest {
 
     @ClassRule

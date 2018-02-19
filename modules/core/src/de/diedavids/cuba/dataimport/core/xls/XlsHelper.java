@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core.example.xls;
+package de.diedavids.cuba.dataimport.core.xls;
 
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Resources;

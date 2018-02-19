@@ -23,20 +23,25 @@ class ImportScenarioEdit extends AbstractEditor<ImportScenario> {
     @Inject
     private ComponentsFactory componentsFactory
 
+    private static final String IMPORTER_FIELD_NAME = 'importer'
+
     @Override
     protected void postInit() {
 
-        fieldGroup.addCustomField("importer") { datasource, propertyId ->
+        fieldGroup.addCustomField(IMPORTER_FIELD_NAME) { datasource, propertyId ->
             LookupField lookupField = (LookupField) componentsFactory.createComponent(LookupField.NAME)
             lookupField.optionsDatasource = importersDs
-            return lookupField
+            lookupField
         }
 
         importersDs.addItemChangeListener { e -> 
-            if (e.getItem() != null )
+            if (e.item) {
                 item.importerBeanName = e.item.beanName
-            else
+            }
+            else {
                 item.importerBeanName = null
+            }
+
         } as Datasource.ItemChangeListener
 
     }
@@ -45,9 +50,9 @@ class ImportScenarioEdit extends AbstractEditor<ImportScenario> {
     void ready() {
 
         if (item.importerBeanName) {
-            importersDs.getItems().each { Importer importer ->
-                if (importer.getBeanName().equalsIgnoreCase(getItem().getImporterBeanName())) {
-                    ((LookupField) fieldGroup.getFieldComponent("importer")).value = importer
+            importersDs.items.each { Importer importer ->
+                if (importer.beanName.equalsIgnoreCase(item.importerBeanName)) {
+                    ((LookupField) fieldGroup.getFieldComponent(IMPORTER_FIELD_NAME)).value = importer
                 }
             }
         }

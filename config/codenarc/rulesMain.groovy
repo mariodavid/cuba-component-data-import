@@ -11,14 +11,14 @@ ruleset {
         description = '[CUBA] LoadContext should not be used in a CUBA Controller. Try to shift this logic into a Service instead.'
     }
 
-    IllegalString {
-        name = 'CUBADoNotUseMetadataCreateInController'
-        string = 'metadata.create'
-        applyToFileNames = '*Browse.groovy, *Edit.groovy, *Dialog*.groovy'
-        priority = 1
-        violationMessage = '[CUBA] Metadata should not be used in Controller, because the REST API will not get these information'
-        description = '[CUBA] Metadata should not be used in Controller, because the REST API will not get these information. Consider @PostConstruct in Entity. See <a href="https://doc.cuba-platform.com/manual-6.4/init_values.html">CUBA docs</a>'
-    }
+//    IllegalString {
+//        name = 'CUBADoNotUseMetadataCreateInController'
+//        string = 'metadata.create'
+//        applyToFileNames = '*Browse.groovy, *Edit.groovy, *Dialog*.groovy'
+//        priority = 1
+//        violationMessage = '[CUBA] Metadata should not be used in Controller, because the REST API will not get these information'
+//        description = '[CUBA] Metadata should not be used in Controller, because the REST API will not get these information. Consider @PostConstruct in Entity. See <a href="https://doc.cuba-platform.com/manual-6.4/init_values.html">CUBA docs</a>'
+//    }
 
 
     MethodSize {

@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core;
+package de.diedavids.cuba.dataimport.core.xls;
 
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
@@ -8,8 +8,7 @@ import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import de.diedavids.cuba.dataimport.ImporterAPI;
-import de.diedavids.cuba.dataimport.core.example.ImportLogHelper;
-import de.diedavids.cuba.dataimport.core.example.xls.XlsHelper;
+import de.diedavids.cuba.dataimport.core.ImportLogHelper;
 import de.diedavids.cuba.dataimport.entity.ImportLog;
 import de.diedavids.cuba.dataimport.exception.ImportFileEofEvaluationException;
 import org.apache.poi.ss.usermodel.Cell;

@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core.example;
+package de.diedavids.cuba.dataimport.core;
 
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
