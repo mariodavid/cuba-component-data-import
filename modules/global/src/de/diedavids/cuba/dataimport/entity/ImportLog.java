@@ -34,8 +34,7 @@ public class ImportLog extends StandardEntity {
     protected List<ImportLogRecord> records;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
-    @Column(name = "STARTED_AT", nullable = false)
+    @Column(name = "STARTED_AT")
     protected Date startedAt;
 
     @Temporal(TemporalType.TIMESTAMP)

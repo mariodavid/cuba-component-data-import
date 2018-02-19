@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">  
+  <persistence-unit name="cuba-component-data-import" transaction-type="RESOURCE_LOCAL"> 
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.haulmont.cuba.core.entity.BaseGenericIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseUuidEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseLongIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseIntegerIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseStringIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseDbGeneratedIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseIdentityIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.BaseIntIdentityIdEntity</class>
+    <class>com.haulmont.cuba.core.entity.StandardEntity</class>
+    <class>com.haulmont.cuba.core.entity.EmbeddableEntity</class>
+    <class>com.haulmont.cuba.core.entity.Server</class>
+    <class>com.haulmont.cuba.core.entity.Config</class>
+    <class>com.haulmont.cuba.core.entity.FileDescriptor</class>
+    <class>com.haulmont.cuba.core.entity.LockDescriptor</class>
+    <class>com.haulmont.cuba.core.entity.Folder</class>
+    <class>com.haulmont.cuba.core.entity.AbstractSearchFolder</class>
+    <class>com.haulmont.cuba.core.entity.AppFolder</class>
+    <class>com.haulmont.cuba.core.entity.FtsQueue</class>
+    <class>com.haulmont.cuba.core.entity.EntityStatistics</class>
+    <class>com.haulmont.cuba.core.entity.SendingMessage</class>
+    <class>com.haulmont.cuba.core.entity.SendingAttachment</class>
+    <class>com.haulmont.cuba.core.entity.EntitySnapshot</class>
+    <class>com.haulmont.cuba.core.entity.ScheduledTask</class>
+    <class>com.haulmont.cuba.core.entity.ScheduledExecution</class>
+    <class>com.haulmont.cuba.core.entity.QueryResult</class>
+    <class>com.haulmont.cuba.core.entity.AccessToken</class>
+    <class>com.haulmont.cuba.core.entity.RefreshToken</class>
+    <class>com.haulmont.cuba.security.entity.User</class>
+    <class>com.haulmont.cuba.security.entity.Role</class>
+    <class>com.haulmont.cuba.security.entity.UserRole</class>
+    <class>com.haulmont.cuba.security.entity.Group</class>
+    <class>com.haulmont.cuba.security.entity.GroupHierarchy</class>
+    <class>com.haulmont.cuba.security.entity.Permission</class>
+    <class>com.haulmont.cuba.security.entity.Constraint</class>
+    <class>com.haulmont.cuba.security.entity.LocalizedConstraintMessage</class>
+    <class>com.haulmont.cuba.security.entity.SessionAttribute</class>
+    <class>com.haulmont.cuba.security.entity.UserSetting</class>
+    <class>com.haulmont.cuba.security.entity.UserSubstitution</class>
+    <class>com.haulmont.cuba.security.entity.LoggedEntity</class>
+    <class>com.haulmont.cuba.security.entity.LoggedAttribute</class>
+    <class>com.haulmont.cuba.security.entity.EntityLogItem</class>
+    <class>com.haulmont.cuba.security.entity.FilterEntity</class>
+    <class>com.haulmont.cuba.security.entity.SearchFolder</class>
+    <class>com.haulmont.cuba.security.entity.Presentation</class>
+    <class>com.haulmont.cuba.security.entity.ScreenHistoryEntity</class>
+    <class>com.haulmont.cuba.security.entity.SessionLogEntry</class>
+    <class>com.haulmont.cuba.core.entity.CategorizedEntity</class>
+    <class>com.haulmont.cuba.core.entity.Category</class>
+    <class>com.haulmont.cuba.core.entity.CategoryAttribute</class>
+    <class>com.haulmont.cuba.core.entity.CategoryAttributeValue</class>
+    <class>com.haulmont.cuba.core.entity.JmxInstance</class>
+    <class>com.haulmont.cuba.security.entity.RememberMeToken</class>
+    <class>com.haulmont.cuba.core.entity.ReferenceToEntity</class>
+    <class>de.diedavids.cuba.dataimport.entity.ImportLog</class>
+    <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
+    <class>de.diedavids.cuba.dataimport.entity.ImportScenario</class>
+    <class>de.diedavids.cuba.dataimport.entity.example.Customer</class>
+    <exclude-unlisted-classes/>
+    <properties>
+      <property name="eclipselink.cache.coordination.propagate-asynchronously" value="false"/>
+      <property name="eclipselink.session-event-listener" value="com.haulmont.cuba.core.sys.persistence.EclipseLinkSessionEventListener"/>
+      <property name="eclipselink.logging.logger" value="com.haulmont.cuba.core.sys.logging.EclipseLinkLog"/>
+      <property name="eclipselink.cache.shared.default" value="false"/>
+      <property name="eclipselink.target-database" value="com.haulmont.cuba.core.sys.persistence.CubaHSQLPlatform"/>
+      <property name="javax.persistence.validation.mode" value="NONE"/>
+      <property name="eclipselink.cache.coordination.protocol" value="com.haulmont.cuba.core.sys.entitycache.EntityCacheTransportManager"/>
+      <property name="eclipselink.weaving" value="static"/>
+    </properties>
+  </persistence-unit> 
+</persistence>

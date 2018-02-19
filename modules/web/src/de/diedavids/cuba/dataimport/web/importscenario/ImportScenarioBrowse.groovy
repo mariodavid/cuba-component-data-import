@@ -33,63 +33,63 @@ import javax.inject.Inject
 class ImportScenarioBrowse extends AbstractLookup {
 
     @Inject
-    private DataImportService importerService;
+    private DataImportService importerService
 
     @Inject
-    private CollectionDatasource<ImportScenario, UUID> importScenariosDs;
+    private CollectionDatasource<ImportScenario, UUID> importScenariosDs
 
     @Inject
-    private Button btnImport;
+    private Button btnImport
 
     @Inject
-    private Metadata metadata;
+    private Metadata metadata
 
     @Inject
-    private DataManager dataManager;
+    private DataManager dataManager
 
     @Inject
-    private ComponentsFactory componentsFactory;
+    private ComponentsFactory componentsFactory
 
 
     @Override
     void init(Map<String, Object> params) {
-        btnImport.setEnabled(importScenariosDs.getItem() != null);
+        btnImport.setEnabled(importScenariosDs.getItem() != null)
         importScenariosDs.addItemChangeListener({
             e -> btnImport.setEnabled(e.getItem() != null)
-        } as Datasource.ItemChangeListener);
+        } as Datasource.ItemChangeListener)
     }
 
-    public void onBtnImportClick() {
-        WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME);
+    void onBtnImportClick() {
+        WindowConfig windowConfig = AppBeans.get(WindowConfig.NAME)
 
         final FileUploadDialog dialog = (FileUploadDialog) App.getInstance().getWindowManager().
-                openWindow(windowConfig.getWindowInfo("fileUploadDialog"), WindowManager.OpenType.DIALOG);
+                openWindow(windowConfig.getWindowInfo("fileUploadDialog"), WindowManager.OpenType.DIALOG)
 
-        final ImportScenario scenario = importScenariosDs.getItem();
+        final ImportScenario scenario = importScenariosDs.getItem()
 
         dialog.addCloseListener({ actionId ->
-            if (COMMIT_ACTION_ID.equals(actionId)) {
-                FileUploadingAPI fileUploading = AppBeans.get(FileUploadingAPI.NAME);
-                FileDescriptor descriptor = fileUploading.getFileDescriptor(dialog.getFileId(), dialog.getFileName());
+            if (COMMIT_ACTION_ID == actionId) {
+                FileUploadingAPI fileUploading = AppBeans.get(FileUploadingAPI.NAME)
+                FileDescriptor descriptor = fileUploading.getFileDescriptor(dialog.getFileId(), dialog.getFileName())
                 try {
-                    fileUploading.putFileIntoStorage(dialog.getFileId(), descriptor);
-                    descriptor = dataManager.commit(descriptor);
+                    fileUploading.putFileIntoStorage(dialog.getFileId(), descriptor)
+                    descriptor = dataManager.commit(descriptor)
 
-                    ImportLog log = metadata.create(ImportLog.class);
-                    log.setScenario(scenario);
-                    log.setFile(descriptor);
-                    log = dataManager.commit(log);
-                    log = importerService.doImport(log, null, true);
+                    ImportLog log = metadata.create(ImportLog.class)
+                    log.setScenario(scenario)
+                    log.setFile(descriptor)
+                    log = dataManager.commit(log)
+                    log = importerService.doImport(log, null, true)
 
-                    showCompletionMessage(log);
+                    showCompletionMessage(log)
 
                 } catch (FileStorageException e) {
-                    Log log = LogFactory.getLog(this.getClass());
-                    log.error("File upload has failed", e);
-                    showNotification("File upload has failed", Frame.NotificationType.ERROR);
+                    Log log = LogFactory.getLog(this.getClass())
+                    log.error("File upload has failed", e)
+                    showNotification("File upload has failed", Frame.NotificationType.ERROR)
                 }
             }
-        } as Window.CloseListener);
+        } as Window.CloseListener)
 
 
     }
@@ -104,7 +104,7 @@ class ImportScenarioBrowse extends AbstractLookup {
                     ,Frame.MessageType.CONFIRMATION_HTML
                     ,[
                 new DialogAction(DialogAction.Type.OK, true)
-            ]);
+            ])
         } else {
             showOptionDialog("Import Result"
                     ,String.format("<font color=\"red\">Import has been finished with %s ERRORS and %s WARNINGS</br>" +
@@ -114,9 +114,9 @@ class ImportScenarioBrowse extends AbstractLookup {
                 new DialogAction(DialogAction.Type.OK, true) {
                     @Override
                     void actionPerform(Component component) {
-                        super.actionPerform(component);
+                        super.actionPerform(component)
                         openWindow('importdata$ImportLog.browse', WindowManager.OpenType.NEW_TAB,
-                                ParamsMap.of("selectLogItem", log));
+                                ParamsMap.of("selectLogItem", log))
                     }
                 }
                 ,new DialogAction(DialogAction.Type.CANCEL)
