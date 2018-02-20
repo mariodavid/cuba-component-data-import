@@ -39,7 +39,7 @@ The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid
 
 Add custom application component to your project:
 
-* Artifact group: `de.diedavids.cuba.runtimediagnose`
+* Artifact group: `de.diedavids.cuba.dataimport`
 * Artifact name: `data-import-global`
 * Version: *add-on version*
 
