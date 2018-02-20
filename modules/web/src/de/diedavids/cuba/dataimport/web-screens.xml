@@ -11,4 +11,6 @@
             template="de/diedavids/cuba/dataimport/web/example/customer/customer-browse.xml"/>
     <screen id="ddcdi$Customer.edit"
             template="de/diedavids/cuba/dataimport/web/example/customer/customer-edit.xml"/>
+    <screen id="ddcdi$import-wizard"
+            template="/de/diedavids/cuba/dataimport/web/importwizard/import-wizard.xml"/>
 </screen-config>

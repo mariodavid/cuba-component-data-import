@@ -4,6 +4,7 @@
           insertBefore="administration">
         <item screen="ddcdi$ImportLog.browse"/>
         <item screen="ddcdi$ImportScenario.browse"/>
+        <item screen="ddcdi$import-wizard" openType="DIALOG"/>
         <item screen="ddcdi$Customer.browse"/>
     </menu>
 </menu-config>
