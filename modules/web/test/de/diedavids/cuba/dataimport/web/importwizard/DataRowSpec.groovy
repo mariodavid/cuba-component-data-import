@@ -1,6 +1,7 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
 import com.haulmont.cuba.core.entity.KeyValueEntity
+import de.diedavids.cuba.dataimport.web.datapreview.DataRow
 import spock.lang.Specification
 
 class DataRowSpec extends Specification {

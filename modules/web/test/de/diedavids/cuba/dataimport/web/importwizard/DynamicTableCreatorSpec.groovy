@@ -5,10 +5,12 @@ import com.haulmont.chile.core.model.MetaProperty
 import com.haulmont.cuba.gui.components.BoxLayout
 import com.haulmont.cuba.gui.components.Frame
 import com.haulmont.cuba.gui.components.Table
-import com.haulmont.cuba.gui.data.DsBuilder
 import com.haulmont.cuba.gui.data.DsContext
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl
 import com.haulmont.cuba.web.gui.WebComponentsFactory
+import de.diedavids.cuba.dataimport.web.datapreview.DataRow
+import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
+import de.diedavids.cuba.dataimport.web.datapreview.ImportData
 import spock.lang.Specification
 
 class DynamicTableCreatorSpec extends Specification {
@@ -41,7 +43,7 @@ class DynamicTableCreatorSpec extends Specification {
         )
 
         when:
-        sut.createTable(new TableData(
+        sut.createTable(new ImportData(
                 columns: ['name', 'firstName'],
                 rows: [
                         DataRow.ofMap(name: "David", "firstName": "mario"),
