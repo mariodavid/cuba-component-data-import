@@ -1,14 +1,14 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
+import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
-import com.xlson.groovycsv.CsvParser
-import com.xlson.groovycsv.PropertyMapper
-import de.diedavids.cuba.dataimport.web.datapreview.DataRow
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
 import de.diedavids.cuba.dataimport.web.datapreview.ImportData
 import de.diedavids.cuba.dataimport.web.datapreview.csv.CsvTableDataConverter
+import de.diedavids.cuba.dataimport.web.datapreview.csv.ExcelTableDataConverter
+import de.diedavids.cuba.dataimport.web.datapreview.csv.TableDataConverter
 
 import javax.inject.Inject
 
@@ -51,19 +51,32 @@ class ImportWizard extends AbstractWindow {
                 step1.caption = "${step1.caption} $check"
                 step1.enabled = false
 
-                importFile(file)
+                parseFileAndDisplay(importFileUploadBtn.fileDescriptor, file)
+
             }
         })
     }
 
+    void parseFileAndDisplay(FileDescriptor fileDescriptor, File file) {
 
-    void importFile(File file) {
-        ImportData importData = new CsvTableDataConverter().convert(file.text)
+
+        TableDataConverter converter = createTableDataConverter(fileDescriptor)
+
+        ImportData importData = converter.convert(file.text)
 
         DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
         dynamicTableCreator.createTable(importData, resultTableBox)
 
     }
+
+    private TableDataConverter createTableDataConverter(FileDescriptor fileDescriptor) {
+        switch (fileDescriptor.extension) {
+            case "xlsx": return new ExcelTableDataConverter()
+            case "csv": return new CsvTableDataConverter()
+            default: throw RuntimeException("File extension not supported")
+        }
+    }
+
 
     private DynamicTableCreator createDynamicTableCreator() {
         def dynamicTableCreator = new DynamicTableCreator(

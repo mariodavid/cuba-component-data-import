@@ -5,7 +5,7 @@ import com.xlson.groovycsv.PropertyMapper
 import de.diedavids.cuba.dataimport.web.datapreview.DataRow
 import de.diedavids.cuba.dataimport.web.datapreview.ImportData
 
-class CsvTableDataConverter implements TableDataConverter {
+class ExcelTableDataConverter implements TableDataConverter {
 
     @Override
     ImportData convert(String content) {

@@ -7,6 +7,9 @@
 
 This application component let's you easily import data into your application from various sources.
 
+
+## NOTE: this project is "work in progress" and not ready to be used.
+
 ## Installation
 
 1. Add the following maven repository `https://dl.bintray.com/mariodavid/cuba-components` to the build.gradle of your CUBA application:
