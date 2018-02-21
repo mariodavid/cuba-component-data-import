@@ -5,6 +5,7 @@ import com.haulmont.chile.core.model.MetaProperty
 import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.DsBuilder
+import com.haulmont.cuba.gui.data.DsContext
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
@@ -48,6 +49,7 @@ class ImportWizard extends AbstractWindow {
             void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent e) {
                 File file = fileUploadingAPI.getFile(importFileUploadBtn.fileId)
 
+
                 wizardAccordion.getTab(WIZARD_STEP_2).enabled = true
                 wizardAccordion.selectedTab = WIZARD_STEP_2
 
@@ -66,81 +68,37 @@ class ImportWizard extends AbstractWindow {
     void importFile(File file) {
 
 
-        LinkedHashMap<String, List> result = parseFile(file)
+        TableData tableData = parseFile(file)
 
 
+        def dynamicTableCreator = new DynamicTableCreator(
+                dsContext: dsContext,
+                frame: frame,
+                componentsFactory: componentsFactory
+        )
+
+        dynamicTableCreator.createTable(tableData, resultTableBox)
+
+        /*
         ValueCollectionDatasourceImpl sqlResultDs = createDatasource(result)
         createResultTable(sqlResultDs)
+        */
 
     }
 
-    private LinkedHashMap<String, List> parseFile(File file) {
-        def csvData = new CsvParser().parse(file.text)
+    private TableData parseFile(File file) {
+        def csvRows = new CsvParser().parse(file.text)
 
-
-        def results = [
-                entities: [],
-                columns : []
-        ]
+        def tableData = new TableData()
         int i = 0
-        csvData.each { PropertyMapper row ->
-
-
+        csvRows.each { PropertyMapper row ->
             if (i < MAX_ROWS_IMPORT_PREVIEW) {
-                results.columns = row.columns.keySet()
-
-                def entity = new KeyValueEntity()
-
-                row.toMap().each { String k, String v ->
-                    entity.setValue(k, v)
-                }
-                results.entities << entity
+                tableData.columns = row.columns.keySet()
+                tableData.rows << DataRow.ofMap(row.toMap())
             }
-
             i++
         }
-        results
-    }
-
-
-    private ValueCollectionDatasourceImpl createDatasource(def result) {
-        ValueCollectionDatasourceImpl resultDs = creteValueCollectionDs()
-        result.entities.each { resultDs.includeItem(it) }
-        result.columns.each { resultDs.addProperty(it) }
-        resultDs
-    }
-
-    private ValueCollectionDatasourceImpl creteValueCollectionDs() {
-        DsBuilder.create(dsContext).reset().setAllowCommit(false)
-                .buildValuesCollectionDatasource()
-    }
-
-    private Table createResultTable(ValueCollectionDatasourceImpl resultDs) {
-        if (resultTable) {
-            resultTableBox.remove(resultTable)
-        }
-        resultTable = componentsFactory.createComponent(Table)
-        resultTable.frame = frame
-
-        addTableColumns(resultDs, resultTable)
-
-        resultTable.datasource = resultDs
-        resultTable.setSizeFull()
-        resultTable.setSortable(false)
-        resultTable.setContextMenuEnabled(false)
-        resultTableBox.add(resultTable)
-
-        resultTable
-    }
-
-
-    private void addTableColumns(ValueCollectionDatasourceImpl sqlResultDs, Table resultTable) {
-        MetaClass meta = sqlResultDs.metaClass
-        for (MetaProperty metaProperty : meta.properties) {
-            Table.Column column = new Table.Column(meta.getPropertyPath(metaProperty.name))
-            column.caption = metaProperty.name
-            resultTable.addColumn(column)
-        }
+        tableData
     }
 
     protected initUploadFileErrorListener() {
@@ -166,4 +124,123 @@ class ImportWizard extends AbstractWindow {
     }
 
 
+}
+
+
+class DataRow {
+
+    def values = []
+    Map<String, Object> columns = [:]
+
+    static DataRow ofMap(Map<String, Object> data) {
+        def row = new DataRow()
+
+        int i = 0
+        data.each { k, v ->
+            row.columns[k] = i
+            row.values << v
+            i++
+        }
+
+        row
+    }
+
+    KeyValueEntity toKevValueEntity() {
+        def result = new KeyValueEntity()
+
+        toMap().each {String k, Object v ->
+            result.setValue(k, v)
+        }
+        result
+    }
+
+    def propertyMissing(String name) {
+        def index = columns[name]
+        if (index != null) {
+            values[index]
+        } else {
+            throw new MissingPropertyException(name)
+        }
+    }
+
+    def getAt(Integer index) {
+        values[index]
+    }
+
+
+    String toString() {
+        columns.collect { key, index -> "$key: ${values[index]}" }.join(', ')
+    }
+
+    Map toMap() {
+        def sortedKeys = columns.keySet().sort { columns[it] }
+        [sortedKeys, values].transpose().collectEntries()
+    }
+}
+
+class TableData {
+    List<DataRow> rows
+    List<String> columns
+}
+
+
+class DynamicTableCreator {
+
+    ComponentsFactory componentsFactory
+
+    Frame frame
+
+    DsContext dsContext
+
+
+    Table createTable(TableData tableData, BoxLayout tableWrapper) {
+        ValueCollectionDatasourceImpl tableDs = createDatasource(tableData)
+        createDynamicTable(tableDs, tableWrapper)
+    }
+
+
+    private ValueCollectionDatasourceImpl createDatasource(TableData tableData) {
+        ValueCollectionDatasourceImpl tableDs = createValueCollectionDs()
+        tableData.rows.each { tableDs.includeItem(it.toKevValueEntity()) }
+        tableData.columns.each { tableDs.addProperty(it) }
+        tableDs
+    }
+
+    protected ValueCollectionDatasourceImpl createValueCollectionDs() {
+        createDsBuilder()
+                .reset()
+                .setAllowCommit(false)
+                .buildValuesCollectionDatasource()
+    }
+
+    protected DsBuilder createDsBuilder() {
+        DsBuilder.create(dsContext)
+    }
+
+    private Table createDynamicTable(ValueCollectionDatasourceImpl tableDs, BoxLayout tableWrapper) {
+        tableWrapper.removeAll()
+
+        Table table = componentsFactory.createComponent(Table)
+        table.frame = frame
+
+        addTableColumns(tableDs, table)
+
+        table.datasource = tableDs
+        table.setSizeFull()
+        table.setSortable(false)
+        table.setContextMenuEnabled(false)
+        tableWrapper.add(table)
+
+        table
+    }
+
+
+    private void addTableColumns(ValueCollectionDatasourceImpl tableDs, Table table) {
+        MetaClass meta = tableDs.metaClass
+        for (MetaProperty metaProperty : meta.properties) {
+            Table.Column column = new Table.Column(meta.getPropertyPath(metaProperty.name))
+            column.caption = metaProperty.name
+            table.addColumn(column)
+        }
+    }
 }
