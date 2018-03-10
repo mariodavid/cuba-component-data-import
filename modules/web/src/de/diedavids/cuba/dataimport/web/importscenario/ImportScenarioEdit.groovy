@@ -1,10 +1,16 @@
 package de.diedavids.cuba.dataimport.web.importscenario
 
+import com.haulmont.chile.core.model.MetaClass
+import com.haulmont.cuba.core.entity.Entity
+import com.haulmont.cuba.core.global.AppBeans
+import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.core.global.Security
 import com.haulmont.cuba.gui.components.AbstractEditor
 import com.haulmont.cuba.gui.components.FieldGroup
 import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
+import com.haulmont.cuba.security.entity.EntityOp
 import de.diedavids.cuba.dataimport.entity.ImportScenario
 import de.diedavids.cuba.dataimport.entity.Importer
 import de.diedavids.cuba.dataimport.web.datasources.ImportersDatasource
@@ -18,12 +24,46 @@ class ImportScenarioEdit extends AbstractEditor<ImportScenario> {
     private ImportersDatasource importersDs
 
     @Inject
+    private Datasource<ImportScenario> importScenarioDs
+
+    @Inject
     private FieldGroup fieldGroup
 
     @Inject
     private ComponentsFactory componentsFactory
 
     private static final String IMPORTER_FIELD_NAME = 'importer'
+
+   @Inject
+   Metadata metadata
+
+
+
+    protected boolean readPermitted(MetaClass metaClass) {
+        return entityOpPermitted(metaClass, EntityOp.READ)
+    }
+
+    protected boolean entityOpPermitted(MetaClass metaClass, EntityOp entityOp) {
+        Security security = AppBeans.get(Security.NAME)
+        return security.isEntityOpPermitted(metaClass, entityOp)
+    }
+
+
+
+    protected Map<String, Object> getEntitiesLookupFieldOptions() {
+        Map<String, Object> options = new TreeMap<>()
+
+        for (MetaClass metaClass : metadata.getTools().getAllPersistentMetaClasses()) {
+            if (readPermitted(metaClass)) {
+                Class javaClass = metaClass.getJavaClass()
+                if (Entity.class.isAssignableFrom(javaClass)) {
+                    options.put(messages.getTools().getEntityCaption(metaClass) + " (" + metaClass.getName() + ")", metaClass.getName())
+                }
+            }
+        }
+
+        return options
+    }
 
     @Override
     protected void postInit() {
@@ -33,6 +73,16 @@ class ImportScenarioEdit extends AbstractEditor<ImportScenario> {
             lookupField.optionsDatasource = importersDs
             lookupField
         }
+
+        FieldGroup.FieldConfig entityClassFieldConfig = fieldGroup.getField("entityClass")
+
+        LookupField lookupField = componentsFactory.createComponent(LookupField)
+
+        lookupField.setDatasource(importScenarioDs, "entityClass")
+        lookupField.setOptionsMap(getEntitiesLookupFieldOptions())
+
+
+        entityClassFieldConfig.setComponent(lookupField)
 
         importersDs.addItemChangeListener { e -> 
             if (e.item) {

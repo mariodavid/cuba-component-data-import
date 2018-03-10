@@ -35,6 +35,8 @@
                 <column id="template"/>
                 <column id="comment"/>
                 <column id="importerBeanName"/>
+                <column id="adHoc"/>
+                <column id="entityClass"/>
             </columns>
             <rows datasource="importScenariosDs"/>
             <rowsCount/>

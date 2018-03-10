@@ -13,4 +13,8 @@
             template="de/diedavids/cuba/dataimport/web/example/customer/customer-edit.xml"/>
     <screen id="ddcdi$import-wizard"
             template="/de/diedavids/cuba/dataimport/web/importwizard/import-wizard.xml"/>
+    <screen id="ddcdi$MlbPlayer.browse"
+            template="de/diedavids/cuba/dataimport/web/example/mlbplayer/mlb-player-browse.xml"/>
+    <screen id="ddcdi$MlbPlayer.edit"
+            template="de/diedavids/cuba/dataimport/web/example/mlbplayer/mlb-player-edit.xml"/>
 </screen-config>

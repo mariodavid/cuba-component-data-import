@@ -9,7 +9,6 @@
         <datasource id="importScenarioDs"
                     class="de.diedavids.cuba.dataimport.entity.ImportScenario"
                     view="importScenario-view"/>
-
         <collectionDatasource id="importersDs"
                               allowCommit="false"
                               class="de.diedavids.cuba.dataimport.entity.Importer"
@@ -29,6 +28,8 @@
                        caption="msg://selectImporter"
                        custom="true"
                        required="true"/>
+                <field property="adHoc"/>
+                <field property="entityClass" custom="true"/>
             </column>
         </fieldGroup>
         <fieldGroup id="fieldGroupTextFields"

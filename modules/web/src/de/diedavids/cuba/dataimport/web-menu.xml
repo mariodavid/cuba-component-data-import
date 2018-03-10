@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
+    <menu id="example"
+          insertBefore="administration">
+        <item screen="ddcdi$Customer.browse"/>
+        <item screen="ddcdi$MlbPlayer.browse"/>
+    </menu>
     <menu id="application-ddcdi"
           insertBefore="administration">
         <item screen="ddcdi$ImportLog.browse"/>
         <item screen="ddcdi$ImportScenario.browse"/>
-        <item screen="ddcdi$import-wizard" openType="DIALOG"/>
-        <item screen="ddcdi$Customer.browse"/>
+        <item openType="DIALOG"
+              screen="ddcdi$import-wizard"/>
     </menu>
 </menu-config>

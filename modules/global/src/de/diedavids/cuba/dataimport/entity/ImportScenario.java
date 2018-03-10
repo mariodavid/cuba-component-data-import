@@ -13,6 +13,8 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.List;
 import javax.persistence.OneToMany;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_SCENARIO")
@@ -23,6 +25,13 @@ public class ImportScenario extends StandardEntity {
     @NotNull
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @NotNull
+    @Column(name = "ENTITY_CLASS", nullable = false)
+    protected String entityClass;
+
+    @Column(name = "AD_HOC")
+    protected Boolean adHoc;
 
     @OneToMany(mappedBy = "scenario")
     protected List<ImportLog> logs;
@@ -38,6 +47,37 @@ public class ImportScenario extends StandardEntity {
     @NotNull
     @Column(name = "IMPORTER_BEAN_NAME", nullable = false)
     protected String importerBeanName;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "importScenario")
+    protected List<ImportAttributeMapper> importAttributeMappers;
+
+    public void setEntityClass(String entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    public String getEntityClass() {
+        return entityClass;
+    }
+
+
+    public void setAdHoc(Boolean adHoc) {
+        this.adHoc = adHoc;
+    }
+
+    public Boolean getAdHoc() {
+        return adHoc;
+    }
+
+
+    public void setImportAttributeMappers(List<ImportAttributeMapper> importAttributeMappers) {
+        this.importAttributeMappers = importAttributeMappers;
+    }
+
+    public List<ImportAttributeMapper> getImportAttributeMappers() {
+        return importAttributeMappers;
+    }
+
 
     public void setLogs(List<ImportLog> logs) {
         this.logs = logs;
