@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.importscenario
+package de.diedavids.cuba.dataimport.web.importconfiguration
 
 import com.haulmont.bali.util.ParamsMap
 import com.haulmont.cuba.core.entity.FileDescriptor
@@ -20,7 +20,7 @@ import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import com.haulmont.cuba.web.App
 import de.diedavids.cuba.dataimport.entity.ImportLog
-import de.diedavids.cuba.dataimport.entity.ImportScenario
+import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.LogRecordLevel
 import de.diedavids.cuba.dataimport.service.DataImportService
 import org.apache.commons.logging.Log
@@ -28,13 +28,13 @@ import org.apache.commons.logging.LogFactory
 
 import javax.inject.Inject
 
-class ImportScenarioBrowse extends AbstractLookup {
+class ImportConfigurationBrowse extends AbstractLookup {
 
     @Inject
     private DataImportService importerService
 
     @Inject
-    private CollectionDatasource<ImportScenario, UUID> importScenariosDs
+    private CollectionDatasource<ImportConfiguration, UUID> importConfigurationsDs
 
     @Inject
     private Button btnImport
@@ -51,8 +51,8 @@ class ImportScenarioBrowse extends AbstractLookup {
 
     @Override
     void init(Map<String, Object> params) {
-        btnImport.setEnabled(importScenariosDs.item != null)
-        importScenariosDs.addItemChangeListener({
+        btnImport.setEnabled(importConfigurationsDs.item != null)
+        importConfigurationsDs.addItemChangeListener({
             e -> btnImport.setEnabled(e.item != null)
         } as Datasource.ItemChangeListener)
     }
@@ -85,10 +85,10 @@ class ImportScenarioBrowse extends AbstractLookup {
 
     private ImportLog createImportLog(FileDescriptor descriptor) {
 
-        ImportScenario scenario = importScenariosDs.item
+        ImportConfiguration configuration = importConfigurationsDs.item
 
         ImportLog log = metadata.create(ImportLog)
-        log.setScenario(scenario)
+        log.setConfiguration(configuration)
         log.setFile(descriptor)
         log = dataManager.commit(log)
         log = importerService.doImport(log, null, true)

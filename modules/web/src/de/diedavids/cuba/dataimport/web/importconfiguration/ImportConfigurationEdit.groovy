@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.importscenario
+package de.diedavids.cuba.dataimport.web.importconfiguration
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.entity.Entity
@@ -11,20 +11,20 @@ import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import com.haulmont.cuba.security.entity.EntityOp
-import de.diedavids.cuba.dataimport.entity.ImportScenario
+import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.Importer
 import de.diedavids.cuba.dataimport.web.datasources.ImportersDatasource
 
 import javax.inject.Inject
 
-class ImportScenarioEdit extends AbstractEditor<ImportScenario> {
+class ImportConfigurationEdit extends AbstractEditor<ImportConfiguration> {
 
 
     @Inject
     private ImportersDatasource importersDs
 
     @Inject
-    private Datasource<ImportScenario> importScenarioDs
+    private Datasource<ImportConfiguration> importConfigurationDs
 
     @Inject
     private FieldGroup fieldGroup
@@ -78,7 +78,7 @@ class ImportScenarioEdit extends AbstractEditor<ImportScenario> {
 
         LookupField lookupField = componentsFactory.createComponent(LookupField)
 
-        lookupField.setDatasource(importScenarioDs, "entityClass")
+        lookupField.setDatasource(importConfigurationDs, "entityClass")
         lookupField.setOptionsMap(getEntitiesLookupFieldOptions())
 
 

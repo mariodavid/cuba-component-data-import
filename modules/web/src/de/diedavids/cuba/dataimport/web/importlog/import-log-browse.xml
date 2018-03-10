@@ -12,7 +12,6 @@
             <query>
                 <![CDATA[select e from ddcdi$ImportLog e]]>
             </query>
-
             <groupDatasource id="recordsDs"
                              property="records"/>
         </groupDatasource>
@@ -37,7 +36,7 @@
                 <groupTable id="importLogsTable"
                             width="100%">
                     <columns>
-                        <column id="scenario"/>
+                        <column id="configuration"/>
                         <column id="file"/>
                         <column id="startedAt"/>
                         <column id="finishedAt"/>

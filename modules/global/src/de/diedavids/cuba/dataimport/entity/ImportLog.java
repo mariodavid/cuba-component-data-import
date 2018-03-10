@@ -45,16 +45,18 @@ public class ImportLog extends StandardEntity {
     protected Integer entitiesProcessed;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "SCENARIO_ID")
-    protected ImportScenario scenario;
 
-    public void setScenario(ImportScenario scenario) {
-        this.scenario = scenario;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "CONFIGURATION_ID")
+    protected ImportConfiguration configuration;
+
+    public void setConfiguration(ImportConfiguration configuration) {
+        this.configuration = configuration;
     }
 
-    public ImportScenario getScenario() {
-        return scenario;
+    public ImportConfiguration getConfiguration() {
+        return configuration;
     }
 
 

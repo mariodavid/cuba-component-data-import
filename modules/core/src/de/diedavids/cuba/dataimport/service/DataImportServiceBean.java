@@ -45,7 +45,7 @@ public class DataImportServiceBean implements DataImportService {
     public ImportLog doImport(ImportLog log, Map<String, Object> params, boolean doPersistLog) {
         log.setStartedAt(new Date());
         try {
-            ImporterAPI importerAPI = AppBeans.get(log.getScenario().getImporterBeanName());
+            ImporterAPI importerAPI = AppBeans.get(log.getConfiguration().getImporterBeanName());
             importerAPI.setFileDescriptor(log.getFile());
 
             log = importerAPI.doImport(log, params);

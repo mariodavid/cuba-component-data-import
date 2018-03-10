@@ -7,12 +7,12 @@
                   view="_minimal"/>
         <property name="records"
                   view="_local"/>
-        <property name="scenario"
+        <property name="configuration"
                   view="_minimal"/>
     </view>
-    <view class="de.diedavids.cuba.dataimport.entity.ImportScenario"
+    <view class="de.diedavids.cuba.dataimport.entity.ImportConfiguration"
           extends="_local"
-          name="importScenario-view">
+          name="importConfiguration-view">
         <property name="logs"
                   view="importLog-view"/>
         <property name="template"

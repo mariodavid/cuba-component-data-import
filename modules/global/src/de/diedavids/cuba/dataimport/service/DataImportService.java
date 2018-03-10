@@ -14,9 +14,9 @@ public interface DataImportService {
 
     /**
      *
-     * @param log log parameter should have fully loaded file descriptor and related scenario entity
+     * @param log log parameter should have fully loaded file descriptor and related configuration entity
      * @param params additional parameters that could be used in an importer implementation
-     * @param doPersistLog when true - log will be persisted with log records under its scenario
+     * @param doPersistLog when true - log will be persisted with log records under its configuration
      * @return import log
      */
     ImportLog doImport(ImportLog log, Map<String, Object> params, boolean doPersistLog);

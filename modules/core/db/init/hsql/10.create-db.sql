@@ -13,7 +13,7 @@ create table DDCDI_IMPORT_LOG (
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED integer,
-    SCENARIO_ID varchar(36) not null,
+    CONFIGURATION_ID varchar(36) not null,
     --
     primary key (ID)
 )^
@@ -38,8 +38,8 @@ create table DDCDI_IMPORT_LOG_RECORD (
     primary key (ID)
 )^
 -- end DDCDI_IMPORT_LOG_RECORD
--- begin DDCDI_IMPORT_SCENARIO
-create table DDCDI_IMPORT_SCENARIO (
+-- begin DDCDI_IMPORT_CONFIGURATION
+create table DDCDI_IMPORT_CONFIGURATION (
     ID varchar(36) not null,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -58,7 +58,7 @@ create table DDCDI_IMPORT_SCENARIO (
     --
     primary key (ID)
 )^
--- end DDCDI_IMPORT_SCENARIO
+-- end DDCDI_IMPORT_CONFIGURATION
 -- begin DDCDI_CUSTOMER
 create table DDCDI_CUSTOMER (
     ID varchar(36) not null,
@@ -93,7 +93,7 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     ENTITY_ATTRIBUTE varchar(255) not null,
     FILE_COLUMN_NUMBER integer not null,
     FILE_COLUMN_ALIAS varchar(255),
-    IMPORT_SCENARIO_ID varchar(36) not null,
+    CONFIGURATION_ID varchar(36) not null,
     --
     primary key (ID)
 )^

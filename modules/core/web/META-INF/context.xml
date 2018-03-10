@@ -1,18 +1,14 @@
 <Context>
-
     <!-- Database connection -->
-    <Resource
-      name="jdbc/CubaDS"
-      type="javax.sql.DataSource"
-      maxTotal="20"
-      maxIdle="2"
-      maxWaitMillis="5000"
-      driverClassName="org.hsqldb.jdbc.JDBCDriver"
-      url="jdbc:hsqldb:hsql://localhost/ddcdi"
-      username="sa"
-      password=""/>
-
+    <Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
+              maxIdle="2"
+              maxTotal="20"
+              maxWaitMillis="5000"
+              name="jdbc/CubaDS"
+              password=""
+              type="javax.sql.DataSource"
+              url="jdbc:hsqldb:hsql://localhost/ddcdi2"
+              username="sa"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
-
 </Context>

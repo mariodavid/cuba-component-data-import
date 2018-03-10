@@ -5,7 +5,7 @@
                       transaction-type="RESOURCE_LOCAL">
         <class>de.diedavids.cuba.dataimport.entity.ImportLog</class>
         <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
-        <class>de.diedavids.cuba.dataimport.entity.ImportScenario</class>
+        <class>de.diedavids.cuba.dataimport.entity.ImportConfiguration</class>
         <class>de.diedavids.cuba.dataimport.entity.example.Customer</class>
         <class>de.diedavids.cuba.dataimport.entity.ImportAttributeMapper</class>
         <class>de.diedavids.cuba.dataimport.entity.example.MlbPlayer</class>

@@ -17,9 +17,9 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 
 @NamePattern("%s|name")
-@Table(name = "DDCDI_IMPORT_SCENARIO")
-@Entity(name = "ddcdi$ImportScenario")
-public class ImportScenario extends StandardEntity {
+@Table(name = "DDCDI_IMPORT_CONFIGURATION")
+@Entity(name = "ddcdi$ImportConfiguration")
+public class ImportConfiguration extends StandardEntity {
     private static final long serialVersionUID = -4678826366994897550L;
 
     @NotNull
@@ -33,7 +33,7 @@ public class ImportScenario extends StandardEntity {
     @Column(name = "AD_HOC")
     protected Boolean adHoc;
 
-    @OneToMany(mappedBy = "scenario")
+    @OneToMany(mappedBy = "configuration")
     protected List<ImportLog> logs;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,7 +49,7 @@ public class ImportScenario extends StandardEntity {
     protected String importerBeanName;
 
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "importScenario")
+    @OneToMany(mappedBy = "configuration")
     protected List<ImportAttributeMapper> importAttributeMappers;
 
     public void setEntityClass(String entityClass) {

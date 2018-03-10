@@ -25,17 +25,19 @@ public class ImportAttributeMapper extends StandardEntity {
     @Column(name = "FILE_COLUMN_ALIAS")
     protected String fileColumnAlias;
 
+
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IMPORT_SCENARIO_ID")
-    protected ImportScenario importScenario;
+    @JoinColumn(name = "CONFIGURATION_ID")
+    protected ImportConfiguration configuration;
 
-    public void setImportScenario(ImportScenario importScenario) {
-        this.importScenario = importScenario;
+    public void setConfiguration(ImportConfiguration configuration) {
+        this.configuration = configuration;
     }
 
-    public ImportScenario getImportScenario() {
-        return importScenario;
+    public ImportConfiguration getConfiguration() {
+        return configuration;
     }
 
 

@@ -8,7 +8,7 @@
     <menu id="application-ddcdi"
           insertBefore="administration">
         <item screen="ddcdi$ImportLog.browse"/>
-        <item screen="ddcdi$ImportScenario.browse"/>
+        <item screen="ddcdi$ImportConfiguration.browse"/>
         <item openType="DIALOG"
               screen="ddcdi$import-wizard"/>
     </menu>

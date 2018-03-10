@@ -58,7 +58,7 @@
     <class>com.haulmont.cuba.core.entity.ReferenceToEntity</class>
     <class>de.diedavids.cuba.dataimport.entity.ImportLog</class>
     <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
-    <class>de.diedavids.cuba.dataimport.entity.ImportScenario</class>
+    <class>de.diedavids.cuba.dataimport.entity.ImportConfiguration</class>
     <class>de.diedavids.cuba.dataimport.entity.example.Customer</class>
     <exclude-unlisted-classes/>
     <properties>

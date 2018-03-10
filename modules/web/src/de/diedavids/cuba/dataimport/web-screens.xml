@@ -3,10 +3,10 @@
     <include file="de/diedavids/cuba/dataimport/screens.xml"/>
     <screen id="ddcdi$ImportLog.browse"
             template="de/diedavids/cuba/dataimport/web/importlog/import-log-browse.xml"/>
-    <screen id="ddcdi$ImportScenario.edit"
-            template="de/diedavids/cuba/dataimport/web/importscenario/import-scenario-edit.xml"/>
-    <screen id="ddcdi$ImportScenario.browse"
-            template="de/diedavids/cuba/dataimport/web/importscenario/import-scenario-browse.xml"/>
+    <screen id="ddcdi$ImportConfiguration.edit"
+            template="de/diedavids/cuba/dataimport/web/importconfiguration/import-configuration-edit.xml"/>
+    <screen id="ddcdi$ImportConfiguration.browse"
+            template="de/diedavids/cuba/dataimport/web/importconfiguration/import-configuration-browse.xml"/>
     <screen id="ddcdi$Customer.browse"
             template="de/diedavids/cuba/dataimport/web/example/customer/customer-browse.xml"/>
     <screen id="ddcdi$Customer.edit"

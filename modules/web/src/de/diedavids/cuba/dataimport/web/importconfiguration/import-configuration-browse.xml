@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
-        class="de.diedavids.cuba.dataimport.web.importscenario.ImportScenarioBrowse"
-        focusComponent="importScenariosTable"
-        lookupComponent="importScenariosTable"
-        messagesPack="de.diedavids.cuba.dataimport.web.importscenario">
+        class="de.diedavids.cuba.dataimport.web.importconfiguration.ImportConfigurationBrowse"
+        focusComponent="importConfigurationsTable"
+        lookupComponent="importConfigurationsTable"
+        messagesPack="de.diedavids.cuba.dataimport.web.importconfiguration">
     <dsContext>
-        <groupDatasource id="importScenariosDs"
-                         class="de.diedavids.cuba.dataimport.entity.ImportScenario"
-                         view="importScenario-view">
+        <groupDatasource id="importConfigurationsDs"
+                         class="de.diedavids.cuba.dataimport.entity.ImportConfiguration"
+                         view="importConfiguration-view">
             <query>
-                <![CDATA[select e from ddcdi$ImportScenario e]]>
+                <![CDATA[select e from ddcdi$ImportConfiguration e]]>
             </query>
         </groupDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="importScenariosTable"
+    <layout expand="importConfigurationsTable"
             spacing="true">
         <filter id="filter"
-                applyTo="importScenariosTable"
-                datasource="importScenariosDs">
+                applyTo="importConfigurationsTable"
+                datasource="importConfigurationsDs">
             <properties include=".*"/>
         </filter>
-        <groupTable id="importScenariosTable"
+        <groupTable id="importConfigurationsTable"
                     width="100%">
             <actions>
                 <action id="create"/>
@@ -38,16 +38,16 @@
                 <column id="adHoc"/>
                 <column id="entityClass"/>
             </columns>
-            <rows datasource="importScenariosDs"/>
+            <rows datasource="importConfigurationsDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
-                        action="importScenariosTable.create"/>
+                        action="importConfigurationsTable.create"/>
                 <button id="editBtn"
-                        action="importScenariosTable.edit"/>
+                        action="importConfigurationsTable.edit"/>
                 <button id="removeBtn"
-                        action="importScenariosTable.remove"/>
+                        action="importConfigurationsTable.remove"/>
                 <button id="btnImport"
                         caption="msg://Import"
                         icon="icons/wf-design-import.png"
