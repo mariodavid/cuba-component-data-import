@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.8.1'
+    ext.cubaVersion = '6.8.5'
     repositories {
         
         maven {
@@ -111,6 +111,8 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 
     dependencies {
         testCompile('junit:junit:4.12')
+        testCompile 'org.assertj:assertj-core:2.9.0'
+
 
         testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
         testCompile('org.springframework:spring-test:4.3.1.RELEASE')
@@ -220,7 +222,7 @@ configure(coreModule) {
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'hsql'
         host = 'localhost'
-        dbName = 'ddcdi2'
+        dbName = 'ddcdi3'
         dbUser = 'sa'
         dbPassword = ''
     }
@@ -228,7 +230,7 @@ configure(coreModule) {
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'hsql'
         host = 'localhost'
-        dbName = 'ddcdi2'
+        dbName = 'ddcdi3'
         dbUser = 'sa'
         dbPassword = ''
     }

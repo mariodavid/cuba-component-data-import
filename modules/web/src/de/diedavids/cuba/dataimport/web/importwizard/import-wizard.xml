@@ -3,13 +3,14 @@
         caption="msg://caption"
         class="de.diedavids.cuba.dataimport.web.importwizard.ImportWizard"
         messagesPack="de.diedavids.cuba.dataimport.web.importwizard">
-
     <dsContext>
-        <collectionDatasource id="mapAttributesDatasource"
-                              class="de.diedavids.cuba.dataimport.entity.ImportAttributeMapper"
-                              datasourceClass="de.diedavids.cuba.dataimport.web.importwizard.MapAttributesDatasource" />
+        <datasource id="importConfigurationDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportConfiguration"
+                    view="importConfiguration-view">
+            <collectionDatasource id="importAttributeMappersDatasource"
+                                  property="importAttributeMappers"/>
+        </datasource>
     </dsContext>
-
     <actions>
         <action id="cancelWizardAction"
                 caption="mainMsg://action.cancel"
@@ -19,24 +20,28 @@
                 caption="mainMsg://actions.Ok"
                 icon="icons/ok.png"
                 invoke="toStep3"/>
-        <action id="closeWizardAction"
+        <action id="toStep4"
                 caption="mainMsg://actions.Ok"
                 icon="icons/ok.png"
+                invoke="toStep4"/>
+        <action id="closeWizardAction"
+                caption="mainMsg://actions.Ok"
                 enable="false"
+                icon="icons/ok.png"
                 invoke="closeWizard"/>
     </actions>
     <dialogMode forceDialog="true"
-                resizable="true"
                 height="600"
+                resizable="true"
                 width="800"/>
-    <layout expand="wizardAccordion" spacing="true">
+    <layout expand="wizardAccordion"
+            spacing="true">
         <accordion id="wizardAccordion">
             <tab id="step1"
                  caption="msg://step1Title"
-                 margin="true"
                  expand="dropZone"
+                 margin="true"
                  spacing="true">
-
                 <buttonsPanel align="TOP_CENTER">
                     <upload id="importFileUploadBtn"
                             accept=".csv,.xlsx"
@@ -52,50 +57,68 @@
                            stylename="cuba-upload-dropzone-description"
                            value="Drop file here..."/>
                 </vbox>
-
             </tab>
             <tab id="step2"
                  caption="msg://step2Title"
                  enable="false"
+                 expand="mapAttributesTable"
                  margin="true"
-                 spacing="true" expand="mapAttributesTable">
-
-                <lookupField id="entityLookup" width="100%"
-                             caption="Entity"/>
-                
-                <table id="mapAttributesTable" visible="false" editable="true" width="100%" height="200px">
+                 spacing="true">
+                <lookupField id="entityLookup"
+                             caption="Entity"
+                             datasource="importConfigurationDs"
+                             property="entityClass"
+                             width="100%"/>
+                <table id="mapAttributesTable"
+                       editable="true"
+                       height="200px"
+                       visible="false"
+                       width="100%">
                     <columns>
-                        <column id="fileColumnNumber" editable="true"/>
-                        <column id="fileColumnAlias" editable="true"/>
-                        <column id="entityAttribute" editable="true"/>
+                        <column id="fileColumnNumber"
+                                editable="true"/>
+                        <column id="fileColumnAlias"
+                                editable="true"/>
+                        <column id="entityAttribute"
+                                editable="true"/>
                     </columns>
-                    <rows datasource="mapAttributesDatasource"/>
+                    <rows datasource="importAttributeMappersDatasource"/>
                 </table>
                 <buttonsPanel align="TOP_RIGHT">
                     <button id="toStep3"
-                            action="toStep3"
-                    />
+                            action="toStep3"/>
                 </buttonsPanel>
-
             </tab>
             <tab id="step3"
                  caption="msg://step3Title"
                  enable="false"
                  margin="true"
                  spacing="true">
-
-                <vbox id="resultTableBox" height="100%" width="100%"/>
-
-
+                <fieldGroup datasource="importConfigurationDs">
+                    <field property="dateFormat"/>
+                    <field property="booleanTrueValue"/>
+                    <field property="booleanFalseValue"/>
+                </fieldGroup>
+                <buttonsPanel align="TOP_RIGHT">
+                    <button id="toStep4"
+                            action="toStep4"/>
+                </buttonsPanel>
+            </tab>
+            <tab id="step4"
+                 caption="msg://step4Title"
+                 enable="false"
+                 margin="true"
+                 spacing="true">
+                <vbox id="resultTableBox"
+                      height="100%"
+                      width="100%"/>
             </tab>
         </accordion>
         <buttonsPanel align="TOP_RIGHT">
             <button id="closeWizard"
-                    action="closeWizardAction"
-            />
+                    action="closeWizardAction"/>
             <button id="cancelWizard"
-                    action="cancelWizardAction"
-            />
+                    action="cancelWizardAction"/>
         </buttonsPanel>
     </layout>
 </window>

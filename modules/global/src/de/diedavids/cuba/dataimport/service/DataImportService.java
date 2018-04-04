@@ -1,6 +1,8 @@
 package de.diedavids.cuba.dataimport.service;
 
 
+import de.diedavids.cuba.dataimport.dto.ImportData;
+import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
 import de.diedavids.cuba.dataimport.entity.ImportLog;
 import de.diedavids.cuba.dataimport.entity.Importer;
 
@@ -20,4 +22,6 @@ public interface DataImportService {
      * @return import log
      */
     ImportLog doImport(ImportLog log, Map<String, Object> params, boolean doPersistLog);
+
+    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData);
 }

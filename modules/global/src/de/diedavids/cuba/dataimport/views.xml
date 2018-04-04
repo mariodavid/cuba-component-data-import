@@ -17,5 +17,7 @@
                   view="importLog-view"/>
         <property name="template"
                   view="_minimal"/>
+        <property name="importAttributeMappers"
+                  view="_local"/>
     </view>
 </views>

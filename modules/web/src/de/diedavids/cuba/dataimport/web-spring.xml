@@ -12,6 +12,8 @@
             <map>
                 <entry key="ddcdi_DataImportService"
                        value="de.diedavids.cuba.dataimport.service.DataImportService"/>
+                <entry key="ddcdi_GenericDataImporterService"
+                       value="de.diedavids.cuba.dataimport.service.GenericDataImporterService"/>
             </map>
         </property>
     </bean>

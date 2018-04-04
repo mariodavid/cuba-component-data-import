@@ -9,6 +9,7 @@ import com.haulmont.cuba.gui.data.DsBuilder
 import com.haulmont.cuba.gui.data.DsContext
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
+import de.diedavids.cuba.dataimport.dto.ImportData
 
 class DynamicTableCreator {
 

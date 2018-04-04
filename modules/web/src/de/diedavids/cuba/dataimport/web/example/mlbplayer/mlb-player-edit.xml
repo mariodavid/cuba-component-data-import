@@ -22,6 +22,7 @@
                 <field property="height"/>
                 <field property="weight"/>
                 <field property="age"/>
+                <field property="birthday"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

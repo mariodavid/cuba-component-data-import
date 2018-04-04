@@ -55,6 +55,9 @@ create table DDCDI_IMPORT_CONFIGURATION (
     TEMPLATE_ID varchar(36),
     COMMENT_ longvarchar,
     IMPORTER_BEAN_NAME varchar(255) not null,
+    DATE_FORMAT varchar(255),
+    BOOLEAN_TRUE_VALUE varchar(255),
+    BOOLEAN_FALSE_VALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -114,6 +117,7 @@ create table DDCDI_MLB_PLAYER (
     HEIGHT integer,
     WEIGHT integer,
     AGE double precision,
+    BIRTHDAY date,
     --
     primary key (ID)
 )^

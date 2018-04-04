@@ -5,6 +5,9 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_MLB_PLAYER")
@@ -26,6 +29,19 @@ public class MlbPlayer extends StandardEntity {
 
     @Column(name = "AGE")
     protected Double age;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "BIRTHDAY")
+    protected Date birthday;
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
 
     public void setName(String name) {
         this.name = name;

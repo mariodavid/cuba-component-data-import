@@ -15,6 +15,7 @@ import java.util.List;
 import javax.persistence.OneToMany;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import com.haulmont.chile.core.annotations.Composition;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")
@@ -48,9 +49,44 @@ public class ImportConfiguration extends StandardEntity {
     @Column(name = "IMPORTER_BEAN_NAME", nullable = false)
     protected String importerBeanName;
 
+    @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "configuration")
     protected List<ImportAttributeMapper> importAttributeMappers;
+
+    @Column(name = "DATE_FORMAT")
+    protected String dateFormat;
+
+    @Column(name = "BOOLEAN_TRUE_VALUE")
+    protected String booleanTrueValue;
+
+    @Column(name = "BOOLEAN_FALSE_VALUE")
+    protected String booleanFalseValue;
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setBooleanTrueValue(String booleanTrueValue) {
+        this.booleanTrueValue = booleanTrueValue;
+    }
+
+    public String getBooleanTrueValue() {
+        return booleanTrueValue;
+    }
+
+    public void setBooleanFalseValue(String booleanFalseValue) {
+        this.booleanFalseValue = booleanFalseValue;
+    }
+
+    public String getBooleanFalseValue() {
+        return booleanFalseValue;
+    }
+
 
     public void setEntityClass(String entityClass) {
         this.entityClass = entityClass;

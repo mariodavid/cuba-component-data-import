@@ -1,14 +1,14 @@
-package de.diedavids.cuba.dataimport.web.datapreview
+package de.diedavids.cuba.dataimport.dto
 
 import com.haulmont.cuba.core.entity.KeyValueEntity
 
-class DataRow {
+class DataRowImpl implements DataRow {
 
     def values = []
     Map<String, Object> columns = [:]
 
     static DataRow ofMap(Map<String, Object> data) {
-        def row = new DataRow()
+        def row = new DataRowImpl()
 
         int i = 0
         data.each { k, v ->
@@ -20,6 +20,7 @@ class DataRow {
         row
     }
 
+    @Override
     KeyValueEntity toKevValueEntity() {
         def result = new KeyValueEntity()
 
@@ -47,11 +48,13 @@ class DataRow {
         columns.collect { key, index -> "$key: ${values[index]}" }.join(', ')
     }
 
+    @Override
     Map toMap() {
         def sortedKeys = columns.keySet().sort { columns[it] }
         [sortedKeys, values].transpose().collectEntries()
     }
 
+    @Override
     List<String> getColumnNames() {
         columns.keySet().sort { columns[it] }
     }

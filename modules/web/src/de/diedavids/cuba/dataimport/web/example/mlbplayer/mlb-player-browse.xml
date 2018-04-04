@@ -36,6 +36,7 @@
                 <column id="height"/>
                 <column id="weight"/>
                 <column id="age"/>
+                <column id="birthday"/>
             </columns>
             <rows datasource="mlbPlayersDs"/>
             <rowsCount/>

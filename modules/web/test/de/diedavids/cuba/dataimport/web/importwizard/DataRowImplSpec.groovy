@@ -1,15 +1,16 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
 import com.haulmont.cuba.core.entity.KeyValueEntity
-import de.diedavids.cuba.dataimport.web.datapreview.DataRow
+import de.diedavids.cuba.dataimport.dto.DataRow
+import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import spock.lang.Specification
 
-class DataRowSpec extends Specification {
+class DataRowImplSpec extends Specification {
 
 
     def "toKeyValueEntity creates a KV Entity with one column out of the DataRow"() {
         given:
-        def sut = new DataRow(
+        def sut = new DataRowImpl(
                 columns: [
                         "name": 0,
                 ],
@@ -25,7 +26,7 @@ class DataRowSpec extends Specification {
 
     def "toKeyValueEntity creates a KV Entity with two columns out of the DataRow"() {
         given:
-        def sut = new DataRow(
+        def sut = new DataRowImpl(
                 columns: [
                         "name": 0,
                         "firstName": 1,
@@ -45,7 +46,7 @@ class DataRowSpec extends Specification {
     def "ofMap will create a DataRow out of a Map"() {
 
         when:
-        DataRow sut = DataRow.ofMap([
+        DataRow sut = DataRowImpl.ofMap([
                 "name": "meier",
                 "firstName": "mario",
         ])

@@ -29,6 +29,9 @@
                        custom="true"
                        required="true"/>
                 <field property="adHoc"/>
+                <field property="dateFormat"/>
+                <field property="booleanTrueValue"/>
+                <field property="booleanFalseValue"/>
                 <field custom="true"
                        property="entityClass"/>
             </column>

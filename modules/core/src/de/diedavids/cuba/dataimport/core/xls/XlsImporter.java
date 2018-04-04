@@ -9,6 +9,8 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import de.diedavids.cuba.dataimport.ImporterAPI;
 import de.diedavids.cuba.dataimport.core.ImportLogHelper;
+import de.diedavids.cuba.dataimport.dto.ImportData;
+import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
 import de.diedavids.cuba.dataimport.entity.ImportLog;
 import de.diedavids.cuba.dataimport.exception.ImportFileEofEvaluationException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -40,6 +42,13 @@ public abstract class XlsImporter implements ImporterAPI {
     protected Map<String, Object> defaultValues;
     protected ImportLogHelper logHelper;
     protected int currentRowIndex;
+
+
+    @Override
+    public ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
+
+        return null;
+    }
 
     public ImportLog doImport(ImportLog importLog, Map<String, Object> params) {
         logHelper =  new ImportLogHelper(this.getClass(), importLog);

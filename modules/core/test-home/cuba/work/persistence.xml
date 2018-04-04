@@ -60,6 +60,8 @@
     <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
     <class>de.diedavids.cuba.dataimport.entity.ImportConfiguration</class>
     <class>de.diedavids.cuba.dataimport.entity.example.Customer</class>
+    <class>de.diedavids.cuba.dataimport.entity.ImportAttributeMapper</class>
+    <class>de.diedavids.cuba.dataimport.entity.example.MlbPlayer</class>
     <exclude-unlisted-classes/>
     <properties>
       <property name="eclipselink.cache.coordination.propagate-asynchronously" value="false"/>

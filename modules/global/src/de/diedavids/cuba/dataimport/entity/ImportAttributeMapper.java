@@ -32,6 +32,7 @@ public class ImportAttributeMapper extends StandardEntity {
     @JoinColumn(name = "CONFIGURATION_ID")
     protected ImportConfiguration configuration;
 
+
     public void setConfiguration(ImportConfiguration configuration) {
         this.configuration = configuration;
     }

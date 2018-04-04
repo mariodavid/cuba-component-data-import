@@ -1,6 +1,6 @@
-package de.diedavids.cuba.dataimport.web.datapreview.csv
+package de.diedavids.cuba.dataimport.web.datapreview.converter
 
-import de.diedavids.cuba.dataimport.web.datapreview.ImportData
+import de.diedavids.cuba.dataimport.dto.ImportData
 import spock.lang.Specification
 
 class CsvTableDataConverterSpec extends Specification {

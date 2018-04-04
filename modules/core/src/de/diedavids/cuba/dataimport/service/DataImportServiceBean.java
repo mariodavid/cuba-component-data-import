@@ -7,6 +7,8 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import de.diedavids.cuba.dataimport.ImporterAPI;
+import de.diedavids.cuba.dataimport.dto.ImportData;
+import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
 import de.diedavids.cuba.dataimport.entity.ImportLog;
 import de.diedavids.cuba.dataimport.entity.Importer;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,15 @@ public class DataImportServiceBean implements DataImportService {
                 persistLog(log);
         }
         return log;
+    }
+
+    @Override
+    public ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
+
+        ImporterAPI importerAPI = AppBeans.get(importConfiguration.getImporterBeanName());
+
+        return importerAPI.doDataImport(importConfiguration, importData);
+
     }
 
 
