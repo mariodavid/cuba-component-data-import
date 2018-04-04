@@ -6,4 +6,4 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 script:
- - ./gradlew check
+ - ./gradlew check coveralls
