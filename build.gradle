@@ -22,6 +22,9 @@ buildscript {
     }
 }
 
+apply plugin: "com.github.kt3k.coveralls"
+
+
 def modulePrefix = 'dataimport'
 
 def globalModule = project(":${modulePrefix}-global")
