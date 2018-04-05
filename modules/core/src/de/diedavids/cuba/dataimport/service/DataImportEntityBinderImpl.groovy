@@ -50,30 +50,28 @@ class DataImportEntityBinderImpl implements DataImportEntityBinder {
 
 
         if (metaProperty.type == MetaProperty.Type.ENUM) {
-            value = metaProperty.javaType.fromId(rawValue)
+            value = handleEnumValues(metaProperty, rawValue)
 
         }
         else if (metaProperty.type == MetaProperty.Type.DATATYPE) {
-            if (metaProperty.javaType == Integer) {
-                value = getIntegerValue(rawValue, dataRow)
-            }
-
-            if (metaProperty.javaType == Double) {
-                value = getDoubleValue(rawValue, dataRow)
-
-            }
-
-            if (metaProperty.javaType == Date) {
-                value = getDateValue(importConfiguration, rawValue)
-            }
-
-            if (metaProperty.javaType == String) {
-                value = getStringValue(rawValue)
-            }
+            value = handleDatatypeValue(metaProperty, rawValue, dataRow, importConfiguration)
         }
 
 
         value
+    }
+
+    private handleEnumValues(MetaProperty metaProperty, String rawValue) {
+        metaProperty.javaType.fromId(rawValue)
+    }
+
+    private handleDatatypeValue(MetaProperty metaProperty, String rawValue, DataRow dataRow, ImportConfiguration importConfiguration) {
+        switch (metaProperty.javaType) {
+            case Integer: return getIntegerValue(rawValue, dataRow)
+            case Double: return getDoubleValue(rawValue, dataRow)
+            case Date: return getDateValue(importConfiguration, rawValue)
+            case String: return getStringValue(rawValue)
+        }
     }
 
     private Integer getIntegerValue(String rawValue, DataRow dataRow) {
