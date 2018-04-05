@@ -1,25 +1,34 @@
-package de.diedavids.cuba.dataimport.core.xls
+package de.diedavids.cuba.dataimport.core.service
 
+import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Metadata
+import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
+import de.diedavids.cuba.dataimport.service.DataImportEntityBinder
+import de.diedavids.cuba.dataimport.service.GenericDataImporterServiceBean
 import spock.lang.Specification
 
-class GenericImportConfigurationImporterSpec extends Specification {
+class GenericDataImporterServiceBeanSpec extends Specification {
     private Metadata metadata = Mock(Metadata)
-    private GenericImportConfigurationImporter sut
+    private GenericDataImporterServiceBean sut
 
+
+    DataImportEntityBinder dataImportEntityBinder = Mock(DataImportEntityBinder)
     void setup() {
 
-        sut = new GenericImportConfigurationImporter(
-                metadata: metadata
+        sut = new GenericDataImporterServiceBean(
+                metadata: metadata,
+                dataImportEntityBinder: dataImportEntityBinder
         )
 
         metadata.create('ddcdi$MlbPlayer') >> new MlbPlayer()
+
+        dataImportEntityBinder.bindAttributes(_,_,_) >> { ImportConfiguration importConfiguration, DataRow dataRow, Entity entity -> return entity }
     }
 
     def "createEntities creates an entity for every row in the import data"() {
@@ -59,33 +68,26 @@ class GenericImportConfigurationImporterSpec extends Specification {
         result[0] instanceof MlbPlayer
     }
 
-
     def "createEntities binds the attributes of the data row to the entity instance"() {
         given:
         ImportDataImpl importData = createData([
                 [name: "Simpson", team: "NY Yankees", height: 120]
         ])
 
-
-
         and:
         ImportConfiguration importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team', fileColumnAlias: 'team', fileColumnNumber: 1),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.height', fileColumnAlias: 'height', fileColumnNumber: 2),
                 ]
         )
 
 
         when:
-        MlbPlayer mlbPlayer = sut.createEntities(importConfiguration, importData)[0] as MlbPlayer
+        sut.createEntities(importConfiguration, importData)[0] as MlbPlayer
 
         then:
-        mlbPlayer.name == "Simpson"
-        mlbPlayer.team == "NY Yankees"
-        mlbPlayer.height == 120
+        1 * dataImportEntityBinder.bindAttributes(importConfiguration, importData.rows[0], _)
     }
 
     private ImportData createData(List<Map<String, Object>> data) {

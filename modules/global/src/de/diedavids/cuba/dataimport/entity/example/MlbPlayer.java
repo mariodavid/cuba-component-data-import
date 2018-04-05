@@ -8,6 +8,9 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_MLB_PLAYER")
@@ -18,8 +21,9 @@ public class MlbPlayer extends StandardEntity {
     @Column(name = "NAME")
     protected String name;
 
-    @Column(name = "TEAM")
-    protected String team;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEAM_ID")
+    protected MlbTeam team;
 
     @Column(name = "HEIGHT")
     protected Integer height;
@@ -33,6 +37,15 @@ public class MlbPlayer extends StandardEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "BIRTHDAY")
     protected Date birthday;
+
+    public MlbTeam getTeam() {
+        return team;
+    }
+
+    public void setTeam(MlbTeam team) {
+        this.team = team;
+    }
+
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
@@ -49,14 +62,6 @@ public class MlbPlayer extends StandardEntity {
 
     public String getName() {
         return name;
-    }
-
-    public void setTeam(String team) {
-        this.team = team;
-    }
-
-    public String getTeam() {
-        return team;
     }
 
     public void setHeight(Integer height) {

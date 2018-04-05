@@ -4,11 +4,12 @@
           insertBefore="administration">
         <item screen="ddcdi$Customer.browse"/>
         <item screen="ddcdi$MlbPlayer.browse"/>
+        <item screen="ddcdi$MlbTeam.browse"/>
     </menu>
     <menu id="application-ddcdi"
           insertBefore="administration">
-        <item screen="ddcdi$ImportLog.browse"/>
-        <item screen="ddcdi$ImportConfiguration.browse"/>
+        <!--<item screen="ddcdi$ImportLog.browse"/>-->
+        <!--<item screen="ddcdi$ImportConfiguration.browse"/>-->
         <item openType="DIALOG"
               screen="ddcdi$import-wizard"/>
     </menu>
