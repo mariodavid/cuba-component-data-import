@@ -47,22 +47,32 @@ class DataImportEntityBinderImpl implements DataImportEntityBinder {
 
     private getValue(MetaProperty metaProperty, String rawValue, DataRow dataRow, ImportConfiguration importConfiguration) {
         def value = null
-        if (metaProperty.javaType == Integer) {
-            value = getIntegerValue(rawValue, dataRow)
-        }
 
-        if (metaProperty.javaType == Double) {
-            value = getDoubleValue(rawValue, dataRow)
+
+        if (metaProperty.type == MetaProperty.Type.ENUM) {
+            value = metaProperty.javaType.fromId(rawValue)
 
         }
+        else if (metaProperty.type == MetaProperty.Type.DATATYPE) {
+            if (metaProperty.javaType == Integer) {
+                value = getIntegerValue(rawValue, dataRow)
+            }
 
-        if (metaProperty.javaType == Date) {
-            value = getDateValue(importConfiguration, rawValue)
+            if (metaProperty.javaType == Double) {
+                value = getDoubleValue(rawValue, dataRow)
+
+            }
+
+            if (metaProperty.javaType == Date) {
+                value = getDateValue(importConfiguration, rawValue)
+            }
+
+            if (metaProperty.javaType == String) {
+                value = getStringValue(rawValue)
+            }
         }
 
-        if (metaProperty.javaType == String) {
-            value = getStringValue(rawValue)
-        }
+
         value
     }
 

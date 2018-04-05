@@ -33,6 +33,7 @@
             <columns>
                 <column id="name"/>
                 <column id="code"/>
+                <column id="state"/>
             </columns>
             <rows datasource="mlbTeamsDs"/>
             <rowsCount/>

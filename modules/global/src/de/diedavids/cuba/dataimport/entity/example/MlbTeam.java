@@ -21,6 +21,18 @@ public class MlbTeam extends StandardEntity {
     @Column(name = "CODE", nullable = false)
     protected String code;
 
+    @Column(name = "STATE")
+    protected String state;
+
+    public void setState(State state) {
+        this.state = state == null ? null : state.getId();
+    }
+
+    public State getState() {
+        return state == null ? null : State.fromId(state);
+    }
+
+
     public void setName(String name) {
         this.name = name;
     }

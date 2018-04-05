@@ -19,6 +19,7 @@
             <column width="250px">
                 <field property="name"/>
                 <field property="code"/>
+                <field property="state"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

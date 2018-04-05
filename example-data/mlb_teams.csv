@@ -1,43 +1,43 @@
-"Code","Name"
-ALT,"Altoona Mountain City"
-ANA,"Los Angeles Angels of Anaheim"
-CAL,"California Angels"
-LAA,"Los Angeles Angels"
-ARI,"Arizona Diamondbacks"
-ATH,"Philadelphia Athletics"
-ATL,"Atlanta Braves"
-BSN,"Boston Braves"
-MLN,"Milwaukee Braves"
-BAL,"Baltimore Orioles"
-MLA,"Milwaukee Brewers"
-SLB,"St. Louis Browns"
-BUF,"Buffalo Bisons"
-BUF,"Buffalo Blues"
-BAL,"Baltimore Lord Baltimores"
-BAL,"Baltimore Orioles"
-BLN,"Baltimore Orioles"
-BAL,"Baltimore Terrapins"
-BLU,"Baltimore Monumentals"
-BOS,"Boston Red Stockings"
-BOS,"Boston Red Sox"
-BRA,"Brooklyn Atlantics"
-BOS,"Boston Reds"
-BRG,"Brooklyn Gladiators"
-BOS,"Boston Reds"
-BTT,"Brooklyn Tip-Tops"
-BUF,"Buffalo Bisons"
-BWW,"Brooklyn Ward's Wonders"
-COL,"Columbus Buckeyes"
-CLV,"Cleveland Blues"
-CEN,"Philadelphia Centennials"
-CLE,"Cleveland Forest Citys"
-CHC,"Chicago Cubs"
-CHI,"Chicago Whales"
-CHI,"Chicago Pirates"
-CHW,"Chicago White Sox"
-CIN,"Cincinnati Reds"
-CKK,"Cincinnati Kelly's Killers"
-CLE,"Cleveland Indians"
-CLE,"Cleveland Infants"
-COL,"Columbus Solons"
-CLE,"Cleveland Blues"
+"Code","Name","State"
+ALT,"Altoona Mountain City",OK
+ANA,"Los Angeles Angels of Anaheim",WA
+CAL,"California Angels",OH
+LAA,"Los Angeles Angels",OK
+ARI,"Arizona Diamondbacks",WA
+ATH,"Philadelphia Athletics",WA
+ATL,"Atlanta Braves",OH
+BSN,"Boston Braves",WA
+MLN,"Milwaukee Braves",OH
+BAL,"Baltimore Orioles",OK
+MLA,"Milwaukee Brewers",OH
+SLB,"St. Louis Browns",OK
+BUF,"Buffalo Bisons",TX
+BUF,"Buffalo Blues",NC
+BAL,"Baltimore Lord Baltimores",WA
+BAL,"Baltimore Orioles",WA
+BLN,"Baltimore Orioles",TX
+BAL,"Baltimore Terrapins",NC
+BLU,"Baltimore Monumentals",PA
+BOS,"Boston Red Stockings",PA
+BOS,"Boston Red Sox",WA
+BRA,"Brooklyn Atlantics",TX
+BOS,"Boston Reds",WA
+BRG,"Brooklyn Gladiators",PA
+BOS,"Boston Reds",NC
+BTT,"Brooklyn Tip-Tops",WA
+BUF,"Buffalo Bisons",TX
+BWW,"Brooklyn Ward's Wonders",PA
+COL,"Columbus Buckeyes",WA
+CLV,"Cleveland Blues",PA
+CEN,"Philadelphia Centennials",TX
+CLE,"Cleveland Forest Citys",WA
+CHC,"Chicago Cubs",NC
+CHI,"Chicago Whales",PA
+CHI,"Chicago Pirates",TX
+CHW,"Chicago White Sox",WA
+CIN,"Cincinnati Reds",WA
+CKK,"Cincinnati Kelly's Killers",PA
+CLE,"Cleveland Indians",HI
+CLE,"Cleveland Infants",HI
+COL,"Columbus Solons",WA
+CLE,"Cleveland Blues",NC
