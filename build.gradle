@@ -237,6 +237,16 @@ configure(coreModule) {
         dbUser = 'sa'
         dbPassword = ''
     }
+
+    task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local test database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = 'localhost'
+        dbName = 'ddcdi_test'
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+
+    //tasks.test.dependsOn(assembleDbScripts)
 }
 
 configure(guiModule) {
