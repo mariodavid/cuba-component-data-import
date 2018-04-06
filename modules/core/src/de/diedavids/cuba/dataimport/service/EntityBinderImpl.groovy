@@ -115,17 +115,20 @@ class EntityBinderImpl implements EntityBinder {
 
         def customBooleanTrueValue = importConfiguration.booleanTrueValue
         def customBooleanFalseValue = importConfiguration.booleanFalseValue
-        if (customBooleanTrueValue && customBooleanFalseValue) {
-            if (customBooleanTrueValue == rawValue) {
+
+        if (customBooleanTrueValue  || customBooleanFalseValue) {
+            if (customBooleanTrueValue.equalsIgnoreCase(rawValue)) {
                 return true
             }
-            else if (customBooleanFalseValue == rawValue) {
+            else if (customBooleanFalseValue.equalsIgnoreCase(rawValue)) {
                 return false
             }
             else {
                 return null
             }
         }
+
+
         try {
             return Boolean.parseBoolean(rawValue)
         }
