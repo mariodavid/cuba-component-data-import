@@ -38,6 +38,18 @@ public class MlbPlayer extends StandardEntity {
     @Column(name = "BIRTHDAY")
     protected Date birthday;
 
+    @Column(name = "LEFT_HANDED")
+    protected Boolean leftHanded;
+
+    public void setLeftHanded(Boolean leftHanded) {
+        this.leftHanded = leftHanded;
+    }
+
+    public Boolean getLeftHanded() {
+        return leftHanded;
+    }
+
+
     public MlbTeam getTeam() {
         return team;
     }

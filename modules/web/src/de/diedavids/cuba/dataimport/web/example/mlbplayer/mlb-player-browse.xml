@@ -37,6 +37,7 @@
                 <column id="weight"/>
                 <column id="age"/>
                 <column id="birthday"/>
+                <column id="leftHanded"/>
             </columns>
             <rows datasource="mlbPlayersDs"/>
             <rowsCount/>

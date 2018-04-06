@@ -42,7 +42,6 @@ abstract class AbstractEntityBinderIntegrationTest {
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team', fileColumnAlias: 'team', fileColumnNumber: 1),
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.height', fileColumnAlias: 'height', fileColumnNumber: 2),
                 ]
         )

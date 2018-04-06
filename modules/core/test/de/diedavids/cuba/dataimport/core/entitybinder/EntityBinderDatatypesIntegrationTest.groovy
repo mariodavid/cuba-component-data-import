@@ -15,10 +15,10 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
 
 
     @Test
-    void "bindAttributes creates an Entity with a correct String Attribute"() {
+    void "bindAttributes binds a string attribute"() {
 
         ImportData importData = createData([
-                [name: "Simpson", team: "NY Yankees", height: 120]
+                [name: "Simpson", height: 120]
         ])
 
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
@@ -27,10 +27,10 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
     }
 
     @Test
-    void "bindAttributes creates an Entity with a correct Integer Attribute"() {
+    void "bindAttributes binds an integer attribute"() {
 
         ImportData importData = createData([
-                [name: "Simpson", team: "NY Yankees", height: 120]
+                [name: "Simpson", height: 120]
         ])
 
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
@@ -39,10 +39,10 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
     }
 
     @Test
-    void "bindAttributes creates an Entity with a correct Double Attribute"() {
+    void "bindAttributes binds a double attribute"() {
 
         ImportData importData = createData([
-                [age: "22.5d"]
+                [age: "22.5"]
         ])
 
         importConfiguration = new ImportConfiguration(
@@ -54,6 +54,86 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getAge()).isEqualTo(22.5d)
+    }
+
+    @Test
+    void "bindAttributes binds a boolean attribute"() {
+
+        ImportData importData = createData([
+                [leftHanded: "true"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                ]
+        )
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getLeftHanded()).isTrue()
+    }
+
+    @Test
+    void "bindAttributes binds a boolean attribute with a custom booleanTrueValue definition"() {
+
+        ImportData importData = createData([
+                [leftHanded: "Yes"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                booleanTrueValue: "Yes",
+                booleanFalseValue: "No",
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                ]
+        )
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getLeftHanded()).isTrue()
+    }
+
+
+    @Test
+    void "bindAttributes binds a boolean attribute with a custom booleanFalseValue definition"() {
+
+        ImportData importData = createData([
+                [leftHanded: "No"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                booleanTrueValue: "Yes",
+                booleanFalseValue: "No",
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                ]
+        )
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getLeftHanded()).isFalse()
+    }
+
+
+    @Test
+    void "bindAttributes binds a boolean attribute not if no custom value matches"() {
+
+        ImportData importData = createData([
+                [leftHanded: "X"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                booleanTrueValue: "Yes",
+                booleanFalseValue: "No",
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                ]
+        )
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getLeftHanded()).isNull()
     }
 
     @Test
@@ -96,7 +176,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
 
 
     @Test
-    void "bindAttributes creates an Entity with a correct Enum value"() {
+    void "bindAttributes binds a  Enum value"() {
 
         ImportData importData = createData([
                 [state: "AL"]

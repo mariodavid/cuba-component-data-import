@@ -23,6 +23,7 @@
                 <field property="weight"/>
                 <field property="age"/>
                 <field property="birthday"/>
+                <field property="leftHanded"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

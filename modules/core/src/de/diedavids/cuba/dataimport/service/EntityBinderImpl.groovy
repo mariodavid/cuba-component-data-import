@@ -1,5 +1,6 @@
 package de.diedavids.cuba.dataimport.service
 
+import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
 import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.entity.Entity
@@ -43,14 +44,15 @@ class EntityBinderImpl implements EntityBinder {
 
         String rawValue = ((String) dataRow[importAttributeMapper.fileColumnAlias]).trim()
 
-        def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + PATH_SEPERATOR)
-        MetaPropertyPath path = metadata.getClass(importEntityClassName).getPropertyPath(entityAttribute)
+        String entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + PATH_SEPERATOR)
+        MetaClass importEntityMetaClass = metadata.getClass(importEntityClassName)
+        MetaPropertyPath path = importEntityMetaClass.getPropertyPath(entityAttribute)
 
         if (isAssociatedAttribute(path)) {
             handleAssociationAttribute(path, rawValue, entity)
         }
         else {
-            MetaProperty metaProperty = metadata.getClass(importEntityClassName).getPropertyNN(entityAttribute)
+            MetaProperty metaProperty = importEntityMetaClass.getPropertyNN(entityAttribute)
             def value = getValue(metaProperty, rawValue, dataRow, importConfiguration)
             entity.setValueEx(entityAttribute, value)
         }
@@ -96,6 +98,7 @@ class EntityBinderImpl implements EntityBinder {
             case Integer: return getIntegerValue(rawValue, dataRow)
             case Double: return getDoubleValue(rawValue, dataRow)
             case Date: return getDateValue(importConfiguration, rawValue)
+            case Boolean: return getBooleanValue(importConfiguration, rawValue, dataRow)
             case String: return getStringValue(rawValue)
         }
     }
@@ -103,6 +106,28 @@ class EntityBinderImpl implements EntityBinder {
     private Integer getIntegerValue(String rawValue, DataRow dataRow) {
         try {
             return Integer.parseInt(rawValue)
+        }
+        catch (NumberFormatException e) {
+            log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
+    }
+    private Boolean getBooleanValue(ImportConfiguration importConfiguration, String rawValue, DataRow dataRow) {
+
+        def customBooleanTrueValue = importConfiguration.booleanTrueValue
+        def customBooleanFalseValue = importConfiguration.booleanFalseValue
+        if (customBooleanTrueValue && customBooleanFalseValue) {
+            if (customBooleanTrueValue == rawValue) {
+                return true
+            }
+            else if (customBooleanFalseValue == rawValue) {
+                return false
+            }
+            else {
+                return null
+            }
+        }
+        try {
+            return Boolean.parseBoolean(rawValue)
         }
         catch (NumberFormatException e) {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
