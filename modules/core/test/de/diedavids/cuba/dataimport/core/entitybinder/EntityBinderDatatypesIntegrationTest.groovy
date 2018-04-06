@@ -176,7 +176,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
 
 
     @Test
-    void "bindAttributes binds a  Enum value"() {
+    void "bindAttributes binds an enum value"() {
 
         ImportData importData = createData([
                 [state: "AL"]
