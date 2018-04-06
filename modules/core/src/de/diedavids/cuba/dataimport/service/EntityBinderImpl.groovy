@@ -4,7 +4,9 @@ import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
 import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.entity.Entity
+import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.core.global.Scripting
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
@@ -25,7 +27,13 @@ class EntityBinderImpl implements EntityBinder {
     @Inject
     SimpleDataLoader simpleDataLoader
 
-    private static final String PATH_SEPERATOR = '.'
+    @Inject
+    Scripting scripting
+
+    @Inject
+    DataManager dataManager
+
+    private static final String PATH_SEPARATOR = '.'
 
 
     @Override
@@ -41,33 +49,60 @@ class EntityBinderImpl implements EntityBinder {
     private void bindAttribute(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, ImportAttributeMapper importAttributeMapper) {
 
         def importEntityClassName = importConfiguration.entityClass
-
+        String entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + PATH_SEPARATOR)
         String rawValue = ((String) dataRow[importAttributeMapper.fileColumnAlias]).trim()
 
-        String entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + PATH_SEPERATOR)
-        MetaClass importEntityMetaClass = metadata.getClass(importEntityClassName)
-        MetaPropertyPath path = importEntityMetaClass.getPropertyPath(entityAttribute)
-
-        if (isAssociatedAttribute(path)) {
-            try {
-                handleAssociationAttribute(path, rawValue, entity)
-            }
-            catch (MultipleAssociationValuesFoundException e) {
-                e.dataRow = dataRow
-                e.propertyPath = path
-                log.warn("Multiple associations found for data row: [${e.dataRow}] and attribute: ${e.propertyPath} with value ${e.value}. Found associations: ${e.allResults}. Will be ignored.")
-            }
-        } else {
-            MetaProperty metaProperty = importEntityMetaClass.getPropertyNN(entityAttribute)
-            def value = getValue(metaProperty, rawValue, dataRow, importConfiguration)
-            entity.setValueEx(entityAttribute, value)
+        if (importAttributeMapper.customAttributeBindScript) {
+            bindAttributeWithCustomScript(importConfiguration, dataRow, entity, entityAttribute, importAttributeMapper, rawValue)
         }
+        else {
+
+            MetaClass importEntityMetaClass = metadata.getClass(importEntityClassName)
+            MetaPropertyPath path = importEntityMetaClass.getPropertyPath(entityAttribute)
+
+            if (isAssociatedAttribute(path)) {
+                try {
+                    handleAssociationAttribute(path, rawValue, entity)
+                }
+                catch (MultipleAssociationValuesFoundException e) {
+                    e.dataRow = dataRow
+                    e.propertyPath = path
+                    log.warn("Multiple associations found for data row: [${e.dataRow}] and attribute: ${e.propertyPath} with value ${e.value}. Found associations: ${e.allResults}. Will be ignored.")
+                }
+            } else {
+                MetaProperty metaProperty = importEntityMetaClass.getPropertyNN(entityAttribute)
+                def value = getValue(metaProperty, rawValue, dataRow, importConfiguration)
+                entity.setValueEx(entityAttribute, value)
+            }
+        }
+
     }
 
+    void bindAttributeWithCustomScript(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, String entityAttribute, ImportAttributeMapper importAttributeMapper, String rawValue) {
+        Binding binding = new Binding(
+                importConfiguration: importConfiguration,
+                importAttributeMapper: importAttributeMapper,
+                dataRow: dataRow,
+                entityAttribute: entityAttribute,
+                dataManager: dataManager,
+                rawValue: rawValue
+        )
+
+
+        try {
+            def value = scripting.evaluateGroovy(importAttributeMapper.customAttributeBindScript, binding)
+            entity.setValueEx(entityAttribute, value)
+        }
+        catch (Exception e) {
+            log.error("Error while executing custom binding script: ${e.getClass()}", e)
+        }
+
+
+    }
 
     private void handleAssociationAttribute(MetaPropertyPath path, String rawValue, Entity entity) {
         def propertyPathFromAssociation = path.path.drop(1)
-        def propertyPath = propertyPathFromAssociation.join(PATH_SEPERATOR)
+        def propertyPath = propertyPathFromAssociation.join(PATH_SEPARATOR)
         def associationJavaType = path.metaProperties[0].javaType
         def associationProperty = path.metaProperties[0].name
 
@@ -140,7 +175,6 @@ class EntityBinderImpl implements EntityBinder {
 
             return customBooleanFalseValue.equalsIgnoreCase(rawValue) ? false : null
         }
-
 
         try {
             return Boolean.parseBoolean(rawValue)
