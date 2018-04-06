@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.mlbteam
+package de.diedavids.cuba.dataimport.web.example.mlbteam
 
 import com.haulmont.cuba.gui.components.AbstractEditor
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam

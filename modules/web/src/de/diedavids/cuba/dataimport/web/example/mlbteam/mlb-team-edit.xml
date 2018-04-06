@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
-        class="de.diedavids.cuba.dataimport.web.mlbteam.MlbTeamEdit"
+        class="de.diedavids.cuba.dataimport.web.example.mlbteam.MlbTeamEdit"
         datasource="mlbTeamDs"
         focusComponent="fieldGroup"
-        messagesPack="de.diedavids.cuba.dataimport.web.mlbteam">
+        messagesPack="de.diedavids.cuba.dataimport.web.example.mlbteam">
     <dsContext>
         <datasource id="mlbTeamDs"
                     class="de.diedavids.cuba.dataimport.entity.example.MlbTeam"

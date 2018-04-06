@@ -18,7 +18,7 @@ public class MlbTeam extends StandardEntity {
     protected String name;
 
     @NotNull
-    @Column(name = "CODE", nullable = false)
+    @Column(name = "CODE", nullable = false, unique = true)
     protected String code;
 
     @Column(name = "STATE")

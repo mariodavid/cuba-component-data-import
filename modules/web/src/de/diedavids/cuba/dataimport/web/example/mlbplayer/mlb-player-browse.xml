@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="mlbPlayersDs"
                          class="de.diedavids.cuba.dataimport.entity.example.MlbPlayer"
-                         view="_local">
+                         view="mlbPlayer-view">
             <query>
                 <![CDATA[select e from ddcdi$MlbPlayer e]]>
             </query>

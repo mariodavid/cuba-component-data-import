@@ -1,8 +1,10 @@
 package de.diedavids.cuba.dataimport.service
 
 import com.haulmont.chile.core.model.MetaProperty
+import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Metadata
+import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
@@ -13,11 +15,16 @@ import javax.inject.Inject
 import java.text.SimpleDateFormat
 
 @Slf4j
-@Component(DataImportEntityBinder.NAME)
-class DataImportEntityBinderImpl implements DataImportEntityBinder {
+@Component(EntityBinder.NAME)
+class EntityBinderImpl implements EntityBinder {
 
     @Inject
     Metadata metadata
+
+    @Inject
+    SimpleDataLoader simpleDataLoader
+
+    private static final String PATH_SEPERATOR = '.'
 
 
     @Override
@@ -34,15 +41,34 @@ class DataImportEntityBinderImpl implements DataImportEntityBinder {
 
         def importEntityClassName = importConfiguration.entityClass
 
-        def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + '.')
-
-        MetaProperty metaProperty = metadata.getClass(importEntityClassName).getPropertyNN(entityAttribute)
         String rawValue = ((String) dataRow[importAttributeMapper.fileColumnAlias]).trim()
 
-        def value = getValue(metaProperty, rawValue, dataRow, importConfiguration)
+        def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + PATH_SEPERATOR)
+        MetaPropertyPath path = metadata.getClass(importEntityClassName).getPropertyPath(entityAttribute)
+
+        if (isAssociatedAttribute(path)) {
+            handleAssociationAttribute(path, rawValue, entity)
+        }
+        else {
+            MetaProperty metaProperty = metadata.getClass(importEntityClassName).getPropertyNN(entityAttribute)
+            def value = getValue(metaProperty, rawValue, dataRow, importConfiguration)
+            entity.setValueEx(entityAttribute, value)
+        }
+    }
 
 
-        entity.setValueEx(entityAttribute, value)
+    private void handleAssociationAttribute(MetaPropertyPath path, String rawValue, Entity entity) {
+        def propertyPathFromAssociation = path.path.drop(1)
+        def propertyPath = propertyPathFromAssociation.join(PATH_SEPERATOR)
+        def associationJavaType = path.metaProperties[0].javaType
+        def associationProperty = path.metaProperties[0].name
+        def associationValue = simpleDataLoader.loadByProperty(associationJavaType, propertyPath, rawValue)
+
+        entity.setValueEx(associationProperty, associationValue)
+    }
+
+    private boolean isAssociatedAttribute(MetaPropertyPath path) {
+        path.metaProperties.size() > 1
     }
 
     private getValue(MetaProperty metaProperty, String rawValue, DataRow dataRow, ImportConfiguration importConfiguration) {

@@ -9,7 +9,7 @@ import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
-import de.diedavids.cuba.dataimport.service.DataImportEntityBinder
+import de.diedavids.cuba.dataimport.service.EntityBinder
 import de.diedavids.cuba.dataimport.service.GenericDataImporterServiceBean
 import spock.lang.Specification
 
@@ -18,7 +18,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
     private GenericDataImporterServiceBean sut
 
 
-    DataImportEntityBinder dataImportEntityBinder = Mock(DataImportEntityBinder)
+    EntityBinder dataImportEntityBinder = Mock(EntityBinder)
     void setup() {
 
         sut = new GenericDataImporterServiceBean(

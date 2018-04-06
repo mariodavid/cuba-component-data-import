@@ -1,55 +1,17 @@
-package de.diedavids.cuba.dataimport.core
+package de.diedavids.cuba.dataimport.core.entitybinder
 
-import de.diedavids.cuba.dataimport.DdcdiTestContainer
-import com.haulmont.cuba.core.Persistence
-import com.haulmont.cuba.core.global.AppBeans
-import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.Metadata
-import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.State
-import de.diedavids.cuba.dataimport.service.DataImportEntityBinder
-import org.junit.*
-import static org.assertj.core.api.Assertions.*;
+import org.junit.Test
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
-
-class DataImportEntityBinderIntegrationTest {
-
-    @ClassRule
-    public static DdcdiTestContainer cont = DdcdiTestContainer.Common.INSTANCE
-
-    private Metadata metadata
-    private Persistence persistence
-    private DataManager dataManager
-
-
-    private DataImportEntityBinder sut
-
-    private ImportConfiguration importConfiguration
-
-    @Before
-    void setUp() throws Exception {
-        metadata = cont.metadata()
-        persistence = cont.persistence()
-        dataManager = AppBeans.get(DataManager.class)
-
-        sut = AppBeans.get(DataImportEntityBinder.NAME)
-
-        importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbPlayer',
-                importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team', fileColumnAlias: 'team', fileColumnNumber: 1),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.height', fileColumnAlias: 'height', fileColumnNumber: 2),
-                ]
-        )
-    }
+class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrationTest{
 
 
     @Test
@@ -133,7 +95,6 @@ class DataImportEntityBinderIntegrationTest {
     }
 
 
-
     @Test
     void "bindAttributes creates an Entity with a correct Enum value"() {
 
@@ -153,14 +114,4 @@ class DataImportEntityBinderIntegrationTest {
     }
 
 
-    private ImportData createData(List<Map<String, Object>> data) {
-        ImportData importData = new ImportDataImpl()
-
-        data.each {
-            def dataRow = DataRowImpl.ofMap(it)
-            importData.rows.add(dataRow)
-        }
-
-        importData
-    }
 }

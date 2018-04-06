@@ -4,8 +4,8 @@ import com.haulmont.cuba.core.entity.Entity;
 import de.diedavids.cuba.dataimport.dto.DataRow;
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
 
-public interface DataImportEntityBinder {
-    String NAME = "ddcdi_DataImportEntityBinder";
+public interface EntityBinder {
+    String NAME = "ddcdi_EntityBinder";
 
     Entity bindAttributes(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity);
 
