@@ -21,4 +21,9 @@ public interface SimpleDataLoader {
 
     <E extends BaseUuidEntity> Collection<E> loadAll(Class<E> entityClass);
     <E extends BaseUuidEntity> Collection<E> loadAll(Class<E> entityClass, String view);
+
+
+    <E extends BaseUuidEntity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue);
+    <E extends BaseUuidEntity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view);
+
 }

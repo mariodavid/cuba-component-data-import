@@ -49,9 +49,15 @@ class EntityBinderImpl implements EntityBinder {
         MetaPropertyPath path = importEntityMetaClass.getPropertyPath(entityAttribute)
 
         if (isAssociatedAttribute(path)) {
-            handleAssociationAttribute(path, rawValue, entity)
-        }
-        else {
+            try {
+                handleAssociationAttribute(path, rawValue, entity)
+            }
+            catch (MultipleAssociationValuesFoundException e) {
+                e.dataRow = dataRow
+                e.propertyPath = path
+                log.warn("Multiple associations found for data row: [${e.dataRow}] and attribute: ${e.propertyPath} with value ${e.value}. Found associations: ${e.allResults}. Will be ignored.")
+            }
+        } else {
             MetaProperty metaProperty = importEntityMetaClass.getPropertyNN(entityAttribute)
             def value = getValue(metaProperty, rawValue, dataRow, importConfiguration)
             entity.setValueEx(entityAttribute, value)
@@ -64,9 +70,19 @@ class EntityBinderImpl implements EntityBinder {
         def propertyPath = propertyPathFromAssociation.join(PATH_SEPERATOR)
         def associationJavaType = path.metaProperties[0].javaType
         def associationProperty = path.metaProperties[0].name
-        def associationValue = simpleDataLoader.loadByProperty(associationJavaType, propertyPath, rawValue)
 
+        def associationValue = loadAssociationValue(associationJavaType, propertyPath, rawValue)
         entity.setValueEx(associationProperty, associationValue)
+    }
+
+    private loadAssociationValue(Class<?> associationJavaType, String propertyPath, String rawValue) {
+        def allResults = simpleDataLoader.loadAllByProperty(associationJavaType, propertyPath, rawValue)
+
+        if (allResults.size() > 1) {
+            throw new MultipleAssociationValuesFoundException(value: rawValue, allResults: allResults)
+        } else {
+            return allResults.first()
+        }
     }
 
     private boolean isAssociatedAttribute(MetaPropertyPath path) {
@@ -80,8 +96,7 @@ class EntityBinderImpl implements EntityBinder {
         if (metaProperty.type == MetaProperty.Type.ENUM) {
             value = handleEnumValues(metaProperty, rawValue)
 
-        }
-        else if (metaProperty.type == MetaProperty.Type.DATATYPE) {
+        } else if (metaProperty.type == MetaProperty.Type.DATATYPE) {
             value = handleDatatypeValue(metaProperty, rawValue, dataRow, importConfiguration)
         }
 
@@ -111,19 +126,18 @@ class EntityBinderImpl implements EntityBinder {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
         }
     }
+
     private Boolean getBooleanValue(ImportConfiguration importConfiguration, String rawValue, DataRow dataRow) {
 
         def customBooleanTrueValue = importConfiguration.booleanTrueValue
         def customBooleanFalseValue = importConfiguration.booleanFalseValue
 
-        if (customBooleanTrueValue  || customBooleanFalseValue) {
+        if (customBooleanTrueValue || customBooleanFalseValue) {
             if (customBooleanTrueValue.equalsIgnoreCase(rawValue)) {
                 return true
-            }
-            else if (customBooleanFalseValue.equalsIgnoreCase(rawValue)) {
+            } else if (customBooleanFalseValue.equalsIgnoreCase(rawValue)) {
                 return false
-            }
-            else {
+            } else {
                 return null
             }
         }

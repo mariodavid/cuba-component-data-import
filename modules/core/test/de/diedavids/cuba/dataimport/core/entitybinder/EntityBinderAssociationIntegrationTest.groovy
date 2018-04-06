@@ -61,21 +61,27 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
 
 
         ImportData importData = createData([
-                [team: "BAL"]
+                [team_state: "MA"]
         ])
 
 
-        MlbTeam balTeam = metadata.create(MlbTeam)
-        balTeam.name = 'Baltimore Orioles'
-        balTeam.code = 'BAL'
-        balTeam.state = State.MA
+        MlbTeam team1InMaryland = metadata.create(MlbTeam)
+        team1InMaryland.name = 'Baltimore Orioles'
+        team1InMaryland.code = 'BAL'
+        team1InMaryland.state = State.MA
 
-        dataManager.commit(balTeam)
+        MlbTeam team2InMaryland = metadata.create(MlbTeam)
+        team2InMaryland.name = 'Hagerstown Owls'
+        team2InMaryland.code = 'HOW'
+        team2InMaryland.state = State.MA
+
+        dataManager.commit(team1InMaryland)
+        dataManager.commit(team2InMaryland)
 
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.code', fileColumnAlias: 'team'),
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.state', fileColumnAlias: 'team_state'),
                 ]
         )
 
@@ -83,9 +89,10 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
 
-        assertThat(entity.getTeam()).isEqualTo(balTeam)
+        assertThat(entity.getTeam()).isNull()
 
-        cont.deleteRecord(balTeam)
+        cont.deleteRecord(team1InMaryland)
+        cont.deleteRecord(team2InMaryland)
     }
 
 }
