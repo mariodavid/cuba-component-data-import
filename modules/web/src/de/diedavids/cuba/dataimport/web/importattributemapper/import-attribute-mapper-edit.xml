@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="de.diedavids.cuba.dataimport.web.importattributemapper.ImportAttributeMapperEdit"
+        datasource="importAttributeMapperDs"
+        focusComponent="fieldGroup"
+        messagesPack="de.diedavids.cuba.dataimport.web.importattributemapper">
+    <dsContext>
+        <datasource id="importAttributeMapperDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportAttributeMapper"
+                    view="_local"/>
+    </dsContext>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="importAttributeMapperDs">
+            <column width="250px">
+                <field property="entityAttribute"/>
+                <field property="fileColumnNumber"/>
+                <field property="fileColumnAlias"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

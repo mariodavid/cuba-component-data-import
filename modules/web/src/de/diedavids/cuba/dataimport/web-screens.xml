@@ -21,4 +21,6 @@
             template="/de/diedavids/cuba/dataimport/web/example/mlbteam/mlb-team-browse.xml"/>
     <screen id="ddcdi$MlbTeam.edit"
             template="/de/diedavids/cuba/dataimport/web/example/mlbteam/mlb-team-edit.xml"/>
+    <screen id="ddcdi$ImportAttributeMapper.edit"
+            template="de/diedavids/cuba/dataimport/web/importattributemapper/import-attribute-mapper-edit.xml"/>
 </screen-config>

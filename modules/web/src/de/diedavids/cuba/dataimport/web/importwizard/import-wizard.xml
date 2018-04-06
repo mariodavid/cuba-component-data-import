@@ -74,14 +74,25 @@
                        height="200px"
                        visible="false"
                        width="100%">
+                    <actions>
+                        <action id="create" openType="DIALOG"/>
+                        <action id="edit" openType="DIALOG"/>
+                        <action id="remove"/>
+                    </actions>
                     <columns>
-                        <column id="fileColumnNumber"
-                                editable="true"/>
-                        <column id="fileColumnAlias"
-                                editable="true"/>
-                        <column id="entityAttribute"
-                                editable="true"/>
+                        <column id="fileColumnNumber"/>
+                        <column id="fileColumnAlias"/>
+                        <column id="entityAttribute"/>
                     </columns>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                action="mapAttributesTable.create"/>
+                        <button id="editBtn"
+                                action="mapAttributesTable.edit"/>
+                        <button id="removeBtn"
+                                action="mapAttributesTable.remove"/>
+                    </buttonsPanel>
                     <rows datasource="importAttributeMappersDatasource"/>
                 </table>
                 <buttonsPanel align="TOP_RIGHT">
