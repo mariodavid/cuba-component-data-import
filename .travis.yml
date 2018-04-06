@@ -7,3 +7,16 @@ cache:
     - $HOME/.gradle/wrapper/
 script:
  - ./gradlew createDb check coveralls
+
+before_install:
+  - chmod +x ./gradlew
+  - ./gradlew --no-daemon startDb
+
+install:
+  - ./gradlew --no-daemon createDb
+
+script:
+  - ./gradlew --no-daemon assemble
+
+script:
+  - ./gradlew --no-daemon check

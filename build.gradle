@@ -223,7 +223,7 @@ configure(coreModule) {
     }
 
 
-    def hsqlDbName = 'ddcdi_test'
+    def hsqlDbName = 'ddcdi3'
     def hsqlPort = 9001
 
     task startDb(description: 'Starts local HSQLDB server', type: CubaHsqlStart) {
