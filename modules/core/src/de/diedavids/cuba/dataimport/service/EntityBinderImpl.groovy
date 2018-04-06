@@ -127,6 +127,7 @@ class EntityBinderImpl implements EntityBinder {
         }
     }
 
+    @SuppressWarnings('BooleanMethodReturnsNull')
     private Boolean getBooleanValue(ImportConfiguration importConfiguration, String rawValue, DataRow dataRow) {
 
         def customBooleanTrueValue = importConfiguration.booleanTrueValue
@@ -135,11 +136,9 @@ class EntityBinderImpl implements EntityBinder {
         if (customBooleanTrueValue || customBooleanFalseValue) {
             if (customBooleanTrueValue.equalsIgnoreCase(rawValue)) {
                 return true
-            } else if (customBooleanFalseValue.equalsIgnoreCase(rawValue)) {
-                return false
-            } else {
-                return null
             }
+
+            return customBooleanFalseValue.equalsIgnoreCase(rawValue) ? false : null
         }
 
 
