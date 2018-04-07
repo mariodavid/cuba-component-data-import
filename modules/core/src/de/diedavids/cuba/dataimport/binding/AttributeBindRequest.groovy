@@ -42,4 +42,20 @@ class AttributeBindRequest {
     MetaProperty getMetaProperty() {
         importEntityMetaClass.getPropertyNN(entityAttributePath)
     }
+
+    boolean isCustomScriptBindingRequest() {
+        importAttributeMapper.customAttributeBindScript
+    }
+
+    boolean isAssociationBindingRequest() {
+        importEntityPropertyPath.metaProperties.size() > 1
+    }
+
+    boolean isDatatypeBindingRequest() {
+        metaProperty.type == MetaProperty.Type.DATATYPE
+    }
+
+    boolean isEnumBindingRequest() {
+        metaProperty.type == MetaProperty.Type.ENUM
+    }
 }

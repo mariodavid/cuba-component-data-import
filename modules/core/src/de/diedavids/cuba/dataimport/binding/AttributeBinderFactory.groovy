@@ -1,14 +1,11 @@
 package de.diedavids.cuba.dataimport.binding
 
-import com.haulmont.chile.core.model.MetaProperty
-import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Scripting
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import org.springframework.stereotype.Component
 
 import javax.inject.Inject
-
 
 @Component
 class AttributeBinderFactory {
@@ -22,31 +19,24 @@ class AttributeBinderFactory {
     @Inject
     DataManager dataManager
 
-    AttributeBinder createDatatypeAttributeBinder() {
-        new DatatypeAttributeBinder()
-    }
-
     AttributeBinder createAttributeBinderFromBindingRequest(AttributeBindRequest bindRequest) {
 
-        if (bindRequest.importAttributeMapper.customAttributeBindScript) {
-            return new CustomGroovyAttributeBinder(
+        if (bindRequest.customScriptBindingRequest) {
+            return new CustomScriptAttributeBinder(
                     scripting: scripting,
                     dataManager: dataManager
             )
+        } else if (bindRequest.isAssociationBindingRequest()) {
+            return new AssociationAttributeBinder(
+                    simpleDataLoader: simpleDataLoader
+            )
+        } else if (bindRequest.isDatatypeBindingRequest()) {
+            return new DatatypeAttributeBinder()
+        } else if (bindRequest.isEnumBindingRequest()) {
+            return new EnumAttributeBinder()
         }
 
-        if (isAssociatedAttribute(bindRequest.importEntityPropertyPath)) {
-            return new AssociationAttributeBinder(simpleDataLoader: simpleDataLoader)
-        }
-        switch (bindRequest.metaProperty.type) {
-            case MetaProperty.Type.ENUM: return new EnumAttributeBinder()
-            case MetaProperty.Type.DATATYPE: return new DatatypeAttributeBinder()
-        }
+        throw new IllegalStateException("No valid Attribute binder for AttributeBindRequest: $bindRequest found")
     }
-
-    private boolean isAssociatedAttribute(MetaPropertyPath path) {
-        path.metaProperties.size() > 1
-    }
-
 
 }
