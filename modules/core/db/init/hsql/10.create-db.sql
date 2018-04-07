@@ -93,10 +93,11 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    CONFIGURATION_ID varchar(36) not null,
     ENTITY_ATTRIBUTE varchar(255) not null,
     FILE_COLUMN_NUMBER integer not null,
     FILE_COLUMN_ALIAS varchar(255),
-    CONFIGURATION_ID varchar(36) not null,
+    CUSTOM_ATTRIBUTE_BIND_SCRIPT longvarchar,
     --
     primary key (ID)
 )^

@@ -9,7 +9,7 @@ import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
-import de.diedavids.cuba.dataimport.service.EntityBinder
+import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.service.GenericDataImporterServiceBean
 import spock.lang.Specification
 

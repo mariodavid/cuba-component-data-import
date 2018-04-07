@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.service;
+package de.diedavids.cuba.dataimport.binding;
 
 import com.haulmont.cuba.core.entity.Entity;
 import de.diedavids.cuba.dataimport.dto.DataRow;

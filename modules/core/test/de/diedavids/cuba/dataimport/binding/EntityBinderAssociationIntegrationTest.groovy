@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core.entitybinder
+package de.diedavids.cuba.dataimport.binding
 
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper

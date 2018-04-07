@@ -8,11 +8,18 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Lob;
 
 @Table(name = "DDCDI_IMPORT_ATTRIBUTE_MAPPER")
 @Entity(name = "ddcdi$ImportAttributeMapper")
 public class ImportAttributeMapper extends StandardEntity {
     private static final long serialVersionUID = 6042259524321617547L;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "CONFIGURATION_ID")
+    protected ImportConfiguration configuration;
+
 
     @NotNull
     @Column(name = "ENTITY_ATTRIBUTE", nullable = false)
@@ -27,10 +34,17 @@ public class ImportAttributeMapper extends StandardEntity {
 
 
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CONFIGURATION_ID")
-    protected ImportConfiguration configuration;
+    @Lob
+    @Column(name = "CUSTOM_ATTRIBUTE_BIND_SCRIPT")
+    protected String customAttributeBindScript;
+
+    public void setCustomAttributeBindScript(String customAttributeBindScript) {
+        this.customAttributeBindScript = customAttributeBindScript;
+    }
+
+    public String getCustomAttributeBindScript() {
+        return customAttributeBindScript;
+    }
 
 
     public void setConfiguration(ImportConfiguration configuration) {
