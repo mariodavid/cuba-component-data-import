@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core.entitybinder
+package de.diedavids.cuba.dataimport.binding
 
 import com.haulmont.bali.db.QueryRunner
 import com.haulmont.cuba.core.Persistence
@@ -11,7 +11,6 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.service.EntityBinder
 import org.junit.Before
 import org.junit.ClassRule
 

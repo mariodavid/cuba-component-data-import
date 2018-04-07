@@ -1,12 +1,9 @@
-package de.diedavids.cuba.dataimport.core.entitybinder
+package de.diedavids.cuba.dataimport.binding
 
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
-import de.diedavids.cuba.dataimport.entity.example.MlbTeam
-import de.diedavids.cuba.dataimport.entity.example.State
-import org.junit.Before
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat;
