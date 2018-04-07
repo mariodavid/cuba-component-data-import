@@ -28,14 +28,14 @@
                     </column>
                 </fieldGroup>
             </tab>
-            <tab id="extendedTab" caption="msg://extendedTab" spacing="true" margin="true">
+            <tab id="customBindingScriptTab" caption="msg://customBindingScriptTab" spacing="true" margin="true">
                 <sourceCodeEditor id="customAttributeBindScriptEditor"
-                                  caption="msg://customAttributeBindScriptEditor"
                                   mode="Groovy"
                                   datasource="importAttributeMapperDs"
                                   property="customAttributeBindScript"
                                   width="100%"
                                   height="100%"
+                                  contextHelpText="msg://customAttributeBindScriptHelp"
                                   />
             </tab>
         </tabSheet>
