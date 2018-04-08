@@ -9,5 +9,5 @@ public interface GenericDataImporterService {
     String NAME = "ddcdi_GenericDataImporterService";
 
 
-    boolean doDataImport(ImportConfiguration importConfiguration, ImportData importData);
+    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData);
 }

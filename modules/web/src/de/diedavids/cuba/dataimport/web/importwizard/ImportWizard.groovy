@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.web.importwizard
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.entity.FileDescriptor
+import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.CollectionDatasource
@@ -11,6 +12,7 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.service.DataImportService
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
@@ -28,9 +30,11 @@ class ImportWizard extends AbstractWindow {
     public static final String WIZARD_STEP_1 = 'step1'
     public static final String WIZARD_STEP_3 = 'step3'
     public static final String WIZARD_STEP_4 = 'step4'
+    public static final String WIZARD_STEP_5 = 'step5'
 
     @Inject
     Accordion wizardAccordion
+
     @Inject
     Button closeWizard
 
@@ -79,6 +83,9 @@ class ImportWizard extends AbstractWindow {
 
     @Inject
     MetaPropertyMatcher metaPropertyMatcher
+
+    @Inject
+    Datasource<ImportLog> importLogDs
 
 
     @Override
@@ -226,15 +233,6 @@ class ImportWizard extends AbstractWindow {
     }
 
     void closeWizard() {
-        boolean importSuccessful = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
-
-        if (importSuccessful) {
-            showNotification('Data Import successful', Frame.NotificationType.TRAY)
-        }
-        else {
-            showNotification('Error while executing import. See logs for details.', Frame.NotificationType.ERROR)
-        }
-
         close(CLOSE_ACTION_ID, true)
     }
 
@@ -243,6 +241,23 @@ class ImportWizard extends AbstractWindow {
         switchTabs(WIZARD_STEP_3, WIZARD_STEP_4)
 
         parseFileAndDisplay(uploadedFileDescriptor, uploadedFile)
+
+        closeWizardAction.enabled = true
+
+    }
+
+    void startImport() {
+
+        ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
+        importLogDs.setItem(importLog)
+
+        toStep5()
+    }
+
+
+    void toStep5() {
+
+        switchTabs(WIZARD_STEP_4, WIZARD_STEP_5)
 
         closeWizardAction.enabled = true
 

@@ -41,6 +41,7 @@
                         <column id="startedAt"/>
                         <column id="finishedAt"/>
                         <column id="entitiesProcessed"/>
+                        <column id="success"/>
                     </columns>
                     <rows datasource="importLogsDs"/>
                     <rowsCount/>

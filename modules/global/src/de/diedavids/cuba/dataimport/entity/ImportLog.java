@@ -47,9 +47,22 @@ public class ImportLog extends StandardEntity {
 
 
 
+    @NotNull
+    @Column(name = "SUCCESS", nullable = false)
+    protected Boolean success = false;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CONFIGURATION_ID")
     protected ImportConfiguration configuration;
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
 
     public void setConfiguration(ImportConfiguration configuration) {
         this.configuration = configuration;

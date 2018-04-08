@@ -34,7 +34,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     EntityBinder dataImportEntityBinder
 
     @Override
-    boolean doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
+    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
 
         def entities = createEntities(importConfiguration, importData)
 
@@ -43,14 +43,21 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
 
+        ImportLog importLog = metadata.create(ImportLog)
+        importLog.configuration = importConfiguration
+
         try {
             entityImportExportAPI.importEntities(entities, importView, true)
-            return true
+            importLog.entitiesProcessed = entities.size()
+            importLog.success = true
         }
         catch (EntityValidationException e) {
             log.error("Import failed due to validation errors of one or more entities", e)
-            return false
+            importLog.entitiesProcessed = 0
+            importLog.success = false
         }
+
+        return importLog
     }
 
     private EntityImportView creteEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {

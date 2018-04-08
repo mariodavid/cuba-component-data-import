@@ -10,6 +10,8 @@
             <collectionDatasource id="importAttributeMappersDatasource"
                                   property="importAttributeMappers"/>
         </datasource>
+        <datasource id="importLogDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportLog"/>
     </dsContext>
     <actions>
         <action id="cancelWizardAction"
@@ -24,6 +26,10 @@
                 caption="mainMsg://actions.Ok"
                 icon="icons/ok.png"
                 invoke="toStep4"/>
+        <action id="startImport"
+                caption="msg://startImport"
+                icon="icons/ok.png"
+                invoke="startImport"/>
         <action id="closeWizardAction"
                 caption="mainMsg://actions.Ok"
                 enable="false"
@@ -97,7 +103,7 @@
                     </buttonsPanel>
                     <rows datasource="importAttributeMappersDatasource"/>
                 </table>
-                <buttonsPanel align="TOP_RIGHT">
+                <buttonsPanel align="BOTTOM_RIGHT">
                     <button id="toStep3"
                             action="toStep3"/>
                 </buttonsPanel>
@@ -107,12 +113,13 @@
                  enable="false"
                  margin="true"
                  spacing="true">
-                <fieldGroup datasource="importConfigurationDs">
+                <fieldGroup id="extendedConfigurationFieldGroup"
+                            datasource="importConfigurationDs">
                     <field property="dateFormat"/>
                     <field property="booleanTrueValue"/>
                     <field property="booleanFalseValue"/>
                 </fieldGroup>
-                <buttonsPanel align="TOP_RIGHT">
+                <buttonsPanel align="BOTTOM_RIGHT">
                     <button id="toStep4"
                             action="toStep4"/>
                 </buttonsPanel>
@@ -120,14 +127,32 @@
             <tab id="step4"
                  caption="msg://step4Title"
                  enable="false"
+                 expand="resultTableBox"
                  margin="true"
                  spacing="true">
                 <vbox id="resultTableBox"
                       height="100%"
                       width="100%"/>
+                <buttonsPanel align="BOTTOM_RIGHT">
+                    <button id="startImportBtn"
+                            action="startImport"/>
+                </buttonsPanel>
+            </tab>
+            <tab id="step5"
+                 caption="msg://step5Title"
+                 enable="false"
+                 margin="true"
+                 spacing="true">
+                <fieldGroup id="importSummaryFieldGroup"
+                            datasource="importLogDs">
+                    <field property="success"
+                           editable="false"/>
+                    <field property="entitiesProcessed"
+                           editable="false"/>
+                </fieldGroup>
             </tab>
         </accordion>
-        <buttonsPanel align="TOP_RIGHT">
+        <buttonsPanel align="BOTTOM_RIGHT">
             <button id="closeWizard"
                     action="closeWizardAction"/>
             <button id="cancelWizard"

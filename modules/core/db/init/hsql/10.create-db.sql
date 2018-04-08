@@ -13,6 +13,7 @@ create table DDCDI_IMPORT_LOG (
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED integer,
+    SUCCESS boolean not null,
     CONFIGURATION_ID varchar(36) not null,
     --
     primary key (ID)
