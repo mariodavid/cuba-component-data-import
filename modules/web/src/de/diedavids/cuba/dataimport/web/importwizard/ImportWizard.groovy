@@ -1,8 +1,6 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
 import com.haulmont.chile.core.model.MetaClass
-import com.haulmont.cuba.core.entity.FileDescriptor
-import com.haulmont.cuba.core.entity.KeyValueEntity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.components.*
@@ -18,11 +16,7 @@ import de.diedavids.cuba.dataimport.service.DataImportService
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
-import de.diedavids.cuba.dataimport.web.datapreview.converter.CsvTableDataConverter
-import de.diedavids.cuba.dataimport.web.datapreview.converter.ExcelTableDataConverter
-import de.diedavids.cuba.dataimport.web.datapreview.converter.TableDataConverter
 import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
-import de.diedavids.cuba.dataimport.web.util.MetaPropertyMatcher
 
 import javax.inject.Inject
 import javax.inject.Named
@@ -46,20 +40,21 @@ class ImportWizard extends AbstractWindow {
     @Inject
     FileUploadingAPI fileUploadingAPI
 
+    ImportFileHandler importFileHandler
+
+    ImportFileParser importFileParser
+
     @Inject
     ComponentsFactory componentsFactory
 
     @Inject
-    protected BoxLayout resultTableBox
+    BoxLayout resultTableBox
 
     @Inject
     LookupField entityLookup
 
     @Inject
     Metadata metadata
-
-    FileDescriptor uploadedFileDescriptor
-    File uploadedFile
 
     @Inject
     Table mapAttributesTable
@@ -76,7 +71,7 @@ class ImportWizard extends AbstractWindow {
     @Inject
     GenericDataImporterService genericDataImporterService
 
-    private ImportData importData
+    ImportData importData
 
     @Inject
     Action closeWizardAction
@@ -84,15 +79,12 @@ class ImportWizard extends AbstractWindow {
     @Inject
     EntityClassSelector entityClassSelector
 
-    @Inject
-    MetaPropertyMatcher metaPropertyMatcher
 
     @Inject
     Datasource<ImportLog> importLogDs
 
-    @Named("reuseFieldGroup.name")
+    @Named('reuseFieldGroup.name')
     TextField nameField
-
 
     @Inject
     ImportWizardService importWizardService
@@ -100,12 +92,11 @@ class ImportWizard extends AbstractWindow {
     @Inject
     DataManager dataManager
 
+    @Inject
+    ImportAttributeMapperCreator importAttributeMapperCreator
 
     @Override
     void init(Map<String, Object> params) {
-
-        initUploadFileSucceedListener()
-        initUploadFileErrorListener()
 
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
 
@@ -115,6 +106,26 @@ class ImportWizard extends AbstractWindow {
 
         initReusePropertyChangeListener()
 
+        initImportFileHandler()
+        initImportFileParser()
+    }
+
+    void initImportFileParser() {
+        importFileParser = new ImportFileParser(
+                importFileHandler: importFileHandler
+        )
+    }
+
+    private void initImportFileHandler() {
+        importFileHandler = new ImportFileHandler(
+                importFileUploadBtn: importFileUploadBtn,
+                fileUploadingAPI: fileUploadingAPI,
+                dataManager: dataManager
+        )
+        importFileHandler.onUploadSuccess { toStep2() }
+        importFileHandler.onUploadError {
+            showNotification(formatMessage('fileUploadError'), Frame.NotificationType.ERROR)
+        }
     }
 
     void initReusePropertyChangeListener() {
@@ -146,10 +157,10 @@ class ImportWizard extends AbstractWindow {
 
                 if (e.property == 'entityClass') {
                     MetaClass selectedEntity = metadata.getClass(e.value.toString())
-                    importData = parseFile(uploadedFileDescriptor, uploadedFile)
+                    importData = importFileParser.parseFile()
 
 
-                    def mappers = createMappers(importData, selectedEntity)
+                    def mappers = importAttributeMapperCreator.createMappers(importData, selectedEntity)
                     mappers.each {
                         importAttributeMappersDatasource.addItem(it)
                     }
@@ -162,42 +173,8 @@ class ImportWizard extends AbstractWindow {
         })
     }
 
-    private List<ImportAttributeMapper> createMappers(ImportData importData, MetaClass selectedEntity) {
-        importData.columns.withIndex().collect { String column, index ->
-            new ImportAttributeMapper(
-                    entityAttribute: metaPropertyMatcher.findEntityAttributeForColumn(column, selectedEntity),
-                    fileColumnAlias: column,
-                    fileColumnNumber: index,
-            )
-        }
-    }
 
-
-    protected initUploadFileSucceedListener() {
-        importFileUploadBtn.addFileUploadSucceedListener(new FileUploadField.FileUploadSucceedListener() {
-            @Override
-            void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent e) {
-                File file = fileUploadingAPI.getFile(importFileUploadBtn.fileId)
-                uploadedFileDescriptor = importFileUploadBtn.fileDescriptor
-                uploadedFile = file
-                showStep2()
-            }
-
-
-        })
-    }
-
-
-    private void switchTabs(String previousTabName, String nextTabName) {
-        wizardAccordion.getTab(nextTabName).enabled = true
-        wizardAccordion.selectedTab = nextTabName
-
-        Accordion.Tab previousTab = wizardAccordion.getTab(previousTabName)
-        previousTab.caption = "${previousTab.caption} $check"
-        previousTab.enabled = false
-    }
-
-    void showStep2() {
+    void toStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
         showFilenameInStep1Title()
 
@@ -205,36 +182,12 @@ class ImportWizard extends AbstractWindow {
 
     private void showFilenameInStep1Title() {
         Accordion.Tab step1Tab = wizardAccordion.getTab(WIZARD_STEP_1)
-        step1Tab.caption += " - ${uploadedFileDescriptor.name}"
+        step1Tab.caption += " - ${importFileHandler.fileName}"
     }
-
 
     void toStep3() {
         switchTabs(WIZARD_STEP_2, WIZARD_STEP_3)
     }
-
-    void parseFileAndDisplay(FileDescriptor fileDescriptor, File file) {
-
-        importData = parseFile(fileDescriptor, file)
-
-        DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
-        dynamicTableCreator.createTable(importData, resultTableBox)
-
-    }
-
-    private ImportData parseFile(FileDescriptor fileDescriptor, File file) {
-        TableDataConverter converter = createTableDataConverter(fileDescriptor)
-        converter.convert(file.text)
-    }
-
-    private TableDataConverter createTableDataConverter(FileDescriptor fileDescriptor) {
-        switch (fileDescriptor.extension) {
-            case 'xlsx': return new ExcelTableDataConverter()
-            case 'csv': return new CsvTableDataConverter()
-            default: throw new FileNotSupportedException()
-        }
-    }
-
 
     private DynamicTableCreator createDynamicTableCreator() {
         def dynamicTableCreator = new DynamicTableCreator(
@@ -244,17 +197,6 @@ class ImportWizard extends AbstractWindow {
         )
         dynamicTableCreator
     }
-
-
-    protected initUploadFileErrorListener() {
-        importFileUploadBtn.addFileUploadErrorListener(new UploadField.FileUploadErrorListener() {
-            @Override
-            void fileUploadError(UploadField.FileUploadErrorEvent e) {
-                showNotification(formatMessage('fileUploadError'), Frame.NotificationType.ERROR)
-            }
-        })
-    }
-
 
     protected String getCheck() {
         formatMessage('check')
@@ -267,9 +209,7 @@ class ImportWizard extends AbstractWindow {
     void closeWizard() {
 
         if (importConfigurationDs.item.reuse) {
-            dataManager.commit(uploadedFileDescriptor)
-            fileUploadingAPI.putFileIntoStorage(importFileUploadBtn.fileId, uploadedFileDescriptor)
-            importLogDs.item.file = uploadedFileDescriptor
+            importLogDs.item.file = importFileHandler.saveFile()
 
             importWizardService.saveImportConfiguration(
                     importConfigurationDs.item,
@@ -286,10 +226,17 @@ class ImportWizard extends AbstractWindow {
 
         switchTabs(WIZARD_STEP_3, WIZARD_STEP_4)
 
-        parseFileAndDisplay(uploadedFileDescriptor, uploadedFile)
+        parseFileAndDisplay()
 
         closeWizardAction.enabled = true
 
+    }
+
+
+    void parseFileAndDisplay() {
+        importData = importFileParser.parseFile()
+        DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
+        dynamicTableCreator.createTable(importData, resultTableBox)
     }
 
     void startImport() {
@@ -300,12 +247,21 @@ class ImportWizard extends AbstractWindow {
         toStep5()
     }
 
-
     void toStep5() {
 
         switchTabs(WIZARD_STEP_4, WIZARD_STEP_5)
 
         closeWizardAction.enabled = true
 
+    }
+
+
+    private void switchTabs(String previousTabName, String nextTabName) {
+        wizardAccordion.getTab(nextTabName).enabled = true
+        wizardAccordion.selectedTab = nextTabName
+
+        Accordion.Tab previousTab = wizardAccordion.getTab(previousTabName)
+        previousTab.caption = "${previousTab.caption} $check"
+        previousTab.enabled = false
     }
 }

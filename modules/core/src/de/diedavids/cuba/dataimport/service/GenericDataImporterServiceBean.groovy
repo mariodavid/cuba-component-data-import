@@ -42,9 +42,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         def importEntityClass = importEntityMetaClass.javaClass
 
         EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
-
-        ImportLog importLog = metadata.create(ImportLog)
-        importLog.configuration = importConfiguration
+        ImportLog importLog = createImportLog(importConfiguration)
 
         try {
             entityImportExportAPI.importEntities(entities, importView, true)
@@ -52,12 +50,17 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importLog.success = true
         }
         catch (EntityValidationException e) {
-            log.error("Import failed due to validation errors of one or more entities", e)
+            log.error('Import failed due to validation errors of one or more entities', e)
             importLog.entitiesProcessed = 0
             importLog.success = false
         }
+        importLog
+    }
 
-        return importLog
+    private ImportLog createImportLog(ImportConfiguration importConfiguration) {
+        ImportLog importLog = metadata.create(ImportLog)
+        importLog.configuration = importConfiguration
+        importLog
     }
 
     private EntityImportView creteEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {
