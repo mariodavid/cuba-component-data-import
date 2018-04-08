@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import javax.persistence.Transient;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")
@@ -33,6 +35,10 @@ public class ImportConfiguration extends StandardEntity {
 
     @Column(name = "AD_HOC")
     protected Boolean adHoc;
+
+    @Transient
+    @MetaProperty
+    protected Boolean reuse;
 
     @OneToMany(mappedBy = "configuration")
     protected List<ImportLog> logs;
@@ -62,6 +68,15 @@ public class ImportConfiguration extends StandardEntity {
 
     @Column(name = "BOOLEAN_FALSE_VALUE")
     protected String booleanFalseValue;
+
+    public Boolean getReuse() {
+        return reuse;
+    }
+
+    public void setReuse(Boolean reuse) {
+        this.reuse = reuse;
+    }
+
 
     public void setDateFormat(String dateFormat) {
         this.dateFormat = dateFormat;

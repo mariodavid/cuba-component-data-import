@@ -3,6 +3,7 @@ package de.diedavids.cuba.dataimport.web.importwizard
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.entity.KeyValueEntity
+import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.CollectionDatasource
@@ -15,6 +16,7 @@ import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.service.DataImportService
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
+import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
 import de.diedavids.cuba.dataimport.web.datapreview.converter.CsvTableDataConverter
 import de.diedavids.cuba.dataimport.web.datapreview.converter.ExcelTableDataConverter
@@ -23,6 +25,7 @@ import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
 import de.diedavids.cuba.dataimport.web.util.MetaPropertyMatcher
 
 import javax.inject.Inject
+import javax.inject.Named
 
 class ImportWizard extends AbstractWindow {
 
@@ -87,6 +90,16 @@ class ImportWizard extends AbstractWindow {
     @Inject
     Datasource<ImportLog> importLogDs
 
+    @Named("reuseFieldGroup.name")
+    TextField nameField
+
+
+    @Inject
+    ImportWizardService importWizardService
+
+    @Inject
+    DataManager dataManager
+
 
     @Override
     void init(Map<String, Object> params) {
@@ -100,6 +113,19 @@ class ImportWizard extends AbstractWindow {
 
         initEntityClassPropertyChangeListener()
 
+        initReusePropertyChangeListener()
+
+    }
+
+    void initReusePropertyChangeListener() {
+        importConfigurationDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener() {
+            @Override
+            void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
+                if (e.property == 'reuse') {
+                    nameField.visible = e.value as Boolean
+                }
+            }
+        })
     }
 
     private ImportConfiguration createImportConfiguration() {
@@ -152,7 +178,6 @@ class ImportWizard extends AbstractWindow {
             @Override
             void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent e) {
                 File file = fileUploadingAPI.getFile(importFileUploadBtn.fileId)
-
                 uploadedFileDescriptor = importFileUploadBtn.fileDescriptor
                 uploadedFile = file
                 showStep2()
@@ -174,6 +199,13 @@ class ImportWizard extends AbstractWindow {
 
     void showStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
+        showFilenameInStep1Title()
+
+    }
+
+    private void showFilenameInStep1Title() {
+        Accordion.Tab step1Tab = wizardAccordion.getTab(WIZARD_STEP_1)
+        step1Tab.caption += " - ${uploadedFileDescriptor.name}"
     }
 
 
@@ -233,6 +265,20 @@ class ImportWizard extends AbstractWindow {
     }
 
     void closeWizard() {
+
+        if (importConfigurationDs.item.reuse) {
+            dataManager.commit(uploadedFileDescriptor)
+            fileUploadingAPI.putFileIntoStorage(importFileUploadBtn.fileId, uploadedFileDescriptor)
+            importLogDs.item.file = uploadedFileDescriptor
+
+            importWizardService.saveImportConfiguration(
+                    importConfigurationDs.item,
+                    importAttributeMappersDatasource.items,
+                    importLogDs.item
+            )
+        }
+
+
         close(CLOSE_ACTION_ID, true)
     }
 
@@ -249,7 +295,7 @@ class ImportWizard extends AbstractWindow {
     void startImport() {
 
         ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
-        importLogDs.setItem(importLog)
+        importLogDs.item = importLog
 
         toStep5()
     }
