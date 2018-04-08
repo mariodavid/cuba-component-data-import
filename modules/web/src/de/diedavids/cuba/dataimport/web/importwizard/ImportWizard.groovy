@@ -226,9 +226,14 @@ class ImportWizard extends AbstractWindow {
     }
 
     void closeWizard() {
-        genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
+        boolean importSuccessful = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
 
-        showNotification('Data Import successful', Frame.NotificationType.TRAY)
+        if (importSuccessful) {
+            showNotification('Data Import successful', Frame.NotificationType.TRAY)
+        }
+        else {
+            showNotification('Error while executing import. See logs for details.', Frame.NotificationType.ERROR)
+        }
 
         close(CLOSE_ACTION_ID)
     }

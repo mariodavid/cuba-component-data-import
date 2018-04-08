@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.app.importexport.EntityImportView
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.core.global.validation.EntityValidationException
 import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
@@ -33,7 +34,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     EntityBinder dataImportEntityBinder
 
     @Override
-    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
+    boolean doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
 
         def entities = createEntities(importConfiguration, importData)
 
@@ -42,9 +43,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
 
-        entityImportExportAPI.importEntities(entities, importView, true)
-
-        null
+        try {
+            entityImportExportAPI.importEntities(entities, importView, true)
+            return true
+        }
+        catch (EntityValidationException e) {
+            log.error("Import failed due to validation errors of one or more entities", e)
+            return false
+        }
     }
 
     private EntityImportView creteEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {

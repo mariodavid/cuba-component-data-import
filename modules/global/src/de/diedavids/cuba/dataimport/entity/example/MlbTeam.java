@@ -6,19 +6,24 @@ import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import javax.persistence.UniqueConstraint;
+import org.hibernate.validator.constraints.Length;
 
 @NamePattern("%s|name")
-@Table(name = "DDCDI_MLB_TEAM")
+@Table(name = "DDCDI_MLB_TEAM", uniqueConstraints = {
+    @UniqueConstraint(name = "IDX_DDCDI_MLB_TEAM_CODE_UNQ", columnNames = {"CODE", "DELETE_TS"})
+})
 @Entity(name = "ddcdi$MlbTeam")
 public class MlbTeam extends StandardEntity {
     private static final long serialVersionUID = -9031136045471665865L;
 
+    @Length(min = 1)
     @NotNull
     @Column(name = "NAME", nullable = false)
     protected String name;
 
     @NotNull
-    @Column(name = "CODE", nullable = false, unique = true)
+    @Column(name = "CODE", nullable = false)
     protected String code;
 
     @Column(name = "STATE")
