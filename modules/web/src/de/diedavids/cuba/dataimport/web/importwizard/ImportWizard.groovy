@@ -235,7 +235,7 @@ class ImportWizard extends AbstractWindow {
             showNotification('Error while executing import. See logs for details.', Frame.NotificationType.ERROR)
         }
 
-        close(CLOSE_ACTION_ID)
+        close(CLOSE_ACTION_ID, true)
     }
 
     void toStep4() {
