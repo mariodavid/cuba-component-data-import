@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.datapreview.converter
+package de.diedavids.cuba.dataimport.converter
 
 import com.xlson.groovycsv.CsvParser
 import com.xlson.groovycsv.PropertyMapper
@@ -7,7 +7,7 @@ import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 
-class ExcelTableDataConverter implements TableDataConverter {
+class CsvImportDataConverter implements ImportDataConverter {
 
     @Override
     ImportData convert(String content) {
@@ -16,6 +16,7 @@ class ExcelTableDataConverter implements TableDataConverter {
 
         def csvRows = parseCSV(content)
         csvRows.each { PropertyMapper row ->
+
             DataRow dataRow = addToTableData(result, row)
             result.columns = dataRow.columnNames
         }

@@ -32,11 +32,8 @@
             </actions>
             <columns>
                 <column id="name"/>
-                <column id="template"/>
-                <column id="comment"/>
-                <column id="importerBeanName"/>
-                <column id="adHoc"/>
                 <column id="entityClass"/>
+                <column id="comment"/>
             </columns>
             <rows datasource="importConfigurationsDs"/>
             <rowsCount/>
@@ -48,10 +45,6 @@
                         action="importConfigurationsTable.edit"/>
                 <button id="removeBtn"
                         action="importConfigurationsTable.remove"/>
-                <button id="btnImport"
-                        caption="msg://Import"
-                        icon="icons/wf-design-import.png"
-                        invoke="onBtnImportClick"/>
             </buttonsPanel>
         </groupTable>
     </layout>

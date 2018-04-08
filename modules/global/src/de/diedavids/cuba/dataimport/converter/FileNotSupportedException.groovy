@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.importwizard
+package de.diedavids.cuba.dataimport.converter
 
 class FileNotSupportedException extends RuntimeException {
 

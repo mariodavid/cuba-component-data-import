@@ -55,7 +55,7 @@ create table DDCDI_IMPORT_CONFIGURATION (
     AD_HOC boolean,
     TEMPLATE_ID varchar(36),
     COMMENT_ longvarchar,
-    IMPORTER_BEAN_NAME varchar(255) not null,
+    IMPORTER_BEAN_NAME varchar(255),
     DATE_FORMAT varchar(255),
     BOOLEAN_TRUE_VALUE varchar(255),
     BOOLEAN_FALSE_VALUE varchar(255),

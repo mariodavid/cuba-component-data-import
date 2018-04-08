@@ -18,6 +18,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import javax.persistence.Transient;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")
@@ -51,8 +52,7 @@ public class ImportConfiguration extends StandardEntity {
     @Column(name = "COMMENT_")
     protected String comment;
 
-    @NotNull
-    @Column(name = "IMPORTER_BEAN_NAME", nullable = false)
+    @Column(name = "IMPORTER_BEAN_NAME")
     protected String importerBeanName;
 
     @Composition

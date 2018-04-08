@@ -3,47 +3,76 @@
         caption="msg://editorCaption"
         class="de.diedavids.cuba.dataimport.web.importconfiguration.ImportConfigurationEdit"
         datasource="importConfigurationDs"
-        focusComponent="fieldGroup"
+        focusComponent="dataFieldGroup"
         messagesPack="de.diedavids.cuba.dataimport.web.importconfiguration">
     <dsContext>
         <datasource id="importConfigurationDs"
                     class="de.diedavids.cuba.dataimport.entity.ImportConfiguration"
-                    view="importConfiguration-view"/>
-        <collectionDatasource id="importersDs"
-                              allowCommit="false"
-                              class="de.diedavids.cuba.dataimport.entity.Importer"
-                              datasourceClass="de.diedavids.cuba.dataimport.web.datasources.ImportersDatasource"/>
+                    view="importConfiguration-view">
+            <collectionDatasource id="importAttributeMappersDs"
+                                  property="importAttributeMappers"/>
+        </datasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="windowActions"
+    <layout expand="contentTabSheet"
             spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="importConfigurationDs"
-                    fieldCaptionWidth="150px">
-            <column width="250px">
-                <field id="name"/>
-                <field id="template"/>
-                <field id="importer"
-                       caption="msg://selectImporter"
-                       custom="true"
-                       required="true"/>
-                <field property="adHoc"/>
-                <field property="dateFormat"/>
-                <field property="booleanTrueValue"/>
-                <field property="booleanFalseValue"/>
-                <field custom="true"
-                       property="entityClass"/>
-            </column>
-        </fieldGroup>
-        <fieldGroup id="fieldGroupTextFields"
-                    datasource="importConfigurationDs"
-                    fieldCaptionWidth="150px">
-            <column width="450px">
-                <field id="comment"
-                       rows="5"/>
-            </column>
-        </fieldGroup>
+        <tabSheet id="contentTabSheet">
+            <tab id="dataTab"
+                 margin="true"
+                 spacing="true"
+                 caption="msg://dataTab">
+                <fieldGroup id="dataFieldGroup"
+                            datasource="importConfigurationDs">
+                    <column width="250px">
+                        <field property="name"/>
+                        <field property="entityClass" editable="false"/>
+                        <field property="template" editable="false"/>
+                        <field property="comment"
+                               rows="5"/>
+                    </column>
+                </fieldGroup>
+            </tab>
+            <tab id="formatTab"
+                 margin="true"
+                 spacing="true"
+                 caption="msg://formatTab">
+                <fieldGroup id="formatFieldGroup"
+                            datasource="importConfigurationDs">
+                    <column width="250px">
+                        <field property="dateFormat"/>
+                        <field property="booleanTrueValue"/>
+                        <field property="booleanFalseValue"/>
+                    </column>
+                </fieldGroup>
+            </tab>
+            <tab id="customBindingScriptTab"
+                 caption="msg://importAttributeMappersTab"
+                 expand="importAttributeMappersTable"
+                 margin="true"
+                 spacing="true">
+                <table id="importAttributeMappersTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create" openType="DIALOG"/>
+                        <action id="edit" openType="DIALOG"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="fileColumnNumber"/>
+                        <column id="fileColumnAlias"/>
+                        <column id="entityAttribute"/>
+                    </columns>
+                    <rows datasource="importAttributeMappersDs"/>
+                    <buttonsPanel>
+                        <button action="importAttributeMappersTable.create"/>
+                        <button action="importAttributeMappersTable.edit"/>
+                        <button action="importAttributeMappersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

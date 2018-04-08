@@ -8,6 +8,8 @@ import com.haulmont.cuba.gui.data.CollectionDatasource
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
+import de.diedavids.cuba.dataimport.converter.DataConverterFactory
+import de.diedavids.cuba.dataimport.converter.ImportAttributeMapperCreator
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
@@ -16,6 +18,8 @@ import de.diedavids.cuba.dataimport.service.DataImportService
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
+import de.diedavids.cuba.dataimport.web.importfile.ImportFileHandler
+import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
 import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
 
 import javax.inject.Inject
@@ -36,12 +40,14 @@ class ImportWizard extends AbstractWindow {
     Button closeWizard
 
     @Inject
+    DataConverterFactory dataConverterFactory
+
+    @Inject
     FileUploadField importFileUploadBtn
     @Inject
     FileUploadingAPI fileUploadingAPI
 
     ImportFileHandler importFileHandler
-
     ImportFileParser importFileParser
 
     @Inject
@@ -105,16 +111,15 @@ class ImportWizard extends AbstractWindow {
         importConfigurationDs.setItem(createImportConfiguration())
 
         initEntityClassPropertyChangeListener()
-
         initReusePropertyChangeListener()
-
         initImportFileHandler()
         initImportFileParser()
     }
 
     void initImportFileParser() {
         importFileParser = new ImportFileParser(
-                importFileHandler: importFileHandler
+                importFileHandler: importFileHandler,
+                dataConverterFactory: dataConverterFactory
         )
     }
 
@@ -144,11 +149,9 @@ class ImportWizard extends AbstractWindow {
 
     private ImportConfiguration createImportConfiguration() {
         def importConfiguration = metadata.create(ImportConfiguration)
-
         importConfiguration.dateFormat = 'dd/MM/yyyy'
         importConfiguration.booleanTrueValue = 'Yes'
         importConfiguration.booleanFalseValue = 'No'
-
         importConfiguration
     }
 
@@ -180,7 +183,6 @@ class ImportWizard extends AbstractWindow {
     void toStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
         showFilenameInStep1Title()
-
     }
 
     private void showFilenameInStep1Title() {
@@ -226,13 +228,9 @@ class ImportWizard extends AbstractWindow {
     }
 
     void toStep4() {
-
         switchTabs(WIZARD_STEP_3, WIZARD_STEP_4)
-
         parseFileAndDisplay()
-
         closeWizardAction.enabled = true
-
     }
 
 
@@ -243,19 +241,14 @@ class ImportWizard extends AbstractWindow {
     }
 
     void startImport() {
-
         ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
         importLogDs.item = importLog
-
         toStep5()
     }
 
     void toStep5() {
-
         switchTabs(WIZARD_STEP_4, WIZARD_STEP_5)
-
         closeWizardAction.enabled = true
-
     }
 
 

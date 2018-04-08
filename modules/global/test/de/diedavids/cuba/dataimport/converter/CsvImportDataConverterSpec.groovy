@@ -1,13 +1,13 @@
-package de.diedavids.cuba.dataimport.web.datapreview.converter
+package de.diedavids.cuba.dataimport.converter
 
 import de.diedavids.cuba.dataimport.dto.ImportData
 import spock.lang.Specification
 
-class CsvTableDataConverterSpec extends Specification {
+class CsvImportDataConverterSpec extends Specification {
 
     def "convert contains the correct amount of columns"() {
         given:
-        def sut = new CsvTableDataConverter()
+        def sut = new CsvImportDataConverter()
         when:
         ImportData result = sut.convert('''Name,Lastname
 Mark,Andersson
@@ -18,7 +18,7 @@ Pete,Hansen''')
 
     def "convert contains two DataRows"() {
         given:
-        def sut = new CsvTableDataConverter()
+        def sut = new CsvImportDataConverter()
         when:
         ImportData result = sut.convert('''Name,Lastname
 Mark,Andersson
@@ -29,7 +29,7 @@ Pete,Hansen''')
 
     def "convert contains the correct values for the DataRows"() {
         given:
-        def sut = new CsvTableDataConverter()
+        def sut = new CsvImportDataConverter()
         when:
         ImportData result = sut.convert('''Name,Lastname
 Mark,Andersson''')

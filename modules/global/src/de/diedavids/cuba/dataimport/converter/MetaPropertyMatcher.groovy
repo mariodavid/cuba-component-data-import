@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.util
+package de.diedavids.cuba.dataimport.converter
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty

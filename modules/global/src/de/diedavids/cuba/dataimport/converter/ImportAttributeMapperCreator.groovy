@@ -1,9 +1,8 @@
-package de.diedavids.cuba.dataimport.web.importwizard
+package de.diedavids.cuba.dataimport.converter
 
 import com.haulmont.chile.core.model.MetaClass
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
-import de.diedavids.cuba.dataimport.web.util.MetaPropertyMatcher
 import org.springframework.stereotype.Component
 
 import javax.inject.Inject

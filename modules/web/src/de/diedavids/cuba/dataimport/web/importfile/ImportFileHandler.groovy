@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.web.importwizard
+package de.diedavids.cuba.dataimport.web.importfile
 
 import com.haulmont.cuba.core.entity.FileDescriptor
 import com.haulmont.cuba.core.global.DataManager

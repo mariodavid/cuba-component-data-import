@@ -1,8 +1,8 @@
-package de.diedavids.cuba.dataimport.web.datapreview.converter
+package de.diedavids.cuba.dataimport.converter
 
 import de.diedavids.cuba.dataimport.dto.ImportData
 
-interface TableDataConverter {
+interface ImportDataConverter {
 
     ImportData convert(String content)
 }
