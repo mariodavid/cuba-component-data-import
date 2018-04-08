@@ -85,6 +85,8 @@ class ImportWizard extends AbstractWindow {
 
     @Named('reuseFieldGroup.name')
     TextField nameField
+    @Named('reuseFieldGroup.comment')
+    TextArea commentField
 
     @Inject
     ImportWizardService importWizardService
@@ -134,6 +136,7 @@ class ImportWizard extends AbstractWindow {
             void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
                 if (e.property == 'reuse') {
                     nameField.visible = e.value as Boolean
+                    commentField.visible = e.value as Boolean
                 }
             }
         })

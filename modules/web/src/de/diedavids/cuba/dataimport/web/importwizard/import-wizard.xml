@@ -37,9 +37,9 @@
                 invoke="closeWizard"/>
     </actions>
     <dialogMode forceDialog="true"
-                height="600"
+                height="90%"
                 resizable="true"
-                width="800"/>
+                width="75%"/>
     <layout expand="wizardAccordion"
             spacing="true">
         <accordion id="wizardAccordion">
@@ -114,30 +114,39 @@
                  margin="true"
                  spacing="true">
                 <vbox spacing="true">
-                    <fieldGroup id="importConfigurationFieldGroup"
-                                width="100%"
-                                border="visible"
-                                caption="msg://formatConfiguration"
-                                datasource="importConfigurationDs">
-                        <field property="dateFormat"/>
-                        <field property="booleanTrueValue"/>
-                        <field property="booleanFalseValue"/>
-                    </fieldGroup>
+                    <scrollBox id="importConfigurationScrollBox">
+                        <fieldGroup id="importConfigurationFieldGroup"
+                                    width="100%"
+                                    border="visible"
+                                    fieldCaptionWidth="250px"
+                                    caption="msg://formatConfiguration"
+                                    datasource="importConfigurationDs">
+                            <field property="dateFormat"/>
+                            <field property="booleanTrueValue"/>
+                            <field property="booleanFalseValue"/>
+                        </fieldGroup>
 
-                    <fieldGroup id="reuseFieldGroup"
-                                width="100%"
-                                border="visible"
-                                caption="msg://saveConfiguration"
-                                datasource="importConfigurationDs">
-                        <field property="reuse"/>
-                        <field property="name" visible="false"/>
-                    </fieldGroup>
-                    <buttonsPanel align="BOTTOM_RIGHT">
-                        <button id="toStep4"
-                                action="toStep4"/>
-                    </buttonsPanel>
+                        <fieldGroup id="reuseFieldGroup"
+                                    width="100%"
+                                    border="visible"
+                                    fieldCaptionWidth="250px"
+                                    caption="msg://saveConfiguration"
+                                    datasource="importConfigurationDs">
+                            <field property="reuse"/>
+                            <field property="name"
+                                   visible="false"/>
+                            <field property="comment"
+                                   rows="3"
+                                   width="100%"
+                                   visible="false"/>
+                        </fieldGroup>
+                    </scrollBox>
+
                 </vbox>
-
+                <buttonsPanel align="BOTTOM_RIGHT">
+                    <button id="toStep4"
+                            action="toStep4"/>
+                </buttonsPanel>
             </tab>
             <tab id="step4"
                  caption="msg://step4Title"
