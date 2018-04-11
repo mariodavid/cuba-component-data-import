@@ -11,7 +11,6 @@ class CsvImportDataConverter implements ImportDataConverter {
 
     @Override
     ImportData convert(String content) {
-
         def result = new ImportDataImpl()
 
         def csvRows = parseCSV(content)
@@ -21,6 +20,11 @@ class CsvImportDataConverter implements ImportDataConverter {
             result.columns = dataRow.columnNames
         }
         result
+    }
+
+    @Override
+    ImportData convert(File file) {
+        convert(file.text)
     }
 
     private Iterator parseCSV(String content) {

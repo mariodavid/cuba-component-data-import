@@ -16,6 +16,7 @@ import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
 import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
+import org.apache.commons.io.FileUtils
 
 import javax.inject.Inject
 
@@ -50,6 +51,7 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
 
     @Inject
     FileStorageService fileStorageService
+
 
     ImportFileParser importFileParser
 
@@ -103,6 +105,9 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
 
     private ImportData getImportData() {
         def fileBytes = fileStorageService.loadFile(item.template)
-        importFileParser.parseFile(item.template, new String(fileBytes))
+        def tmpFile = File.createTempFile("importfile-${item.name}", null)
+        FileUtils.writeByteArrayToFile(tmpFile, fileBytes)
+
+        importFileParser.parseFile(item.template, tmpFile)
     }
 }

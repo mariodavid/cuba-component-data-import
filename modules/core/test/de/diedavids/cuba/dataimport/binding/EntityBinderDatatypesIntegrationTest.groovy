@@ -3,6 +3,8 @@ package de.diedavids.cuba.dataimport.binding
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.example.Customer
+import de.diedavids.cuba.dataimport.entity.example.CustomerPriority
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.State
@@ -296,6 +298,79 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         MlbTeam entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbTeam()) as MlbTeam
 
         assertThat(entity.getState()).isEqualTo(State.AL)
+    }
+
+    @Test
+    void "bindAttributes binds an integer based (id) enum value"() {
+
+        ImportData importData = createData([
+                [priority: "HIGH"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$Customer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                ]
+        )
+        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+
+        assertThat(entity.getPriority()).isEqualTo(CustomerPriority.HIGH)
+    }
+
+    @Test
+    void "bindAttributes binds enum regardless of the case"() {
+
+        ImportData importData = createData([
+                [priority: "high"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$Customer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                ]
+        )
+        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+
+        assertThat(entity.getPriority()).isEqualTo(CustomerPriority.HIGH)
+    }
+
+    @Test
+    void "bindAttributes binds nothing in case of enum and null value"() {
+
+        ImportData importData = createData([
+                [priority: ""]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$Customer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                ]
+        )
+        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+
+        assertThat(entity.getPriority()).isNull()
+    }
+
+
+    @Test
+    void "bindAttributes binds nothing in case of wrong enum value"() {
+
+        ImportData importData = createData([
+                [priority: "MIDDLE"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$Customer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                ]
+        )
+        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+
+        assertThat(entity.getPriority()).isNull()
     }
 
 
