@@ -8,28 +8,20 @@
 This application component let's you easily import data into your application from various sources.
 
 
-## NOTE: this project is "work in progress" and not ready to be used.
-
 ## Installation
 
 1. Add the following maven repository `https://dl.bintray.com/mariodavid/cuba-components` to the build.gradle of your CUBA application:
 
-
+    
     buildscript {
-        
-        //...
-        
         repositories {
-        
-            // ...
-        
             maven {
                 url  "https://dl.bintray.com/mariodavid/cuba-components"
             }
         }
-        
-        // ...
     }
+    
+
 
 2. Select a version of the add-on which is compatible with the platform version used in your project:
 
@@ -47,3 +39,33 @@ Add custom application component to your project:
 * Version: *add-on version*
 
 ## Using the application component
+
+The `data-import` application component helps you import data into your system from different files.
+
+Currently the following file-types are supported: 
+
+* Excel `.xlsx` 
+* comma separated values `.csv`
+
+In order to configure various import options, there is a UI based configuration possibility to define
+
+* which entity will be imported
+* which columns maps to which entity attribute
+* format configuration for dates, boolean values etc.
+* custom groovy scripts for attributes to value mapping
+
+There are two modes of using the `data-import` application component. The first one is an interactive UI wizard, which
+will guide the user directly through the process of importing the data.
+
+The second mode is, that the import configuration can be pre-defined by a developer / administrator of the system.
+The end-user of the system can reuse this configurations and just uploads the file that should get imported.
+
+
+### Import wizard
+ 
+
+![import-wizard-step-1](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-1.png)
+
+![import-wizard-step-2](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-2.png)
+
+![import-wizard-step-3](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-3.png)
