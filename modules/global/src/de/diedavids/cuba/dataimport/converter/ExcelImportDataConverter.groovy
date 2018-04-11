@@ -1,36 +1,51 @@
 package de.diedavids.cuba.dataimport.converter
 
-import com.xlson.groovycsv.CsvParser
-import com.xlson.groovycsv.PropertyMapper
 import de.diedavids.cuba.dataimport.dto.DataRowImpl
-import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.DataFormatter
+import org.apache.poi.ss.usermodel.Row
 
 class ExcelImportDataConverter implements ImportDataConverter {
 
     @Override
     ImportData convert(String content) {
+        throw new IllegalArgumentException('String conversion is not supported in case of Excel')
+    }
 
+    @Override
+    ImportData convert(File file) {
         def result = new ImportDataImpl()
 
-        def csvRows = parseCSV(content)
-        csvRows.each { PropertyMapper row ->
-            DataRow dataRow = addToTableData(result, row)
-            result.columns = dataRow.columnNames
-        }
+        parse(file, result)
+
         result
     }
 
-    private Iterator parseCSV(String content) {
-        new CsvParser().parse(content)
+    private void parse(File file, ImportDataImpl result) {
+
+
+        def reader = new ExcelReader(file)
+
+        DataFormatter dataFormatter = new DataFormatter()
+
+        reader.eachLine(labels: true) { Row row ->
+            def rowResult = [:]
+            labels.each {
+                rowResult["$it"] = ''
+            }
+
+            row.cellIterator().each { Cell cell ->
+                rowResult[labels[cell.columnIndex]] = dataFormatter.formatCellValue(cell)
+            }
+            result.columns = labels
+            result.rows << DataRowImpl.ofMap(rowResult)
+        }
+
+
     }
 
-    private DataRow addToTableData(ImportDataImpl importData, PropertyMapper row) {
-        def dataRow = DataRowImpl.ofMap(row.toMap())
-        importData.rows << dataRow
-        dataRow
-    }
 
 
 }

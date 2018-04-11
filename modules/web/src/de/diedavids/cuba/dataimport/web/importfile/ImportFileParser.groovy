@@ -12,15 +12,15 @@ class ImportFileParser {
     DataConverterFactory dataConverterFactory
 
     ImportData parseFile() {
-        def fileDescriptor = importFileHandler.uploadedFileDescriptor
-        def fileContent = importFileHandler.uploadedFile.text
+        FileDescriptor fileDescriptor = importFileHandler.uploadedFileDescriptor
+        File file = importFileHandler.uploadedFile
 
-        parseFile(fileDescriptor, fileContent)
+        parseFile(fileDescriptor, file)
     }
 
-    ImportData parseFile(FileDescriptor fileDescriptor, String fileContent) {
+    ImportData parseFile(FileDescriptor fileDescriptor, File file) {
         ImportDataConverter converter = dataConverterFactory.createTableDataConverter(fileDescriptor)
-        converter.convert(fileContent)
+        converter.convert(file)
     }
 
 

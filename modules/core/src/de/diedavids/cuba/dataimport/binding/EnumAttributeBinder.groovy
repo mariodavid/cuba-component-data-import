@@ -12,7 +12,17 @@ class EnumAttributeBinder implements AttributeBinder {
     }
 
     private getValue(AttributeBindRequest bindRequest) {
-        bindRequest.metaProperty.javaType.fromId(bindRequest.rawValue)
+        Class<Enum> enumType = bindRequest.metaProperty.javaType as Class<Enum>
+        def value = bindRequest.rawValue.toUpperCase()
+        if (enumType.isEnum() && value) {
+            try {
+                enumType.valueOf(enumType, value)
+            }
+            catch (IllegalArgumentException e) {
+                log.info("Enum value could not be found: $value for Enum: ${enumType.simpleName}. Will be ignored")
+                log.debug('Details: ', e)
+            }
+        }
     }
 
 }
