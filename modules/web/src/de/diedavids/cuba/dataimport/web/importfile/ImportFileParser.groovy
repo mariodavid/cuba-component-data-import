@@ -1,7 +1,6 @@
 package de.diedavids.cuba.dataimport.web.importfile
 
 import com.haulmont.cuba.core.entity.FileDescriptor
-import com.haulmont.cuba.core.global.AppBeans
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.converter.ImportDataConverter
 import de.diedavids.cuba.dataimport.dto.ImportData
