@@ -17,14 +17,14 @@
             name="core">
         <artifact appJar="true"
                   name="dataimport-core"/>
-        <property name="cuba.springContextConfig"
-                  value="+de/diedavids/cuba/dataimport/spring.xml"/>
-        <property name="cuba.mainMessagePack"
-                  value="+de.diedavids.cuba.dataimport.core"/>
         <artifact classifier="db"
                   configuration="dbscripts"
                   ext="zip"
                   name="dataimport-core"/>
+        <property name="cuba.springContextConfig"
+                  value="+de/diedavids/cuba/dataimport/spring.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+de.diedavids.cuba.dataimport.core"/>
     </module>
     <module blocks="web,desktop"
             dependsOn="global"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="de.diedavids.cuba.dataimport.web.uniqueconfigurationattribute.UniqueConfigurationAttributeEdit"
+        datasource="uniqueConfigurationAttributeDs"
+        focusComponent="fieldGroup"
+        messagesPack="de.diedavids.cuba.dataimport.web.uniqueconfigurationattribute">
+    <dsContext>
+        <datasource id="uniqueConfigurationAttributeDs"
+                    class="de.diedavids.cuba.dataimport.entity.UniqueConfigurationAttribute"
+                    view="_local"/>
+    </dsContext>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="uniqueConfigurationAttributeDs">
+            <column width="250px">
+                <field property="entityAttribute"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>
