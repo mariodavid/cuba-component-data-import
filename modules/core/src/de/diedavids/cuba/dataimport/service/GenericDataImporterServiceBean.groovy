@@ -12,9 +12,7 @@ import com.haulmont.cuba.core.global.validation.EntityValidationException
 import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
-import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.*
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 
@@ -33,20 +31,20 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     @Inject
     EntityBinder dataImportEntityBinder
 
+
+    @Inject
+    UniqueEntityFinderService uniqueEntityFinderService
+
     @Override
     ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
 
         def entities = createEntities(importConfiguration, importData)
 
-        def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
-        def importEntityClass = importEntityMetaClass.javaClass
-
-        EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
         ImportLog importLog = createImportLog(importConfiguration)
 
         try {
-            entityImportExportAPI.importEntities(entities, importView, true)
-            importLog.entitiesProcessed = entities.size()
+            Collection<Entity> importEntities = importEntities(entities, importConfiguration)
+            importLog.entitiesProcessed = importEntities.size()
             importLog.success = true
         }
         catch (EntityValidationException e) {
@@ -55,6 +53,40 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importLog.success = false
         }
         importLog
+    }
+
+    private Collection<Entity> importEntities(Collection<BindedEntity> entities, ImportConfiguration importConfiguration) {
+
+        def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
+        def importEntityClass = importEntityMetaClass.javaClass
+        EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
+        Collection<Entity> importedEntities = []
+
+        entities.each { BindedEntity bindedEntity ->
+            importEntity(bindedEntity, importView, importedEntities, importConfiguration)
+        }
+
+        importedEntities
+
+    }
+
+    private List<UniqueConfiguration> importEntity(bindedEntity, EntityImportView importView, Collection<Entity> importedEntities, ImportConfiguration importConfiguration) {
+        importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
+
+            def alreadyExistingEntity = uniqueEntityFinderService.findEntity(bindedEntity.entity, uniqueConfiguration)
+
+            if (!alreadyExistingEntity) {
+                entityImportExportAPI.importEntities([bindedEntity.entity], importView, true)
+                importedEntities << bindedEntity.entity
+            }
+
+            if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
+                def alreadyExistingBindedEntity = bindAttributes(importConfiguration, bindedEntity.dataRow, alreadyExistingEntity)
+                entityImportExportAPI.importEntities([alreadyExistingBindedEntity], importView, true)
+                importedEntities << bindedEntity.entity
+            }
+
+        }
     }
 
     private ImportLog createImportLog(ImportConfiguration importConfiguration) {
@@ -93,16 +125,19 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
 
-    Collection<Entity> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
+    Collection<BindedEntity> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
         importData.rows.collect {
             createEntityFromRow(importConfiguration, it)
         }
     }
 
-    Entity createEntityFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
+    BindedEntity createEntityFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
-        bindAttributes(importConfiguration, dataRow, entityInstance)
+        new BindedEntity(
+                entity: bindAttributes(importConfiguration, dataRow, entityInstance),
+                dataRow: dataRow
+        )
     }
 
     Entity bindAttributes(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
@@ -112,4 +147,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     private Entity createEntityInstance(ImportConfiguration importConfiguration) {
         metadata.create(importConfiguration.entityClass)
     }
+}
+
+class BindedEntity {
+    Entity entity
+    DataRow dataRow
 }
