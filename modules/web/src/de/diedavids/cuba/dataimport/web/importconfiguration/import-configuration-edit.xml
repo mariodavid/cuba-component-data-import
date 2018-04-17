@@ -11,6 +11,10 @@
                     view="importConfiguration-view">
             <collectionDatasource id="importAttributeMappersDs"
                                   property="importAttributeMappers"/>
+            <collectionDatasource id="uniqueConfigurationsDs"
+                                  property="uniqueConfigurations">
+                <collectionDatasource id="entityAttributesDs" property="entityAttributes" />
+            </collectionDatasource>
         </datasource>
     </dsContext>
     <dialogMode height="600"
@@ -69,6 +73,31 @@
                         <button action="importAttributeMappersTable.create"/>
                         <button action="importAttributeMappersTable.edit"/>
                         <button action="importAttributeMappersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="uniqueConfigurationsTab"
+                 caption="msg://uniqueConfigurationsTab"
+                 expand="uniqueConfigurationsTable"
+                 margin="true"
+                 spacing="true">
+                <table id="uniqueConfigurationsTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create" openType="DIALOG"/>
+                        <action id="edit" openType="DIALOG"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="policy" />
+                        <column id="entityAttributes" />
+                    </columns>
+                    <rows datasource="uniqueConfigurationsDs"/>
+                    <buttonsPanel>
+                        <button action="uniqueConfigurationsTable.create"/>
+                        <button action="uniqueConfigurationsTable.edit"/>
+                        <button action="uniqueConfigurationsTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

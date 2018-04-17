@@ -21,6 +21,8 @@ class ImportFileParser {
     ImportData parseFile(FileDescriptor fileDescriptor, File file) {
         ImportDataConverter converter = dataConverterFactory.createTableDataConverter(fileDescriptor)
         converter.convert(file)
+
+
     }
 
 

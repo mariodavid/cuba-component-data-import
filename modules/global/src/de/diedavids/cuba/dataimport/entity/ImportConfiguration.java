@@ -60,6 +60,11 @@ public class ImportConfiguration extends StandardEntity {
     @OneToMany(mappedBy = "configuration")
     protected List<ImportAttributeMapper> importAttributeMappers;
 
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "importConfiguration")
+    protected List<UniqueConfiguration> uniqueConfigurations;
+
     @Column(name = "DATE_FORMAT")
     protected String dateFormat;
 
@@ -68,6 +73,15 @@ public class ImportConfiguration extends StandardEntity {
 
     @Column(name = "BOOLEAN_FALSE_VALUE")
     protected String booleanFalseValue;
+
+    public void setUniqueConfigurations(List<UniqueConfiguration> uniqueConfigurations) {
+        this.uniqueConfigurations = uniqueConfigurations;
+    }
+
+    public List<UniqueConfiguration> getUniqueConfigurations() {
+        return uniqueConfigurations;
+    }
+
 
     public Boolean getReuse() {
         return reuse;

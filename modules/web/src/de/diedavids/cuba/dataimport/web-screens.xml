@@ -25,4 +25,8 @@
             template="de/diedavids/cuba/dataimport/web/importconfiguration/import-configuration-edit.xml"/>
     <screen id="ddcdi$ImportConfiguration.create"
             template="de/diedavids/cuba/dataimport/web/importconfiguration/import-configuration-create.xml"/>
+    <screen id="ddcdi$UniqueConfiguration.edit"
+            template="de/diedavids/cuba/dataimport/web/uniqueconfiguration/unique-configuration-edit.xml"/>
+    <screen id="ddcdi$UniqueConfigurationAttribute.edit"
+            template="de/diedavids/cuba/dataimport/web/uniqueconfigurationattribute/unique-configuration-attribute-edit.xml"/>
 </screen-config>

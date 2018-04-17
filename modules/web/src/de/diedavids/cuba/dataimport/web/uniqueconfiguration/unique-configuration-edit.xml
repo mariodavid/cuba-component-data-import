@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="de.diedavids.cuba.dataimport.web.uniqueconfiguration.UniqueConfigurationEdit"
+        datasource="uniqueConfigurationDs"
+        focusComponent="fieldGroup"
+        messagesPack="de.diedavids.cuba.dataimport.web.uniqueconfiguration">
+    <dsContext>
+        <datasource id="uniqueConfigurationDs"
+                    class="de.diedavids.cuba.dataimport.entity.UniqueConfiguration"
+                    view="uniqueConfiguration-view">
+            <collectionDatasource id="entityAttributesDs"
+                                  property="entityAttributes"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="uniqueConfigurationDs">
+            <column width="250px">
+                <field property="policy"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="entityAttributesBox"
+                  caption="msg://de.diedavids.cuba.dataimport.entity/UniqueConfiguration.entityAttributes">
+            <table id="entityAttributesTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create" openType="DIALOG"/>
+                    <action id="edit" openType="DIALOG"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="entityAttribute" />
+                </columns>
+                <rows datasource="entityAttributesDs"/>
+                <buttonsPanel>
+                    <button action="entityAttributesTable.create"/>
+                    <button action="entityAttributesTable.edit"/>
+                    <button action="entityAttributesTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>
