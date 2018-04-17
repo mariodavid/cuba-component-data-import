@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             version="2.0">
+    <persistence-unit name="cuba-component-data-import"
+                      transaction-type="RESOURCE_LOCAL">
+        <class>de.diedavids.cuba.dataimport.entity.example.Customer</class>
+        <class>de.diedavids.cuba.dataimport.entity.example.MlbPlayer</class>
+        <class>de.diedavids.cuba.dataimport.entity.example.MlbTeam</class>
+    </persistence-unit>
+</persistence>
