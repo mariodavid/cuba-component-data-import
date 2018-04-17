@@ -1,1 +1,0 @@
-drop index IDX_DDCDI_MLB_TEAM_UNIQ_CODE ;

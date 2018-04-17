@@ -1,1 +1,0 @@
-alter table DDCDI_IMPORT_ATTRIBUTE_MAPPER alter column DATE_FORMAT rename to DATE_FORMAT__UNUSED ;

@@ -260,6 +260,16 @@ configure(coreModule) {
         dbPassword = ''
     }
 
+
+    task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
+        dbName = hsqlDbName
+        dbUser = 'sa'
+        dbPassword = ''
+        auxiliaryScript = file('test/de/diedavids/cuba/dataimport/create-db.sql')
+    }
+
     //tasks.test.dependsOn(assembleDbScripts)
 }
 
