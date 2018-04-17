@@ -9,6 +9,10 @@
                     view="importConfiguration-view">
             <collectionDatasource id="importAttributeMappersDatasource"
                                   property="importAttributeMappers"/>
+            <collectionDatasource id="uniqueConfigurationDs"
+                                  property="uniqueConfigurations">
+                <collectionDatasource id="entityAttributesDs" property="entityAttributes" />
+            </collectionDatasource>
         </datasource>
         <datasource id="importLogDs"
                     class="de.diedavids.cuba.dataimport.entity.ImportLog"/>
@@ -115,31 +119,68 @@
                  spacing="true">
                 <vbox spacing="true">
                     <scrollBox id="importConfigurationScrollBox">
-                        <fieldGroup id="importConfigurationFieldGroup"
-                                    width="100%"
-                                    border="visible"
-                                    fieldCaptionWidth="250px"
-                                    caption="msg://formatConfiguration"
-                                    datasource="importConfigurationDs">
-                            <field property="dateFormat"/>
-                            <field property="booleanTrueValue"/>
-                            <field property="booleanFalseValue"/>
-                        </fieldGroup>
 
-                        <fieldGroup id="reuseFieldGroup"
-                                    width="100%"
-                                    border="visible"
-                                    fieldCaptionWidth="250px"
-                                    caption="msg://saveConfiguration"
-                                    datasource="importConfigurationDs">
-                            <field property="reuse"/>
-                            <field property="name"
-                                   visible="false"/>
-                            <field property="comment"
-                                   rows="3"
-                                   width="100%"
-                                   visible="false"/>
-                        </fieldGroup>
+                        <tabSheet id="importConfigurationTabSheet">
+
+                            <tab id="formatConfigurationTab"
+                                 caption="msg://formatConfiguration"
+                                 margin="true"
+                                 spacing="true">
+                                <fieldGroup id="importConfigurationFieldGroup"
+                                            width="100%"
+                                            border="visible"
+                                            fieldCaptionWidth="250px"
+                                            caption="msg://formatConfiguration"
+                                            datasource="importConfigurationDs">
+                                    <field property="dateFormat"/>
+                                    <field property="booleanTrueValue"/>
+                                    <field property="booleanFalseValue"/>
+                                </fieldGroup>
+
+                                <fieldGroup id="reuseFieldGroup"
+                                            width="100%"
+                                            border="visible"
+                                            fieldCaptionWidth="250px"
+                                            caption="msg://saveConfiguration"
+                                            datasource="importConfigurationDs">
+                                    <field property="reuse"/>
+                                    <field property="name"
+                                           visible="false"/>
+                                    <field property="comment"
+                                           rows="3"
+                                           width="100%"
+                                           visible="false"/>
+                                </fieldGroup>
+                            </tab>
+
+                            <tab id="uniqueConfigurationTab"
+                                     caption="msg://uniqueConfigurationsTab"
+                                     expand="uniqueConfigurationsTable"
+                                     margin="true"
+                                     spacing="true">
+                                    <table id="uniqueConfigurationsTable"
+                                           height="100%"
+                                           width="100%">
+                                        <actions>
+                                            <action id="create" openType="DIALOG"/>
+                                            <action id="edit" openType="DIALOG"/>
+                                            <action id="remove"/>
+                                        </actions>
+                                        <columns>
+                                            <column id="policy" />
+                                            <column id="entityAttributes" />
+                                        </columns>
+                                        <rows datasource="uniqueConfigurationDs"/>
+                                        <buttonsPanel>
+                                            <button action="uniqueConfigurationsTable.create"/>
+                                            <button action="uniqueConfigurationsTable.edit"/>
+                                            <button action="uniqueConfigurationsTable.remove"/>
+                                        </buttonsPanel>
+                                    </table>
+                            </tab>
+
+                        </tabSheet>
+
                     </scrollBox>
 
                 </vbox>
