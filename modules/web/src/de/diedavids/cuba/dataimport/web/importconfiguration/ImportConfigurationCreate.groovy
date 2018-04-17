@@ -85,9 +85,17 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
         parseAttributeMappersForConfiguration()
     }
 
-    private void parseAttributeMappersForConfiguration() {
+    private boolean parseAttributeMappersForConfiguration() {
         List<ImportAttributeMapper> mappers = createAttributeMappers(importData)
-        assignMappersToConfiguration(mappers)
+        if (mappers) {
+            assignMappersToConfiguration(mappers)
+
+            return true
+        }
+        else {
+            return false
+        }
+
     }
 
     private void assignMappersToConfiguration(List<ImportAttributeMapper> mappers) {
