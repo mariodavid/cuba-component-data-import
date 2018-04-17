@@ -89,13 +89,8 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
         List<ImportAttributeMapper> mappers = createAttributeMappers(importData)
         if (mappers) {
             assignMappersToConfiguration(mappers)
-
             return true
         }
-        else {
-            return false
-        }
-
     }
 
     private void assignMappersToConfiguration(List<ImportAttributeMapper> mappers) {
