@@ -6,7 +6,7 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 script:
- - ./gradlew createDb check coveralls
+ - ./gradlew createTestDb check coveralls
 
 before_install:
   - chmod +x ./gradlew
