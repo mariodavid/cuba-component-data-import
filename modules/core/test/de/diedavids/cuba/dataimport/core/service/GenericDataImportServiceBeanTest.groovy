@@ -1,14 +1,12 @@
 package de.diedavids.cuba.dataimport.core.service
 
 import com.haulmont.cuba.core.global.AppBeans
-import de.diedavids.cuba.dataimport.AbstractDbIntegrationTest
 import de.diedavids.cuba.dataimport.AbstractImpotrIntegrationTest
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.State
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
-import de.diedavids.cuba.dataimport.service.UniqueEntityFinderService
 import org.junit.Before
 import org.junit.Test
 

@@ -192,6 +192,8 @@ configure(globalModule) {
 
 configure(coreModule) {
 
+    task enhanceTestModel(type: CubaTestEnhancing)
+
     configurations {
         jdbc
         dbscripts
