@@ -16,6 +16,8 @@
                        value="de.diedavids.cuba.dataimport.service.GenericDataImporterService"/>
                 <entry key="ddcdi_ImportWizardService"
                        value="de.diedavids.cuba.dataimport.service.ImportWizardService"/>
+                <entry key="ddcdi_UniqueEntityFinderService"
+                       value="de.diedavids.cuba.dataimport.service.UniqueEntityFinderService"/>
             </map>
         </property>
     </bean>

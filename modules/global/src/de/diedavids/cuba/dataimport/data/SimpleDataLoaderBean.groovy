@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.data
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.entity.BaseUuidEntity
+import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.LoadContext
 import com.haulmont.cuba.core.global.Metadata
@@ -87,6 +88,35 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext.createQuery(queryString).setParameter('propertyValue', propertyValue)
     }
 
+    protected LoadContext.Query createQueryByEntityAttributeValues(String metaClassName, Collection<EntityAttributeValue> entityAttributeValues) {
+
+        def queryString = "${getSelectPart(metaClassName)} where "
+
+        def conditionParts = entityAttributeValues.withIndex().collect {EntityAttributeValue entityAttributeValue, int i ->
+            "e.${entityAttributeValue.entityAttribute} = :propertyValue$i"
+        }
+
+        queryString += conditionParts.join(' and ')
+
+        LoadContext.Query query = LoadContext.createQuery(queryString)
+
+        entityAttributeValues.eachWithIndex { EntityAttributeValue entityAttributeValue, int i ->
+            query.setParameter("propertyValue$i", entityAttributeValue.value)
+        }
+
+        query
+    }
+
+
+    @Override
+    <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues) {
+
+        LoadContext.Query query = createQueryByEntityAttributeValues(getMetaClassName(entityClass), entityAttributeValues)
+        LoadContext loadContext = getLoadContext(entityClass)
+                .setQuery(query)
+
+        dataManager.loadList(loadContext)as Collection<E>
+    }
 
     protected String getSelectPart(String metaClassName) {
         "SELECT e FROM ${metaClassName} e"

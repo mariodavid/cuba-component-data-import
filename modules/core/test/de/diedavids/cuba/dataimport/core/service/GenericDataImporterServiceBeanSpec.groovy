@@ -14,6 +14,7 @@ import de.diedavids.cuba.dataimport.service.GenericDataImporterServiceBean
 import spock.lang.Specification
 
 class GenericDataImporterServiceBeanSpec extends Specification {
+
     private Metadata metadata = Mock(Metadata)
     private GenericDataImporterServiceBean sut
 
@@ -65,7 +66,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
         def result = sut.createEntities(importConfiguration, importData)
 
         then:
-        result[0] instanceof MlbPlayer
+        result[0].entity instanceof MlbPlayer
     }
 
     def "createEntities binds the attributes of the data row to the entity instance"() {
@@ -84,7 +85,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
 
 
         when:
-        sut.createEntities(importConfiguration, importData)[0] as MlbPlayer
+        sut.createEntities(importConfiguration, importData)[0].entity as MlbPlayer
 
         then:
         1 * dataImportEntityBinder.bindAttributes(importConfiguration, importData.rows[0], _)

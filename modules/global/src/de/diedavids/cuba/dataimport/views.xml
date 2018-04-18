@@ -19,5 +19,13 @@
                   view="_minimal"/>
         <property name="importAttributeMappers"
                   view="_local"/>
+        <property name="uniqueConfigurations"
+                  view="uniqueConfiguration-view"/>
+    </view>
+    <view class="de.diedavids.cuba.dataimport.entity.UniqueConfiguration"
+          extends="_local"
+          name="uniqueConfiguration-view">
+        <property name="entityAttributes"
+                  view="_minimal"/>
     </view>
 </views>

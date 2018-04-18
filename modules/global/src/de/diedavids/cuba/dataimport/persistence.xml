@@ -7,5 +7,7 @@
         <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
         <class>de.diedavids.cuba.dataimport.entity.ImportConfiguration</class>
         <class>de.diedavids.cuba.dataimport.entity.ImportAttributeMapper</class>
+        <class>de.diedavids.cuba.dataimport.entity.UniqueConfigurationAttribute</class>
+        <class>de.diedavids.cuba.dataimport.entity.UniqueConfiguration</class>
     </persistence-unit>
 </persistence>
