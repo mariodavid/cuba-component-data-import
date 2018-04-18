@@ -192,6 +192,8 @@ configure(globalModule) {
 
 configure(coreModule) {
 
+    task enhanceTestModel(type: CubaTestEnhancing)
+
     configurations {
         jdbc
         dbscripts
@@ -247,7 +249,7 @@ configure(coreModule) {
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'hsql'
         host = 'localhost'
-        dbName = 'ddcdi3'
+        dbName = hsqlDbName
         dbUser = 'sa'
         dbPassword = ''
     }
@@ -255,9 +257,19 @@ configure(coreModule) {
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'hsql'
         host = 'localhost'
-        dbName = 'ddcdi3'
+        dbName = hsqlDbName
         dbUser = 'sa'
         dbPassword = ''
+    }
+
+
+    task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
+        dbName = hsqlDbName
+        dbUser = 'sa'
+        dbPassword = ''
+        auxiliaryScript = file('test/de/diedavids/cuba/dataimport/create-db.sql')
     }
 
     //tasks.test.dependsOn(assembleDbScripts)

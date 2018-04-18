@@ -1,3 +1,0 @@
-alter table DDCDI_IMPORT_CONFIGURATION add column DATE_FORMAT varchar(255) ;
-alter table DDCDI_IMPORT_CONFIGURATION add column BOOLEAN_TRUE_VALUE varchar(255) ;
-alter table DDCDI_IMPORT_CONFIGURATION add column BOOLEAN_FALSE_VALUE varchar(255) ;

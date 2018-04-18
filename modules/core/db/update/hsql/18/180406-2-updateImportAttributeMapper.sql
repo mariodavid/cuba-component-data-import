@@ -1,1 +1,0 @@
-alter table DDCDI_IMPORT_ATTRIBUTE_MAPPER add column CUSTOM_ATTRIBUTE_BIND_SCRIPT longvarchar ;

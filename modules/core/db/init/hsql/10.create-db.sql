@@ -63,26 +63,6 @@ create table DDCDI_IMPORT_CONFIGURATION (
     primary key (ID)
 )^
 -- end DDCDI_IMPORT_CONFIGURATION
--- begin DDCDI_CUSTOMER
-create table DDCDI_CUSTOMER (
-    ID varchar(36) not null,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    NAME varchar(255) not null,
-    FIRST_NAME varchar(255),
-    DOCUMENT_NUMBER varchar(50) not null,
-    DESCRIPTION longvarchar,
-    PRIORITY integer,
-    --
-    primary key (ID)
-)^
--- end DDCDI_CUSTOMER
 -- begin DDCDI_IMPORT_ATTRIBUTE_MAPPER
 create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     ID varchar(36) not null,
@@ -103,46 +83,6 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     primary key (ID)
 )^
 -- end DDCDI_IMPORT_ATTRIBUTE_MAPPER
--- begin DDCDI_MLB_PLAYER
-create table DDCDI_MLB_PLAYER (
-    ID varchar(36) not null,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    NAME varchar(255),
-    TEAM_ID varchar(36),
-    HEIGHT integer,
-    WEIGHT integer,
-    AGE double precision,
-    BIRTHDAY date,
-    LEFT_HANDED boolean,
-    --
-    primary key (ID)
-)^
--- end DDCDI_MLB_PLAYER
--- begin DDCDI_MLB_TEAM
-create table DDCDI_MLB_TEAM (
-    ID varchar(36) not null,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    NAME varchar(255) not null,
-    CODE varchar(255) not null,
-    STATE varchar(50),
-    --
-    primary key (ID)
-)^
--- end DDCDI_MLB_TEAM
 -- begin DDCDI_UNIQUE_CONFIGURATION_ATTRIBUTE
 create table DDCDI_UNIQUE_CONFIGURATION_ATTRIBUTE (
     ID varchar(36) not null,

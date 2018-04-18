@@ -5,15 +5,13 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-script:
- - ./gradlew createDb check coveralls
 
 before_install:
   - chmod +x ./gradlew
   - ./gradlew --no-daemon startDb
 
 install:
-  - ./gradlew --no-daemon createDb
+  - ./gradlew --no-daemon createTestDb
 
 script:
   - ./gradlew --no-daemon assemble

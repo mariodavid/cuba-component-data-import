@@ -1,1 +1,0 @@
-create unique index IDX_DDCDI_MLB_TEAM_UNIQ_CODE on DDCDI_MLB_TEAM (CODE) ;
