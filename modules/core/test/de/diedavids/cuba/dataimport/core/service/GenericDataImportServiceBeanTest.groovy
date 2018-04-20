@@ -36,8 +36,8 @@ class GenericDataImportServiceBeanTest extends AbstractImpotrIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
                 ],
                 uniqueConfigurations: [new UniqueConfiguration(
                         entityAttributes: [
@@ -74,9 +74,9 @@ class GenericDataImportServiceBeanTest extends AbstractImpotrIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.code', fileColumnAlias: 'code', fileColumnNumber: 2),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.state', fileColumnAlias: 'state', fileColumnNumber: 2),
+                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
                 ],
                 uniqueConfigurations: [new UniqueConfiguration(
                         entityAttributes: [
@@ -112,9 +112,9 @@ class GenericDataImportServiceBeanTest extends AbstractImpotrIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.code', fileColumnAlias: 'code', fileColumnNumber: 2),
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.state', fileColumnAlias: 'state', fileColumnNumber: 2),
+                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
                 ],
                 uniqueConfigurations: [new UniqueConfiguration(
                         entityAttributes: [

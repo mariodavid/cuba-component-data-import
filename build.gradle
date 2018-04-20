@@ -59,8 +59,8 @@ cuba {
             url = System.properties['uploadRepositoryRelease'] ?: System.env.UPLOAD_REPOSITORY_RELEASE ?: bintrayRepositoryUrl
         }
 
-        user = System.properties['uploadRepositoryUsername'] ?: System.env.UPLOAD_REPOSITORY_USERNAME
-        password = System.properties['uploadRepositoryPassword'] ?:System.env.UPLOAD_REPOSITORY_PASSWORD
+        user = System.env.UPLOAD_REPOSITORY_USERNAME
+        password = System.env.UPLOAD_REPOSITORY_PASSWORD
     }
     ide {
         vcs = 'Git'

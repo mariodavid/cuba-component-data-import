@@ -2,5 +2,3 @@
 
 ./gradlew startDb
 ./gradlew createTestDb
-./gradlew check
-./gradlew assemble
