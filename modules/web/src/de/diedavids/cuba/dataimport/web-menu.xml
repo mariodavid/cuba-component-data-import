@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <menu id="application-ddcdi"
-          insertBefore="administration">
+    <menu id="data-import"
+          insertBefore="sys$Category.browse">
         <item screen="ddcdi$ImportLog.browse"/>
         <item screen="ddcdi$ImportConfiguration.browse"/>
         <item openType="DIALOG"

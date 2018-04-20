@@ -54,6 +54,7 @@ In order to configure various import options, there is a UI based configuration 
 * which entity will be imported
 * which columns maps to which entity attribute
 * format configuration for dates, boolean values etc.
+* unique configurations and how to deal with these situations
 * custom groovy scripts for attributes to value mapping
 
 There are two modes of using the `data-import` application component. The first one is an interactive UI wizard, which
@@ -64,10 +65,22 @@ The end-user of the system can reuse this configurations and just uploads the fi
 
 
 ### Import wizard
- 
 
+The import wizard allows the user to interactively go through the import process and configure the above mentioned settings
+for the import execution. It can be found in the main menu: `Administration > Data Import > Import Wizard`
+
+##### Step 1: Upload file
 ![import-wizard-step-1](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-1.png)
 
+
+##### Step 2: Configure entity mapping
 ![import-wizard-step-2](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-2.png)
 
+The second step in the wizard allows the user to configure which columns of the import file will be mapped to which entity
+attributes. The system makes suggestions based on the similarities of the entity attribute names and the column headers
+in the import file, but this can be adjusted by the user if needed.
+
 ![import-wizard-step-3](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-3.png)
+
+The last step will preview the data that was received from the import file. With "Start Import" the import process
+will be triggered. Afterwards the user will see a summary of how many entities were imported correctly.
