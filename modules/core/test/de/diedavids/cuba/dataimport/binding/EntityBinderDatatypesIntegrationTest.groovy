@@ -292,7 +292,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbTeam.state', fileColumnAlias: 'state'),
+                        new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state'),
                 ]
         )
         MlbTeam entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbTeam()) as MlbTeam
