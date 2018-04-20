@@ -39,7 +39,7 @@ apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 
-def bintrayRepositoryUrl = "https://api.bintray.com/maven/mariodavid/cuba-components/cuba-component-runtime-diagnose/;publish=1"
+def bintrayRepositoryUrl = "https://api.bintray.com/maven/mariodavid/cuba-components/cuba-component-data-import/;publish=1"
 
 
 
