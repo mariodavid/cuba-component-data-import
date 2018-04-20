@@ -80,6 +80,11 @@ The second step in the wizard allows the user to configure which columns of the 
 attributes. The system makes suggestions based on the similarities of the entity attribute names and the column headers
 in the import file, but this can be adjusted by the user if needed.
 
+##### Step 3: Import Configuration 
+In the import configuration it is possible to define certain Format options as well as the unique configurations for this import.
+
+
+##### Step 4: Import Preview
 ![import-wizard-step-3](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-3.png)
 
 The last step will preview the data that was received from the import file. With "Start Import" the import process
