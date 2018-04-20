@@ -5,7 +5,7 @@ import com.haulmont.chile.core.model.MetaProperty
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Component
 
-@Component
+@Component('ddcdi_MetaPropertyMatcher')
 class MetaPropertyMatcher {
 
 

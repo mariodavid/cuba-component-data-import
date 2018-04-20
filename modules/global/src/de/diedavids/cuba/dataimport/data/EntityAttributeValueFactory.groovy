@@ -3,7 +3,7 @@ package de.diedavids.cuba.dataimport.data
 import com.haulmont.cuba.core.entity.Entity
 import org.springframework.stereotype.Component
 
-@Component
+@Component('ddcdi_EntityAttributeValueFactory')
 class EntityAttributeValueFactory {
 
     EntityAttributeValue createEntityAttributeValue(Entity entity, String entityAttribute) {

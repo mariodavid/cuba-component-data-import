@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 import javax.inject.Inject
 
-@Component
+@Component('ddcdi_ImportAttributeMapperCreator')
 class ImportAttributeMapperCreator {
 
     @Inject
