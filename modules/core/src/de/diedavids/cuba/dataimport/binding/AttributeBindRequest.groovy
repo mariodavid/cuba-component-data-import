@@ -28,7 +28,7 @@ class AttributeBindRequest {
     }
 
     String getEntityAttributePath() {
-        importAttributeMapper.entityAttribute
+        importAttributeMapper.entityAttribute - (importEntityClassName + PATH_SEPARATOR)
     }
 
     MetaClass getImportEntityMetaClass() {
