@@ -1,7 +1,6 @@
 package de.diedavids.cuba.dataimport.data
 
 import com.haulmont.chile.core.model.MetaClass
-import com.haulmont.cuba.core.entity.BaseUuidEntity
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.LoadContext
@@ -23,7 +22,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
 
     @Override
-    <E extends BaseUuidEntity> E load(Class<E> entityClass, UUID id, String view = '_local') {
+    <E extends Entity> E load(Class<E> entityClass, UUID id, String view = '_local') {
 
         LoadContext<E> loadContext = getLoadContext(entityClass)
                 .setId(id)
@@ -34,7 +33,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
 
     @Override
-    <E extends BaseUuidEntity> E loadByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view = '_local') {
+    <E extends Entity> E loadByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view = '_local') {
 
         LoadContext.Query query = createQueryByProperty(getMetaClassName(entityClass), propertyPath, propertyValue)
         def loadContext = getLoadContext(entityClass)
@@ -46,7 +45,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
 
     @Override
-    <E extends BaseUuidEntity> E loadByReference(Class<E> entityClass, String propertyPath, BaseUuidEntity reference, String view = '_local') {
+    <E extends Entity> E loadByReference(Class<E> entityClass, String propertyPath, Entity reference, String view = '_local') {
         LoadContext.Query query = createQueryByReference(getMetaClassName(entityClass), propertyPath, reference)
         def loadContext = getLoadContext(entityClass)
                 .setQuery(query)
@@ -57,7 +56,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
 
     @Override
-    <E extends BaseUuidEntity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view = '_local') {
+    <E extends Entity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view = '_local') {
         LoadContext.Query query = createQueryByProperty(getMetaClassName(entityClass),propertyPath, propertyValue)
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
@@ -66,7 +65,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
     }
 
     @Override
-    <E extends BaseUuidEntity> Collection<E> loadAll(Class<E> entityClass, String view = '_local') {
+    <E extends Entity> Collection<E> loadAll(Class<E> entityClass, String view = '_local') {
         LoadContext.Query query = createQueryForSelectAll(getMetaClassName(entityClass))
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
@@ -78,7 +77,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext.createQuery(getSelectPart(metaClassName))
     }
 
-    protected LoadContext.Query createQueryByReference(String metaClassName, String propertyPath, BaseUuidEntity reference) {
+    protected LoadContext.Query createQueryByReference(String metaClassName, String propertyPath, Entity reference) {
         def queryString = "${getSelectPart(metaClassName)} where e.${propertyPath}.id = :referenceId"
         LoadContext.createQuery(queryString).setParameter('referenceId', reference.id)
     }
