@@ -13,8 +13,11 @@ class MetaPropertyMatcher {
 
         MetaProperty possibleProperty = findPropertyByColumn(selectedEntity, column)
 
-        possibleProperty?.toString() ?: ''
+        if (possibleProperty) {
+            return possibleProperty.toString() - (selectedEntity.name + '.' )
+        }
 
+        ''
     }
 
     private MetaProperty findPropertyByColumn(MetaClass selectedEntity, String column) {
