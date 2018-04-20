@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 
 import javax.inject.Inject
 
-@Component
+@Component('ddcdi_EntityClassSelector')
 @CompileStatic
 class EntityClassSelector {
 
@@ -19,7 +19,6 @@ class EntityClassSelector {
 
     @Inject
     Messages messages
-
 
     @Inject
     Security security
