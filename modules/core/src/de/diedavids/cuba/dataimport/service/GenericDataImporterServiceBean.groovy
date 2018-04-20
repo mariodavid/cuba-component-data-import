@@ -70,23 +70,32 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     }
 
-    private List<UniqueConfiguration> importEntity(bindedEntity, EntityImportView importView, Collection<Entity> importedEntities, ImportConfiguration importConfiguration) {
-        importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
+    private List<UniqueConfiguration> importEntity(BindedEntity bindedEntity, EntityImportView importView, Collection<Entity> importedEntities, ImportConfiguration importConfiguration) {
 
-            def alreadyExistingEntity = uniqueEntityFinderService.findEntity(bindedEntity.entity, uniqueConfiguration)
+        if (importConfiguration.uniqueConfigurations) {
+            importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
 
-            if (!alreadyExistingEntity) {
-                entityImportExportAPI.importEntities([bindedEntity.entity], importView, true)
-                importedEntities << bindedEntity.entity
+                def alreadyExistingEntity = uniqueEntityFinderService.findEntity(bindedEntity.entity, uniqueConfiguration)
+
+                if (!alreadyExistingEntity) {
+                    doImportEntity(bindedEntity.entity, importView, importedEntities)
+                }
+
+                if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
+                    def alreadyExistingBindedEntity = bindAttributes(importConfiguration, bindedEntity.dataRow, alreadyExistingEntity)
+                    doImportEntity(alreadyExistingBindedEntity, importView, importedEntities)
+                }
+
             }
-
-            if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
-                def alreadyExistingBindedEntity = bindAttributes(importConfiguration, bindedEntity.dataRow, alreadyExistingEntity)
-                entityImportExportAPI.importEntities([alreadyExistingBindedEntity], importView, true)
-                importedEntities << bindedEntity.entity
-            }
-
         }
+        else {
+            doImportEntity(bindedEntity.entity, importView, importedEntities)
+        }
+    }
+
+    private void doImportEntity(Entity entity, EntityImportView importView, Collection<Entity> importedEntities) {
+        entityImportExportAPI.importEntities([entity], importView, true)
+        importedEntities << entity
     }
 
     private ImportLog createImportLog(ImportConfiguration importConfiguration) {
