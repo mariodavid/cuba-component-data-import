@@ -15,7 +15,7 @@ buildscript {
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
 
-
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
 
         classpath 'net.saliman:gradle-cobertura-plugin:2.5.0'
         classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
@@ -39,10 +39,6 @@ apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 
-def bintrayRepositoryUrl = "https://api.bintray.com/maven/mariodavid/cuba-components/cuba-component-data-import/;publish=1"
-
-
-
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
@@ -52,18 +48,48 @@ cuba {
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
     }
-    uploadRepository {
-        if (cuba.artifact.isSnapshot) {
-            url = System.properties['uploadRepositorySnapshot'] ?: System.env.UPLOAD_REPOSITORY_SNAPSHOT
-        } else {
-            url = System.properties['uploadRepositoryRelease'] ?: System.env.UPLOAD_REPOSITORY_RELEASE ?: bintrayRepositoryUrl
-        }
-
-        user = System.env.UPLOAD_REPOSITORY_USERNAME
-        password = System.env.UPLOAD_REPOSITORY_PASSWORD
-    }
     ide {
         vcs = 'Git'
+    }
+}
+
+subprojects {
+    apply plugin: 'com.jfrog.bintray'
+
+    bintray {
+        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('UPLOAD_REPOSITORY_USERNAME')
+        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('UPLOAD_REPOSITORY_PASSWORD')
+
+        configurations = ['archives']
+
+        publish = true
+
+        override = false
+
+        // metadata
+        pkg {
+            repo = 'cuba-components'
+            name = 'cuba-component-data-import'
+            desc = 'CUBA platform application component for data import'
+            userOrg = 'mariodavid'
+
+            websiteUrl = 'https://github.com/mariodavid/cuba-component-data-import'
+            issueTrackerUrl = 'https://github.com/mariodavid/cuba-component-data-import/issues'
+            vcsUrl = 'https://github.com/mariodavid/cuba-component-data-import.git'
+
+            licenses = ["Apache-2.0"]
+
+            labels = ['data-import', 'cuba-patform', 'cuba-component']
+            githubRepo = 'mariodavid/cuba-component-data-import'
+            githubReleaseNotesFile = 'CHANGELOG.md'
+
+            version {
+                name = "${cuba.artifact.version}"
+                desc = ''
+                released  = new Date()
+                vcsTag = "${cuba.artifact.version}"
+            }
+        }
     }
 }
 

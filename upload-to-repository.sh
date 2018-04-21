@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 
-./gradlew uploadArchives
+./gradlew clean assemble bintrayUpload
 
