@@ -11,4 +11,13 @@
               username="sa"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
+    <!--<Resource driverClassName="org.postgresql.Driver"
+          maxIdle="2"
+          maxTotal="20"
+          maxWaitMillis="5000"
+          name="jdbc/CubaDS"
+          password="postgres"
+          type="javax.sql.DataSource"
+          url="jdbc:postgresql://localhost/postgres"
+          username="postgres"/>-->
 </Context>

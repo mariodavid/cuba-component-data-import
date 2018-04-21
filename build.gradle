@@ -273,6 +273,7 @@ configure(coreModule) {
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
+        dbName = 'ddcdi3'
         dbms = 'hsql'
         host = 'localhost'
         dbName = hsqlDbName
@@ -281,6 +282,7 @@ configure(coreModule) {
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
+        dbName = 'ddcdi3'
         dbms = 'hsql'
         host = 'localhost'
         dbName = hsqlDbName
