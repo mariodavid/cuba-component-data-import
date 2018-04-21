@@ -74,6 +74,19 @@ public class ImportConfiguration extends StandardEntity {
     @Column(name = "BOOLEAN_FALSE_VALUE")
     protected String booleanFalseValue;
 
+    @Lob
+    @Column(name = "PRE_COMMIT_SCRIPT")
+    protected String preCommitScript;
+
+    public void setPreCommitScript(String preCommitScript) {
+        this.preCommitScript = preCommitScript;
+    }
+
+    public String getPreCommitScript() {
+        return preCommitScript;
+    }
+
+
     public void setUniqueConfigurations(List<UniqueConfiguration> uniqueConfigurations) {
         this.uniqueConfigurations = uniqueConfigurations;
     }

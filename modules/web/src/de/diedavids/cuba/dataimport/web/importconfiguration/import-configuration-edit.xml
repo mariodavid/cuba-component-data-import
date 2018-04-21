@@ -50,7 +50,21 @@
                     </column>
                 </fieldGroup>
             </tab>
-            <tab id="customBindingScriptTab"
+
+            <tab id="preCommitScriptTab"
+                 margin="true"
+                 spacing="true"
+                 caption="msg://preCommitScriptTab">
+                <sourceCodeEditor id="preCommitScriptEditor"
+                                  mode="Groovy"
+                                  datasource="importConfigurationDs"
+                                  property="preCommitScript"
+                                  width="100%"
+                                  height="100%"
+                                  contextHelpText="msg://preCommitScriptHelp"
+                />
+            </tab>
+            <tab id="attributeMappersTab"
                  caption="msg://importAttributeMappersTab"
                  expand="importAttributeMappersTable"
                  margin="true"
