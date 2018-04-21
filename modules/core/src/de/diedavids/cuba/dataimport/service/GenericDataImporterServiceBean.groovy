@@ -7,7 +7,9 @@ import com.haulmont.cuba.core.app.importexport.EntityImportExportAPI
 import com.haulmont.cuba.core.app.importexport.EntityImportView
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour
 import com.haulmont.cuba.core.entity.Entity
+import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.core.global.Scripting
 import com.haulmont.cuba.core.global.validation.EntityValidationException
 import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.dto.DataRow
@@ -30,6 +32,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     @Inject
     EntityBinder dataImportEntityBinder
+
+
+
+    @Inject
+    Scripting scripting
+
+    @Inject
+    DataManager dataManager
 
 
     @Inject
@@ -78,25 +88,56 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 def alreadyExistingEntity = uniqueEntityFinderService.findEntity(bindedEntity.entity, uniqueConfiguration)
 
                 if (!alreadyExistingEntity) {
-                    doImportEntity(bindedEntity.entity, importView, importedEntities)
+                    doImportEntity(bindedEntity, importView, importedEntities, importConfiguration)
                 }
 
                 if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
-                    def alreadyExistingBindedEntity = bindAttributes(importConfiguration, bindedEntity.dataRow, alreadyExistingEntity)
-                    doImportEntity(alreadyExistingBindedEntity, importView, importedEntities)
+                    bindedEntity.entity = bindAttributes(importConfiguration, bindedEntity.dataRow, alreadyExistingEntity)
+                    doImportEntity(bindedEntity, importView, importedEntities, importConfiguration)
                 }
 
             }
         }
         else {
-            doImportEntity(bindedEntity.entity, importView, importedEntities)
+            doImportEntity(bindedEntity, importView, importedEntities, importConfiguration)
         }
     }
 
-    private void doImportEntity(Entity entity, EntityImportView importView, Collection<Entity> importedEntities) {
-        entityImportExportAPI.importEntities([entity], importView, true)
-        importedEntities << entity
+    private void doImportEntity(BindedEntity bindedEntity, EntityImportView importView, Collection<Entity> importedEntities, ImportConfiguration importConfiguration) {
+
+        def binding = new Binding(
+                entity: bindedEntity.entity,
+                dataRow: bindedEntity.dataRow,
+                dataManager: dataManager,
+                importConfiguration: importConfiguration,
+        )
+
+        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importConfiguration, binding)
+
+        if (entityShouldBeImported) {
+            entityImportExportAPI.importEntities([bindedEntity.entity], importView, true)
+            importedEntities << bindedEntity.entity
+        }
+
     }
+
+
+
+    private boolean executePreCommitScriptIfNecessary(ImportConfiguration importConfiguration, Binding binding) {
+        def preCommitScript = importConfiguration.preCommitScript
+        try {
+            if (preCommitScript) {
+                return scripting.evaluateGroovy(preCommitScript, binding)
+            }
+            return true
+        }
+        catch (Exception e) {
+            log.error("Error while executing pre commit script: ${e.getClass()}", e)
+            return false
+        }
+    }
+
+
 
     private ImportLog createImportLog(ImportConfiguration importConfiguration) {
         ImportLog importLog = metadata.create(ImportLog)

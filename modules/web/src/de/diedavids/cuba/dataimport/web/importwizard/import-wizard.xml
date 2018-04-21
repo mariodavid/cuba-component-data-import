@@ -116,9 +116,11 @@
                  caption="msg://step3Title"
                  enable="false"
                  margin="true"
+                 expand="importConfigurationContentBox"
                  spacing="true">
-                <vbox spacing="true">
-                    <scrollBox id="importConfigurationScrollBox">
+                <vbox id="importConfigurationContentBox"
+                      spacing="true"
+                      expand="importConfigurationTabSheet">
 
                         <tabSheet id="importConfigurationTabSheet">
 
@@ -153,6 +155,21 @@
                                 </fieldGroup>
                             </tab>
 
+
+                            <tab id="preCommitScriptTab"
+                                 margin="true"
+                                 spacing="true"
+                                 expand="preCommitScriptEditor"
+                                 caption="msg://preCommitScriptTab">
+                                <sourceCodeEditor id="preCommitScriptEditor"
+                                                  mode="Groovy"
+                                                  datasource="importConfigurationDs"
+                                                  property="preCommitScript"
+                                                  width="100%"
+                                                  height="100%"
+                                                  contextHelpText="msg://preCommitScriptHelp"
+                                />
+                            </tab>
                             <tab id="uniqueConfigurationTab"
                                      caption="msg://uniqueConfigurationsTab"
                                      expand="uniqueConfigurationsTable"
@@ -181,7 +198,6 @@
 
                         </tabSheet>
 
-                    </scrollBox>
 
                 </vbox>
                 <buttonsPanel align="BOTTOM_RIGHT">

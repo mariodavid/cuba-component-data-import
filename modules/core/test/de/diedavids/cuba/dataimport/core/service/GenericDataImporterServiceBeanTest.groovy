@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.core.service
 
 import com.haulmont.cuba.core.global.AppBeans
 import de.diedavids.cuba.dataimport.AbstractImpotrIntegrationTest
+import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
@@ -12,58 +13,24 @@ import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class GenericDataImportServiceBeanTest extends AbstractImpotrIntegrationTest {
+class GenericDataImporterServiceBeanTest extends AbstractImpotrIntegrationTest {
 
 
     protected GenericDataImporterService sut
 
     protected ImportConfiguration importConfiguration
 
+    protected SimpleDataLoader simpleDataLoader
+
     @Before
     void setUp() throws Exception {
         super.setUp()
 
         sut = AppBeans.get(GenericDataImporterService.NAME)
+        simpleDataLoader = AppBeans.get(SimpleDataLoader.NAME)
+
 
         clearTable("DDCDI_MLB_TEAM")
-    }
-
-
-    @Test
-    void "doDataImport uses only entities that don't violate a unique configuration"() {
-
-
-        importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbTeam',
-                importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
-                ],
-                uniqueConfigurations: [new UniqueConfiguration(
-                        entityAttributes: [
-                                new UniqueConfigurationAttribute(entityAttribute: 'code'),
-                                new UniqueConfigurationAttribute(entityAttribute: 'name'),
-                        ],
-                        policy: UniquePolicy.SKIP
-                )]
-        )
-
-
-
-        MlbTeam existingBalTeam = createAndStoreMlbTeam('Baltimore Orioles', 'BAL', State.AK)
-
-        ImportData importData = createData([
-                [name: 'Boston Braves', code: 'BSN'],
-                [name: 'Baltimore Orioles', code: 'BAL']
-        ])
-
-
-
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
-
-        assertThat(importLog.entitiesProcessed).isEqualTo(1)
-
-        cont.deleteRecord(existingBalTeam)
     }
 
 

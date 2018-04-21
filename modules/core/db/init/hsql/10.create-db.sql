@@ -59,6 +59,7 @@ create table DDCDI_IMPORT_CONFIGURATION (
     DATE_FORMAT varchar(255),
     BOOLEAN_TRUE_VALUE varchar(255),
     BOOLEAN_FALSE_VALUE varchar(255),
+    PRE_COMMIT_SCRIPT longvarchar,
     --
     primary key (ID)
 )^

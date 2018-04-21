@@ -4,4 +4,31 @@
         <functionality id="oneToOneIndex"
                        state="ENABLE"/>
     </functionalitySettings>
+    <dbScripts>
+        <excludes>
+            <hsql>
+                <item name="180421-0-dropDdcdiMlbTeam.sql">
+                    <![CDATA[alter table DDCDI_MLB_TEAM rename to DDCDI_MLB_TEAM__UNUSED ;]]>
+                </item>
+                <item name="180421-0-dropDdcdiMlbTeam_DropScript.sql">
+                    <![CDATA[drop table DDCDI_MLB_TEAM__UNUSED if exists cascade ;]]>
+                </item>
+                <item name="180421-0-dropDdcdiCustomer.sql">
+                    <![CDATA[alter table DDCDI_CUSTOMER rename to DDCDI_CUSTOMER__UNUSED ;]]>
+                </item>
+                <item name="180421-0-dropDdcdiCustomer_DropScript.sql">
+                    <![CDATA[drop table DDCDI_CUSTOMER__UNUSED if exists cascade ;]]>
+                </item>
+                <item name="180421-0-dropDdcdiMlbPlayer.sql">
+                    <![CDATA[alter table DDCDI_MLB_PLAYER rename to DDCDI_MLB_PLAYER__UNUSED ;]]>
+                </item>
+                <item name="180421-0-dropDdcdiMlbPlayer_DropScript.sql">
+                    <![CDATA[drop table DDCDI_MLB_PLAYER__UNUSED if exists cascade ;]]>
+                </item>
+                <item name="180421-0-dropDdcdiMlbTeam01.sql">
+                    <![CDATA[alter table DDCDI_MLB_PLAYER drop constraint FK_DDCDI_MLB_PLAYER_TEAM ;]]>
+                </item>
+            </hsql>
+        </excludes>
+    </dbScripts>
 </studio>
