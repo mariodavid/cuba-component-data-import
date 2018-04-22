@@ -29,6 +29,10 @@
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
+                <action id="import"
+                        caption="msg://import"
+                        invoke="executeImport"
+                        trackSelection="true"/>
             </actions>
             <columns>
                 <column id="name"/>
@@ -45,6 +49,9 @@
                         action="importConfigurationsTable.edit"/>
                 <button id="removeBtn"
                         action="importConfigurationsTable.remove"/>
+                <button id="importBtn"
+                        action="importConfigurationsTable.import"
+                        icon="icons/wf-design-import.png"/>
             </buttonsPanel>
         </groupTable>
     </layout>
