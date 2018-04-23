@@ -3,6 +3,7 @@
 *.ipr
 *.iml
 *.iws
+.ideaDataSources
 build/*
 deploy/*
 modules/*/build/*
