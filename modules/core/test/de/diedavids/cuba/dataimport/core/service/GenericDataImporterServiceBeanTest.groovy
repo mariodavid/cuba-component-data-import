@@ -1,7 +1,7 @@
 package de.diedavids.cuba.dataimport.core.service
 
 import com.haulmont.cuba.core.global.AppBeans
-import de.diedavids.cuba.dataimport.AbstractImpotrIntegrationTest
+import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
@@ -13,7 +13,7 @@ import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class GenericDataImporterServiceBeanTest extends AbstractImpotrIntegrationTest {
+class GenericDataImporterServiceBeanTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

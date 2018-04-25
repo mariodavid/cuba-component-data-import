@@ -51,6 +51,7 @@ create table DDCDI_IMPORT_CONFIGURATION (
     DELETED_BY varchar(50),
     --
     NAME varchar(255) not null,
+    TRANSACTION_STRATEGY varchar(50) not null,
     ENTITY_CLASS varchar(255) not null,
     AD_HOC boolean,
     TEMPLATE_ID varchar(36),

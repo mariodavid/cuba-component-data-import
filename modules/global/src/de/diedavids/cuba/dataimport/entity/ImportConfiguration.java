@@ -31,6 +31,10 @@ public class ImportConfiguration extends StandardEntity {
     protected String name;
 
     @NotNull
+    @Column(name = "TRANSACTION_STRATEGY", nullable = false)
+    protected String transactionStrategy;
+
+    @NotNull
     @Column(name = "ENTITY_CLASS", nullable = false)
     protected String entityClass;
 
@@ -77,6 +81,15 @@ public class ImportConfiguration extends StandardEntity {
     @Lob
     @Column(name = "PRE_COMMIT_SCRIPT")
     protected String preCommitScript;
+
+    public void setTransactionStrategy(ImportTransactionStrategy transactionStrategy) {
+        this.transactionStrategy = transactionStrategy == null ? null : transactionStrategy.getId();
+    }
+
+    public ImportTransactionStrategy getTransactionStrategy() {
+        return transactionStrategy == null ? null : ImportTransactionStrategy.fromId(transactionStrategy);
+    }
+
 
     public void setPreCommitScript(String preCommitScript) {
         this.preCommitScript = preCommitScript;
