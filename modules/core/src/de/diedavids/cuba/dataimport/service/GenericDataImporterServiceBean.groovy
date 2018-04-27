@@ -120,20 +120,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration)
 
         if (entityShouldBeImported) {
-
             if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
-                try {
-                    entityImportExportAPI.importEntities([importEntityRequest.entity], importView, true)
-                    importLog.entitiesImportSuccess++
-                }
-                catch (EntityValidationException e) {
-                    importEntityRequest.constraintViolations = e.constraintViolations
-                    importLog.entitiesImportValidationError++
-                    importLog.success = false
-
-                }
+                tryToExecuteImport(importEntityRequest, importView, importLog)
             }
-
             importedEntities << importEntityRequest
         }
         else {
@@ -142,6 +131,18 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         importLog.entitiesProcessed++
 
+    }
+
+    private void tryToExecuteImport(ImportEntityRequest importEntityRequest, EntityImportView importView, ImportLog importLog) {
+        try {
+            entityImportExportAPI.importEntities([importEntityRequest.entity], importView, true)
+            importLog.entitiesImportSuccess++
+        }
+        catch (EntityValidationException e) {
+            importEntityRequest.constraintViolations = e.constraintViolations
+            importLog.entitiesImportValidationError++
+            importLog.success = false
+        }
     }
 
     private Binding createPreCommitBinding(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration) {
