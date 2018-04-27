@@ -32,6 +32,7 @@
                         <field property="name"/>
                         <field property="entityClass" editable="false"/>
                         <field property="template" editable="false"/>
+                        <field property="transactionStrategy" contextHelpText="msg://transactionStrategyHelp"/>
                         <field property="comment"
                                rows="5"/>
                     </column>

@@ -127,12 +127,13 @@
                              caption="msg://generalConfiguration"
                              margin="true"
                              spacing="true">
+                            <hbox spacing="true">
                             <fieldGroup id="generalConfigurationFieldGroup"
                                         border="visible"
                                         caption="msg://generalConfiguration"
                                         datasource="importConfigurationDs"
-                                        fieldCaptionWidth="250px"
-                                        width="100%">
+                                        fieldCaptionWidth="200px"
+                                        >
                                 <field contextHelpText="msg://transactionStrategyHelp"
                                        property="transactionStrategy"/>
                             </fieldGroup>
@@ -140,26 +141,14 @@
                                         border="visible"
                                         caption="msg://formatConfiguration"
                                         datasource="importConfigurationDs"
-                                        fieldCaptionWidth="250px"
-                                        width="100%">
+                                        fieldCaptionWidth="200px"
+                                        >
                                 <field property="dateFormat"/>
                                 <field property="booleanTrueValue"/>
                                 <field property="booleanFalseValue"/>
                             </fieldGroup>
-                            <fieldGroup id="reuseFieldGroup"
-                                        border="visible"
-                                        caption="msg://saveConfiguration"
-                                        datasource="importConfigurationDs"
-                                        fieldCaptionWidth="250px"
-                                        width="100%">
-                                <field property="reuse"/>
-                                <field property="name"
-                                       visible="false"/>
-                                <field property="comment"
-                                       rows="3"
-                                       visible="false"
-                                       width="100%"/>
-                            </fieldGroup>
+                            </hbox>
+
                         </tab>
                         <tab id="preCommitScriptTab"
                              caption="msg://preCommitScriptTab"
@@ -200,6 +189,25 @@
                                     <button action="uniqueConfigurationsTable.remove"/>
                                 </buttonsPanel>
                             </table>
+                        </tab>
+                        <tab id="saveConfigurationTab"
+                             caption="msg://saveConfigurationTab"
+                             margin="true"
+                             spacing="true">
+                            <fieldGroup id="reuseFieldGroup"
+                                        border="visible"
+                                        caption="msg://saveConfiguration"
+                                        datasource="importConfigurationDs"
+                                        fieldCaptionWidth="250px"
+                                        width="100%">
+                                <field property="reuse"/>
+                                <field property="name"
+                                       visible="false"/>
+                                <field property="comment"
+                                       rows="3"
+                                       visible="false"
+                                       width="100%"/>
+                            </fieldGroup>
                         </tab>
                     </tabSheet>
                 </vbox>
