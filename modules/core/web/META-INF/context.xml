@@ -11,6 +11,15 @@
               username="sa"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
+    <!--<Resource driverClassName="oracle.jdbc.OracleDriver"
+          maxIdle="2"
+          maxTotal="20"
+          maxWaitMillis="5000"
+          name="jdbc/CubaDS"
+          password="oracle"
+          type="javax.sql.DataSource"
+          url="jdbc:oracle:thin:@//localhost/xe"
+          username="system"/>-->
     <!--<Resource driverClassName="org.postgresql.Driver"
           maxIdle="2"
           maxTotal="20"
@@ -29,13 +38,4 @@
           type="javax.sql.DataSource"
           url="jdbc:mysql://localhost/cuba?useSSL=false&amp;allowMultiQueries=true&amp;allowPublicKeyRetrieval=true"
           username="root"/>-->
-    <!--<Resource driverClassName="oracle.jdbc.OracleDriver"
-          maxIdle="2"
-          maxTotal="20"
-          maxWaitMillis="5000"
-          name="jdbc/CubaDS"
-          password="oracle"
-          type="javax.sql.DataSource"
-          url="jdbc:oracle:thin:@//localhost/xe"
-          username="system"/>-->
 </Context>
