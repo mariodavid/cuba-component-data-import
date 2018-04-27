@@ -3,6 +3,7 @@ package de.diedavids.cuba.dataimport.binding
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.State
@@ -43,7 +44,8 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.code', fileColumnAlias: 'team'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
 
@@ -82,7 +84,8 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.state', fileColumnAlias: 'team_state'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
 

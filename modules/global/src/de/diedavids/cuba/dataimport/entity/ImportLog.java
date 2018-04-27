@@ -47,6 +47,18 @@ public class ImportLog extends StandardEntity {
 
 
 
+    @Column(name = "ENTITIES_IMPORT_SUCCESS")
+    protected Integer entitiesImportSuccess;
+
+    @Column(name = "ENTITIES_IMPORT_VAL_ERROR")
+    protected Integer entitiesImportValidationError;
+
+    @Column(name = "ENTITIES_PRE_COMMIT_SKIPPED")
+    protected Integer entitiesPreCommitSkipped;
+
+    @Column(name = "ENTITIES_UNIQUE_CONSTRAINT_SKIPPED")
+    protected Integer entitiesUniqueConstraintSkipped;
+
     @NotNull
     @Column(name = "SUCCESS", nullable = false)
     protected Boolean success = false;
@@ -54,6 +66,41 @@ public class ImportLog extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CONFIGURATION_ID")
     protected ImportConfiguration configuration;
+
+    public void setEntitiesUniqueConstraintSkipped(Integer entitiesUniqueConstraintSkipped) {
+        this.entitiesUniqueConstraintSkipped = entitiesUniqueConstraintSkipped;
+    }
+
+    public Integer getEntitiesUniqueConstraintSkipped() {
+        return entitiesUniqueConstraintSkipped;
+    }
+
+
+    public void setEntitiesPreCommitSkipped(Integer entitiesPreCommitSkipped) {
+        this.entitiesPreCommitSkipped = entitiesPreCommitSkipped;
+    }
+
+    public Integer getEntitiesPreCommitSkipped() {
+        return entitiesPreCommitSkipped;
+    }
+
+
+    public void setEntitiesImportSuccess(Integer entitiesImportSuccess) {
+        this.entitiesImportSuccess = entitiesImportSuccess;
+    }
+
+    public Integer getEntitiesImportSuccess() {
+        return entitiesImportSuccess;
+    }
+
+    public void setEntitiesImportValidationError(Integer entitiesImportValidationError) {
+        this.entitiesImportValidationError = entitiesImportValidationError;
+    }
+
+    public Integer getEntitiesImportValidationError() {
+        return entitiesImportValidationError;
+    }
+
 
     public void setSuccess(Boolean success) {
         this.success = success;

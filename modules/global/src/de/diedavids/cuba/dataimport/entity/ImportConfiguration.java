@@ -1,5 +1,6 @@
 package de.diedavids.cuba.dataimport.entity;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import com.haulmont.cuba.core.entity.FileDescriptor;
@@ -29,6 +30,10 @@ public class ImportConfiguration extends StandardEntity {
     @NotNull
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @NotNull
+    @Column(name = "TRANSACTION_STRATEGY", nullable = false)
+    protected String transactionStrategy;
 
     @NotNull
     @Column(name = "ENTITY_CLASS", nullable = false)
@@ -77,6 +82,15 @@ public class ImportConfiguration extends StandardEntity {
     @Lob
     @Column(name = "PRE_COMMIT_SCRIPT")
     protected String preCommitScript;
+
+    public void setTransactionStrategy(ImportTransactionStrategy transactionStrategy) {
+        this.transactionStrategy = transactionStrategy == null ? null : transactionStrategy.getId();
+    }
+
+    public ImportTransactionStrategy getTransactionStrategy() {
+        return transactionStrategy == null ? null : ImportTransactionStrategy.fromId(transactionStrategy);
+    }
+
 
     public void setPreCommitScript(String preCommitScript) {
         this.preCommitScript = preCommitScript;
@@ -198,5 +212,10 @@ public class ImportConfiguration extends StandardEntity {
         return importerBeanName;
     }
 
+
+    @PostConstruct
+    protected void initTransactionStrategy() {
+        setTransactionStrategy(ImportTransactionStrategy.SINGLE_TRANSACTION);
+    }
 
 }

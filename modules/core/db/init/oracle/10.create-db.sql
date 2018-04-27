@@ -13,6 +13,10 @@ create table DDCDI_IMPORT_LOG (
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED number(10),
+    ENTITIES_IMPORT_SUCCESS number(10),
+    ENTITIES_IMPORT_VAL_ERROR number(10),
+    ENTITIES_PRE_COMMIT_SKIPPED number(10),
+    ENTITIES_UNIQUE_CONSTRAINT_SKIPPED number(10),
     SUCCESS char(1) not null,
     CONFIGURATION_ID varchar2(32) not null,
     --
@@ -51,6 +55,7 @@ create table DDCDI_IMPORT_CONFIGURATION (
     DELETED_BY varchar2(50),
     --
     NAME varchar2(255) not null,
+    TRANSACTION_STRATEGY varchar2(50) not null,
     ENTITY_CLASS varchar2(255) not null,
     AD_HOC char(1),
     TEMPLATE_ID varchar2(32),

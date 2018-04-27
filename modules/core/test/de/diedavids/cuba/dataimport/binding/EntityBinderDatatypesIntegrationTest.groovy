@@ -3,6 +3,7 @@ package de.diedavids.cuba.dataimport.binding
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.Customer
 import de.diedavids.cuba.dataimport.entity.example.CustomerPriority
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
@@ -51,7 +52,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.age', fileColumnAlias: 'age', fileColumnNumber: 3),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -69,7 +71,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -89,7 +92,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "No",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -111,7 +115,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "No",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -132,7 +137,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "No",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -152,7 +158,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "No",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -173,7 +180,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "No",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -195,7 +203,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -216,7 +225,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -236,7 +246,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanFalseValue: "No",
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -254,7 +265,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.age', fileColumnAlias: 'age', fileColumnNumber: 3),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -273,7 +285,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'lastname', fileColumnNumber: 0)
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
@@ -293,7 +306,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbTeam entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbTeam()) as MlbTeam
 
@@ -311,7 +325,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
 
@@ -329,7 +344,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
 
@@ -347,7 +363,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
 
@@ -366,7 +383,8 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
 
