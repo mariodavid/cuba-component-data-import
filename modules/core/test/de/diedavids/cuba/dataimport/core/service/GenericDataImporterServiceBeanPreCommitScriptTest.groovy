@@ -43,6 +43,7 @@ class GenericDataImporterServiceBeanPreCommitScriptTest extends AbstractImportIn
                         new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
                         new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
                 ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION,
                 preCommitScript: """
 if (entity.code == 'BAL') {
     return true
@@ -58,7 +59,7 @@ else {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        sut.doDataImport(importConfiguration, importData)
+        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
         def baltimoreTeam = mlbTeams.first()
 
@@ -66,6 +67,9 @@ else {
         assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.code).isEqualTo("BAL")
 
+
+        //and:
+        assertThat(importLog.entitiesPreCommitSkipped).isEqualTo(1)
     }
 
 
@@ -78,7 +82,8 @@ else {
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
                         new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
         ImportData importData = createData([
@@ -86,12 +91,12 @@ else {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        sut.doDataImport(importConfiguration, importData)
+        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
 
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
 
         assertThat(mlbTeams.size()).isEqualTo(2)
-
+        assertThat(importLog.entitiesPreCommitSkipped).isEqualTo(0)
     }
 
 }

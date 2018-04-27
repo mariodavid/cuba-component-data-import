@@ -6,6 +6,7 @@ import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
@@ -54,10 +55,14 @@ class GenericDataImporterServiceBeanTransactionStrategyTest extends AbstractImpo
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        sut.doDataImport(importConfiguration, importData)
+        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
 
         assertThat(mlbTeams.size()).isEqualTo(0)
+
+
+        //and:
+        assertThat(importLog.entitiesImportSuccess).isEqualTo(0)
     }
 
 
@@ -80,10 +85,16 @@ class GenericDataImporterServiceBeanTransactionStrategyTest extends AbstractImpo
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        sut.doDataImport(importConfiguration, importData)
+        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
 
         assertThat(mlbTeams.size()).isEqualTo(2)
+
+
+        //and:
+        assertThat(importLog.entitiesProcessed).isEqualTo(2)
+        assertThat(importLog.entitiesImportSuccess).isEqualTo(2)
+        assertThat(importLog.entitiesImportValidationError).isEqualTo(0)
     }
 
 
@@ -106,7 +117,7 @@ class GenericDataImporterServiceBeanTransactionStrategyTest extends AbstractImpo
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        sut.doDataImport(importConfiguration, importData)
+        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
         def baltimoreTeam = mlbTeams.first()
 
@@ -114,6 +125,11 @@ class GenericDataImporterServiceBeanTransactionStrategyTest extends AbstractImpo
 
         assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.code).isEqualTo("BAL")
+
+        //and:
+        assertThat(importLog.entitiesProcessed).isEqualTo(2)
+        assertThat(importLog.entitiesImportSuccess).isEqualTo(1)
+        assertThat(importLog.entitiesImportValidationError).isEqualTo(1)
     }
 
 

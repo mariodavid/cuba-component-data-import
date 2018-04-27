@@ -3,6 +3,7 @@ package de.diedavids.cuba.dataimport.binding
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import org.junit.Test
 
@@ -27,7 +28,8 @@ class EntityBinderCustomGroovyScriptIntegrationTest extends AbstractEntityBinder
                                 fileColumnNumber: 3,
                                 customAttributeBindScript: "return 'NameFromCustomScript'"
                         ),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -58,7 +60,8 @@ else {
 }
 """
                         ),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
@@ -83,7 +86,8 @@ else {
                                 fileColumnNumber: 3,
                                 customAttributeBindScript: "return rawValue + '-custom'"
                         ),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
         MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 

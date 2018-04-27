@@ -1,5 +1,6 @@
 package de.diedavids.cuba.dataimport.entity;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import com.haulmont.cuba.core.entity.FileDescriptor;
@@ -211,5 +212,10 @@ public class ImportConfiguration extends StandardEntity {
         return importerBeanName;
     }
 
+
+    @PostConstruct
+    protected void initTransactionStrategy() {
+        setTransactionStrategy(ImportTransactionStrategy.SINGLE_TRANSACTION);
+    }
 
 }

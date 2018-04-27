@@ -13,6 +13,10 @@ create table DDCDI_IMPORT_LOG (
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED integer,
+    ENTITIES_IMPORT_SUCCESS integer,
+    ENTITIES_IMPORT_VAL_ERROR integer,
+    ENTITIES_PRE_COMMIT_SKIPPED integer,
+    ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
     SUCCESS boolean not null,
     CONFIGURATION_ID varchar(36) not null,
     --

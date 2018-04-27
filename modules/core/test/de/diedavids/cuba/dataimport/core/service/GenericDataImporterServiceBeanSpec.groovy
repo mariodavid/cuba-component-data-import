@@ -8,6 +8,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.service.GenericDataImporterServiceBean
@@ -41,7 +42,8 @@ class GenericDataImporterServiceBeanSpec extends Specification {
 
         and:
         ImportConfiguration importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbPlayer'
+                entityClass: 'ddcdi$MlbPlayer',
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
         when:
@@ -59,7 +61,8 @@ class GenericDataImporterServiceBeanSpec extends Specification {
 
         and:
         ImportConfiguration importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbPlayer'
+                entityClass: 'ddcdi$MlbPlayer',
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
         when:
@@ -80,7 +83,8 @@ class GenericDataImporterServiceBeanSpec extends Specification {
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
 

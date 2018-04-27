@@ -50,20 +50,10 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         ImportLog importLog = createImportLog(importConfiguration)
 
-        try {
-            Collection<ImportEntityRequest> importEntityRequests = importEntities(entities, importConfiguration)
-            importLog.entitiesProcessed = importEntityRequests.count {it.success} as Integer
-            importLog.success = true
-        }
-        catch (EntityValidationException e) {
-            log.error('Import failed due to validation errors of one or more entities', e)
-            importLog.entitiesProcessed = 0
-            importLog.success = false
-        }
-        importLog
+        importEntities(entities, importConfiguration, importLog)
     }
 
-    private Collection<ImportEntityRequest> importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration) {
+    private ImportLog importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
         def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
         def importEntityClass = importEntityMetaClass.javaClass
@@ -72,32 +62,36 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
             entities.each { ImportEntityRequest importEntityRequest ->
-                importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration)
+                importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
             }
-        }
-        else {
-            importAllEntities(entities, importView, importedEntities, importConfiguration)
+        } else {
+            importAllEntities(entities, importView, importedEntities, importConfiguration, importLog)
 
         }
 
-        importedEntities
+        importLog
 
     }
 
-    private void importAllEntities(Collection<ImportEntityRequest> entities, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration) {
+    private void importAllEntities(Collection<ImportEntityRequest> entities, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
         entities.each { ImportEntityRequest importEntityRequest ->
-            importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration)
+            importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
         }
 
         try {
             entityImportExportAPI.importEntities(importedEntities*.entity, importView, true)
+            importLog.entitiesProcessed = entities.size()
+            importLog.entitiesImportSuccess = importedEntities.size()
+
         }
         catch (EntityValidationException e) {
             log.warn('Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.', e)
+            importLog.entitiesProcessed = 0
+            importLog.success = false
         }
     }
 
-    private List<UniqueConfiguration> importSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration) {
+    private void importSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
         if (importConfiguration.uniqueConfigurations) {
             importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
@@ -105,22 +99,23 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 def alreadyExistingEntity = uniqueEntityFinderService.findEntity(importEntityRequest.entity, uniqueConfiguration)
 
                 if (!alreadyExistingEntity) {
-                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration)
+                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
                 }
-
-                if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
+                else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
                     importEntityRequest.entity = bindAttributes(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity)
-                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration)
-                }
 
+                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
+                }
+                else {
+                    importLog.entitiesUniqueConstraintSkipped++
+                }
             }
-        }
-        else {
-            doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration)
+        } else {
+            doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
         }
     }
 
-    private void doImportSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration) {
+    private void doImportSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
         boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration)
 
@@ -129,13 +124,23 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
                 try {
                     entityImportExportAPI.importEntities([importEntityRequest.entity], importView, true)
+                    importLog.entitiesImportSuccess++
                 }
                 catch (EntityValidationException e) {
                     importEntityRequest.constraintViolations = e.constraintViolations
+                    importLog.entitiesImportValidationError++
+                    importLog.success = false
+
                 }
             }
+
             importedEntities << importEntityRequest
         }
+        else {
+            importLog.entitiesPreCommitSkipped++
+        }
+
+        importLog.entitiesProcessed++
 
     }
 
@@ -165,9 +170,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
 
-
     private ImportLog createImportLog(ImportConfiguration importConfiguration) {
         ImportLog importLog = metadata.create(ImportLog)
+        importLog.entitiesProcessed = 0
+        importLog.entitiesImportSuccess = 0
+        importLog.entitiesImportValidationError = 0
+        importLog.entitiesPreCommitSkipped = 0
+        importLog.entitiesUniqueConstraintSkipped = 0
+        importLog.success = true
         importLog.configuration = importConfiguration
         importLog
     }

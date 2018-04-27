@@ -51,7 +51,8 @@ class GenericDataImporterServiceBeanTest extends AbstractImportIntegrationTest {
                                 new UniqueConfigurationAttribute(entityAttribute: 'name'),
                         ],
                         policy: UniquePolicy.UPDATE
-                )]
+                )],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
 
@@ -89,7 +90,8 @@ class GenericDataImporterServiceBeanTest extends AbstractImportIntegrationTest {
                                 new UniqueConfigurationAttribute(entityAttribute: 'name'),
                         ],
                         policy: UniquePolicy.SKIP
-                )]
+                )],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
 
