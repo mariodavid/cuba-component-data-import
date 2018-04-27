@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core.service
+package de.diedavids.cuba.dataimport.service
 
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Metadata
