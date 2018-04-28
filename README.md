@@ -96,13 +96,17 @@ in the import file, but this can be adjusted by the user if needed.
 
 #### Step 3: Import Configuration 
 In the import configuration it is possible to define certain Format options as well as the unique configurations for this import.
+![import-wizard-step-3](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-3.png)
 
 
 #### Step 4: Import Preview
-![import-wizard-step-3](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-3.png)
+![import-wizard-step-4](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-4.png)
 
 The last step will preview the data that was received from the import file. With "Start Import" the import process
 will be triggered. Afterwards the user will see a summary of how many entities were imported correctly.
+
+#### Step 5: Import Summary
+![import-wizard-step-5](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-5.png)
 
 
 ## Import Configuration
@@ -133,7 +137,7 @@ the import file and depending on the column names / attribute names, it will try
 that is available. Since this auto-detection feature has limitations, is it suggested to before executing the import validate
 that the suggested entity attributes for the mappings are correct. 
 
-#### custom attribute binding script
+#### Custom attribute binding script
 
 Additionally it is possible to configure a custom binding script, that let's the user implement certain parsing logic / default values in case this is
 not handled by the default binding behavior.

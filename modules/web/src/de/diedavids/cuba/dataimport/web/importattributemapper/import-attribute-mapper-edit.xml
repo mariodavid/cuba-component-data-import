@@ -11,8 +11,8 @@
                     view="_local"/>
     </dsContext>
     <dialogMode
-        height="600px"
-        width="800px" />
+        height="400px"
+        width="600px" />
     <layout expand="contentTabSheet"
             spacing="true">
 
