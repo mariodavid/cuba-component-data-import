@@ -43,7 +43,7 @@ cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
         version = "0.2.0"
-        isSnapshot = true
+        isSnapshot = false
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
