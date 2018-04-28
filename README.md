@@ -328,7 +328,7 @@ the following binding values would lead to the result:
 ### entity association binding
 
 a very important case is to import values from entity references. entity associations are supported to some degree.
-for all not supported cases, the [custom attribute binding script](#custom-attribute-binding-script) can be used.
+for all not supported cases, the custom attribute binding script can be used.
                                  
 #### n:1 entity association
 
