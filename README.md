@@ -40,6 +40,15 @@ Add custom application component to your project:
 * Artifact name: `data-import-global`
 * Version: *add-on version*
 
+## Supported DBMS
+
+The following databases are supported by this application component:
+
+* HSQLDB
+* PostgreSQL
+* MySQL
+* Oracle
+
 ## Using the application component
 
 The `data-import` application component helps you import data into your system from different files.
