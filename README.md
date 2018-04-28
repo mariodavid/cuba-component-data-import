@@ -36,12 +36,12 @@ The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid
 Add custom application component to your project:
 
 * Artifact group: `de.diedavids.cuba.dataimport`
-* Artifact name: `data-import-global`
+* Artifact name: `dataimport-global`
 * Version: *add-on version*
 
 ```groovy
 dependencies {
-  appComponent("de.diedavids.cuba.dataimport:data-import-global:<<addon-version>>")
+  appComponent("de.diedavids.cuba.dataimport:dataimport-global:<<addon-version>>")
 }
 ```
 

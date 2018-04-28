@@ -42,8 +42,8 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
-        version = "0.2.0"
-        isSnapshot = false
+        version = "0.3.0"
+        isSnapshot = true
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
