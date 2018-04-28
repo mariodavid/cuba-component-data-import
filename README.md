@@ -96,6 +96,7 @@ in the import file, but this can be adjusted by the user if needed.
 
 #### Step 3: Import Configuration 
 In the import configuration it is possible to define certain Format options as well as the unique configurations for this import.
+![import-wizard-step-3](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-6.png)
 
 
 #### Step 4: Import Preview
