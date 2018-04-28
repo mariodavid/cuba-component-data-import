@@ -237,14 +237,18 @@
                  spacing="true">
                 <fieldGroup id="importSummaryFieldGroup"
                             datasource="importLogDs">
-                    <field editable="false"
-                           property="success"/>
-                    <field editable="false"
-                           property="entitiesProcessed"/>
-                    <field property="entitiesImportSuccess"/>
-                    <field property="entitiesImportValidationError"/>
-                    <field property="entitiesPreCommitSkipped"/>
-                    <field property="entitiesUniqueConstraintSkipped"/>
+                    <field property="success"
+                           editable="false"/>
+                    <field property="entitiesProcessed"
+                           editable="false"/>
+                    <field property="entitiesImportSuccess"
+                           editable="false"/>
+                    <field property="entitiesImportValidationError"
+                           editable="false"/>
+                    <field property="entitiesPreCommitSkipped"
+                           editable="false"/>
+                    <field property="entitiesUniqueConstraintSkipped"
+                           editable="false"/>
                 </fieldGroup>
             </tab>
         </accordion>

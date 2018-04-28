@@ -226,7 +226,6 @@ class ImportWizard extends AbstractWindow {
     void toStep4() {
         switchTabs(WIZARD_STEP_3, WIZARD_STEP_4)
         parseFileAndDisplay()
-        closeWizardAction.enabled = true
     }
 
 
