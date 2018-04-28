@@ -62,6 +62,7 @@ Currently the following file-types are supported:
 
 * Excel `.xlsx` 
 * comma separated values `.csv`
+* JSON `.json`
 
 In order to configure various import options, there is a UI based configuration possibility to define
 
@@ -107,6 +108,60 @@ will be triggered. Afterwards the user will see a summary of how many entities w
 
 #### Step 5: Import Summary
 ![import-wizard-step-5](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-5.png)
+
+
+## Supported file types
+
+Multiple filetypes are supported by this application component. Information and requirements
+for certain file types will be described below. 
+
+Example files can be found in the [example-data](https://github.com/mariodavid/cuba-component-data-import/blob/master/example-data) subdirectory. 
+
+### Excel - .xlsx
+
+For the Excel files the first row has to be the column names. 
+Unnamed columns are not supported currently. 
+
+
+Example Excel file:
+
+| Name             | Description            |
+| ---------------- | ---------------------- |
+| Users            | This will be the users |
+| Managers         | The moderators         |
+
+	
+### CSV - .csv
+
+For the CSV files the first row has to be the column names. 
+Unnamed columns are not supported currently. 
+
+Example CSV file:
+```
+"Name","Description"
+"Users", "This will be the users"
+"Moderators", "The Moderators"
+```
+
+### JSON - .json
+
+For the JSON files it is required to be a JSON array, where each entry in this array 
+is itself a JSON object, which should get imported as an entity instance.
+ 
+
+Example JSON file:
+```
+[
+  {
+    "Name": "Users",
+    "Description": "The users of the system"
+  },
+  {
+    "Name": "Moderators",
+    "Description": "The mods of the system"
+  }
+]
+```
 
 
 ## Import Configuration
