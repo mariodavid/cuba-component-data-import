@@ -10,6 +10,7 @@ class DataConverterFactory {
         switch (fileDescriptor.extension) {
             case 'xlsx': return new ExcelImportDataConverter()
             case 'csv': return new CsvImportDataConverter()
+            case 'xml': return new XmlImportDataConverter()
             default: throw new FileNotSupportedException()
         }
     }

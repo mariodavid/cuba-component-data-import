@@ -1,0 +1,10 @@
+<roles>
+    <role>
+        <Name>Users</Name>
+        <Description>The users of the system</Description>
+    </role>
+    <role>
+        <Name>Moderators</Name>
+        <Description>The mods of the system</Description>
+    </role>
+</roles>
