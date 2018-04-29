@@ -11,15 +11,22 @@ class JsonImportDataConverter implements ImportDataConverter {
     ImportData convert(String content) {
         def result = new ImportDataImpl()
 
-        def json = new JsonSlurper().parseText(content)
-
+        def json = parseJson(content)
 
         json.each {
-            result.columns = new ArrayList(it.keySet())
+            result.columns = getColumns(it)
             addToTableData(result, it)
         }
 
         result
+    }
+
+    private Object parseJson(String content) {
+        new JsonSlurper().parseText(content)
+    }
+
+    private List<String> getColumns(it) {
+        new ArrayList(it.keySet())
     }
 
     private DataRow addToTableData(ImportDataImpl importData, Map row) {
@@ -33,34 +40,4 @@ class JsonImportDataConverter implements ImportDataConverter {
         convert(file.text)
     }
 
-    /*
-
-    @Override
-    ImportData convert(String content) {
-        def result = new ImportDataImpl()
-
-        def csvRows = parseCSV(content)
-        csvRows.each { PropertyMapper row ->
-
-            DataRow dataRow = addToTableData(result, row)
-            result.columns = dataRow.columnNames
-        }
-        result
-    }
-
-    @Override
-    ImportData convert(File file) {
-        convert(file.text)
-    }
-
-    private Iterator parseCSV(String content) {
-        new CsvParser().parse(content)
-    }
-
-    private DataRow addToTableData(ImportDataImpl importData, PropertyMapper row) {
-        def dataRow = DataRowImpl.ofMap(row.toMap())
-        importData.rows << dataRow
-        dataRow
-    }
-     */
 }
