@@ -1,0 +1,10 @@
+[
+  {
+    "Name": "Users",
+    "Description": "The users of the system"
+  },
+  {
+    "Name": "Moderators",
+    "Description": "The mods of the system"
+  }
+]
