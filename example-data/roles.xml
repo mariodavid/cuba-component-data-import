@@ -1,0 +1,10 @@
+<root>
+    <entry>
+        <Name>Users</Name>
+        <Description>The users of the system</Description>
+    </entry>
+    <entry>
+        <Name>Moderators</Name>
+        <Description>The mods of the system</Description>
+    </entry>
+</root>

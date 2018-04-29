@@ -55,7 +55,6 @@
                  spacing="true">
                 <buttonsPanel align="TOP_CENTER">
                     <upload id="importFileUploadBtn"
-                            accept=".csv,.xlsx"
                             dropZone="dropZone"
                             uploadButtonCaption="msg://uploadBtnCaption"
                             uploadButtonDescription="msg://uploadBtnDescription"
