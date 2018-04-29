@@ -11,6 +11,7 @@ class DataConverterFactory {
             case 'xlsx': return new ExcelImportDataConverter()
             case 'csv': return new CsvImportDataConverter()
             case 'json': return new JsonImportDataConverter()
+            case 'xml': return new XmlImportDataConverter()
             default: throw new FileNotSupportedException()
         }
     }
