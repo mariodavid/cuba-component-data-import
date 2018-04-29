@@ -1,7 +1,5 @@
 package de.diedavids.cuba.dataimport.converter
 
-import com.xlson.groovycsv.CsvParser
-import com.xlson.groovycsv.PropertyMapper
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
@@ -46,9 +44,8 @@ class XmlImportDataConverter implements ImportDataConverter {
 
 
     def processNode(node, Map<String, ?> map = [:]) {
-        if (!map[node.name()]) {
-            map[node.name()] = map.getClass().newInstance()
-        }
+        map[node.name()] = map[node.name()] ?: map.getClass().newInstance()
+
         Map<String, ?> nodeMap = map[node.name()]
 
         node.children().each { it ->
