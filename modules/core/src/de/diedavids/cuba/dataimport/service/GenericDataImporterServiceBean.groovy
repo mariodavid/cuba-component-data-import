@@ -6,6 +6,7 @@ import com.haulmont.chile.core.model.Range
 import com.haulmont.cuba.core.app.importexport.EntityImportExportAPI
 import com.haulmont.cuba.core.app.importexport.EntityImportView
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour
+import com.haulmont.cuba.core.entity.BaseGenericIdEntity
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
@@ -101,13 +102,11 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
                 if (!alreadyExistingEntity) {
                     doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
-                }
-                else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
+                } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
                     importEntityRequest.entity = bindAttributes(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity)
 
                     doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
-                }
-                else {
+                } else {
                     importLog.entitiesUniqueConstraintSkipped++
                 }
             }
@@ -125,8 +124,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 tryToExecuteImport(importEntityRequest, importView, importLog)
             }
             importedEntities << importEntityRequest
-        }
-        else {
+        } else {
             importLog.entitiesPreCommitSkipped++
         }
 
@@ -199,7 +197,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + '.')
             MetaPropertyPath path = metadata.getClass(importEntityClassName).getPropertyPath(entityAttribute)
 
-            if (isAssociatedAttribute(path)) {
+            if (isAssociationAttribute(importAttributeMapper, path)) {
                 def associationMetaProperty = path.metaProperties[0]
                 def associationMetaPropertyName = associationMetaProperty.name
                 if (associationMetaProperty.type == MetaProperty.Type.ASSOCIATION && associationMetaProperty.range.cardinality == Range.Cardinality.MANY_TO_ONE) {
@@ -209,10 +207,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    private boolean isAssociatedAttribute(MetaPropertyPath path) {
-        path.metaProperties.size() > 1
+    private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper, MetaPropertyPath path) {
+        !importAttributeMapper.dynamicAttribute && path?.metaProperties?.size() > 1
     }
-
 
     Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
         importData.rows.collect {
@@ -234,7 +231,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private Entity createEntityInstance(ImportConfiguration importConfiguration) {
-        metadata.create(importConfiguration.entityClass)
+        Entity entity = metadata.create(importConfiguration.entityClass)
+        ((BaseGenericIdEntity) entity).dynamicAttributes = [:]
+        entity
     }
 }
 

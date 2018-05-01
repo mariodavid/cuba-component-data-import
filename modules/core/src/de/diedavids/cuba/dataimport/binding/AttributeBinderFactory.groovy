@@ -1,6 +1,5 @@
 package de.diedavids.cuba.dataimport.binding
 
-import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Scripting
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader

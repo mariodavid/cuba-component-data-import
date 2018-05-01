@@ -4,7 +4,7 @@ import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
 import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
-import com.haulmont.cuba.core.entity.CategoryAttribute
+import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributesUtils
 import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
@@ -43,11 +43,19 @@ class AttributeBindRequest {
     }
 
     MetaPropertyPath getImportEntityPropertyPath() {
-        importEntityMetaClass.getPropertyPath(entityAttributePath)
+        if (dynamicAttributeBindingRequest) {
+            DynamicAttributesUtils.getMetaPropertyPath(importEntityMetaClass, entityAttributePath)
+        } else {
+            importEntityMetaClass.getPropertyPath(entityAttributePath)
+        }
     }
 
     MetaProperty getMetaProperty() {
-        importEntityMetaClass.getProperty(entityAttributePath)
+        if (dynamicAttributeBindingRequest) {
+            DynamicAttributesUtils.getMetaPropertyPath(importEntityMetaClass, entityAttributePath).metaProperty
+        } else {
+            importEntityMetaClass.getProperty(entityAttributePath)
+        }
     }
 
     boolean isCustomScriptBindingRequest() {
@@ -68,5 +76,9 @@ class AttributeBindRequest {
 
     boolean isDynamicAttributeBindingRequest() {
         dynamicAttributes.getAttributeForMetaClass(importEntityMetaClass, entityAttributePath) as boolean
+    }
+
+    Class getJavaType() {
+        metaProperty.javaType
     }
 }
