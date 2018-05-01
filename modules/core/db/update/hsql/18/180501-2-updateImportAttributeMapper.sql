@@ -1,0 +1,1 @@
+alter table DDCDI_IMPORT_ATTRIBUTE_MAPPER add column DYNAMIC_ATTRIBUTE boolean ;
