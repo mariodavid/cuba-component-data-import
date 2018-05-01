@@ -43,6 +43,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     @Inject
     UniqueEntityFinderService uniqueEntityFinderService
 
+
     @Override
     ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
 
@@ -57,7 +58,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
         def importEntityClass = importEntityMetaClass.javaClass
-        EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
+        EntityImportView importView = createEntityImportView(importEntityClass, importConfiguration)
         Collection<ImportEntityRequest> importedEntities = []
 
         if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
@@ -183,7 +184,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importLog
     }
 
-    private EntityImportView creteEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {
+    private EntityImportView createEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {
         EntityImportView importView = new EntityImportView(importEntityClass)
                 .addLocalProperties()
         addAssociationPropertiesToImportView(importConfiguration, importView)
@@ -191,7 +192,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importView
     }
 
-    private void addAssociationPropertiesToImportView(ImportConfiguration importConfiguration, importView) {
+    private void addAssociationPropertiesToImportView(ImportConfiguration importConfiguration, EntityImportView importView) {
         importConfiguration.importAttributeMappers.each { ImportAttributeMapper importAttributeMapper ->
             def importEntityClassName = importConfiguration.entityClass
 

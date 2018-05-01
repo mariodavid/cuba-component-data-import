@@ -3,6 +3,8 @@ package de.diedavids.cuba.dataimport.binding
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
 import com.haulmont.chile.core.model.MetaPropertyPath
+import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
+import com.haulmont.cuba.core.entity.CategoryAttribute
 import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
@@ -13,10 +15,14 @@ class AttributeBindRequest {
     private static final String PATH_SEPARATOR = '.'
 
     ImportConfiguration importConfiguration
+
     DataRow dataRow
+
     ImportAttributeMapper importAttributeMapper
 
     Metadata metadata
+
+    DynamicAttributes dynamicAttributes
 
 
     String getRawValue() {
@@ -41,7 +47,7 @@ class AttributeBindRequest {
     }
 
     MetaProperty getMetaProperty() {
-        importEntityMetaClass.getPropertyNN(entityAttributePath)
+        importEntityMetaClass.getProperty(entityAttributePath)
     }
 
     boolean isCustomScriptBindingRequest() {
@@ -49,14 +55,18 @@ class AttributeBindRequest {
     }
 
     boolean isAssociationBindingRequest() {
-        importEntityPropertyPath.metaProperties.size() > 1
+        importEntityPropertyPath?.metaProperties?.size() > 1 ?: false
     }
 
     boolean isDatatypeBindingRequest() {
-        metaProperty.type == MetaProperty.Type.DATATYPE
+        metaProperty?.type == MetaProperty.Type.DATATYPE
     }
 
     boolean isEnumBindingRequest() {
-        metaProperty.type == MetaProperty.Type.ENUM
+        metaProperty?.type == MetaProperty.Type.ENUM
+    }
+
+    boolean isDynamicAttributeBindingRequest() {
+        dynamicAttributes.getAttributeForMetaClass(importEntityMetaClass, entityAttributePath) as boolean
     }
 }
