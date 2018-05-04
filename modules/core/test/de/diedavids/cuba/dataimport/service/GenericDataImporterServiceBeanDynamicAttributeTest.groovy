@@ -16,11 +16,9 @@ import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
-import static org.assertj.core.api.Assertions.fail
 
 class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportIntegrationTest {
 
@@ -61,35 +59,25 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
     void "doDataImport can import a string based dynamic attribute"() {
 
         //given:
-        createAndStoreDynamicAttribute('ddcdi$MlbTeam', 'Stadium Information', 'stadiumName', PropertyType.STRING)
-
-
-        assertThat(simpleDataLoader.loadAll(Category).size()).isEqualTo(1)
-
-        dynamicAttributesManagerAPI.loadCache()
-
-        importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbTeam',
-                importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name'),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code'),
-                        new ImportAttributeMapper(entityAttribute: '+stadiumName', fileColumnAlias: 'stadiumName', dynamicAttribute: true),
-                ],
-                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        createAndStoreDynamicAttribute(
+                entityClass:  'ddcdi$MlbTeam',
+                categoryName: 'Stadium Information',
+                attributeName: 'stadiumName',
+                dataType: PropertyType.STRING
         )
+
+
+        importConfiguration = importConfigurationWithDynamicAttribute("+stadiumName", 'stadiumName')
 
         ImportData importData = createData([
                 [name: 'Baltimore Orioles', code: 'BAL', stadiumName: 'Oriole Park at Camden Yards']
         ])
 
+        //when:
         sut.doDataImport(importConfiguration, importData)
 
-        LoadContext<MlbTeam> loadContext = LoadContext.create(MlbTeam)
-                .setQuery(LoadContext.createQuery('select e from ddcdi$MlbTeam e'))
-                .setLoadDynamicAttributes(true)
-        def mlbTeams = dataManager.loadList(loadContext);
-
-        def baltimoreTeam = mlbTeams.first()
+        //then:
+        def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
         assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumName")).isEqualTo("Oriole Park at Camden Yards")
@@ -101,38 +89,24 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
 
         //given:
         createAndStoreDynamicAttribute(
-                'ddcdi$MlbTeam',
-                'Stadium Information',
-                'stadiumSeats',
-                PropertyType.INTEGER)
-
-
-        assertThat(simpleDataLoader.loadAll(Category).size()).isEqualTo(1)
-
-        dynamicAttributesManagerAPI.loadCache()
-
-        importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbTeam',
-                importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name'),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code'),
-                        new ImportAttributeMapper(entityAttribute: '+stadiumSeats', fileColumnAlias: 'stadiumSeats', dynamicAttribute: true),
-                ],
-                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+                entityClass:  'ddcdi$MlbTeam',
+                categoryName: 'Stadium Information',
+                attributeName: 'stadiumSeats',
+                dataType: PropertyType.INTEGER
         )
+
+
+        importConfiguration = importConfigurationWithDynamicAttribute("+stadiumSeats", 'stadiumSeats')
 
         ImportData importData = createData([
                 [name: 'Baltimore Orioles', code: 'BAL', stadiumSeats: 10000]
         ])
 
+        //when:
         sut.doDataImport(importConfiguration, importData)
 
-        LoadContext<MlbTeam> loadContext = LoadContext.create(MlbTeam)
-                .setQuery(LoadContext.createQuery('select e from ddcdi$MlbTeam e'))
-                .setLoadDynamicAttributes(true)
-        def mlbTeams = dataManager.loadList(loadContext);
-
-        def baltimoreTeam = mlbTeams.first()
+        //then:
+        def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
         assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumSeats")).isEqualTo(10000)
@@ -144,38 +118,23 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
 
         //given:
         createAndStoreDynamicAttribute(
-                'ddcdi$MlbTeam',
-                'Stadium Information',
-                'stadiumSeats',
-                PropertyType.INTEGER)
-
-
-        assertThat(simpleDataLoader.loadAll(Category).size()).isEqualTo(1)
-
-        dynamicAttributesManagerAPI.loadCache()
-
-        importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbTeam',
-                importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name'),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code'),
-                        new ImportAttributeMapper(entityAttribute: '+stadiumSeats', fileColumnAlias: 'stadiumSeats', dynamicAttribute: true),
-                ],
-                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+                entityClass:  'ddcdi$MlbTeam',
+                categoryName: 'Stadium Information',
+                attributeName: 'stadiumSeats',
+                dataType: PropertyType.INTEGER
         )
+
+        importConfiguration = importConfigurationWithDynamicAttribute("+stadiumSeats", 'stadiumSeats')
 
         ImportData importData = createData([
                 [name: 'Baltimore Orioles', code: 'BAL', stadiumSeats: "10000"]
         ])
 
+        //when:
         sut.doDataImport(importConfiguration, importData)
 
-        LoadContext<MlbTeam> loadContext = LoadContext.create(MlbTeam)
-                .setQuery(LoadContext.createQuery('select e from ddcdi$MlbTeam e'))
-                .setLoadDynamicAttributes(true)
-        def mlbTeams = dataManager.loadList(loadContext);
-
-        def baltimoreTeam = mlbTeams.first()
+        //then:
+        def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
         assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumSeats")).isEqualTo(10000)
@@ -184,63 +143,85 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
 
 
     @Test
+    void "doDataImport can import a boolean based dynamic attribute from a String using the boolean attribute configuration"() {
+
+        //given:
+        createAndStoreDynamicAttribute(
+                entityClass:  'ddcdi$MlbTeam',
+                categoryName: 'Stadium Information',
+                attributeName: 'hasRoof',
+                dataType: PropertyType.BOOLEAN
+        )
+
+        importConfiguration = importConfigurationWithDynamicAttribute("+hasRoof", 'hasRoof')
+        importConfiguration.booleanTrueValue = "Yes"
+        importConfiguration.booleanFalseValue = "No"
+
+        ImportData importData = createData([
+                [name: 'Baltimore Orioles', code: 'BAL', hasRoof: "Yes"]
+        ])
+
+        //when:
+        sut.doDataImport(importConfiguration, importData)
+
+        //then:
+        def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
+
+        assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
+        assertThat(baltimoreTeam.getValue("+hasRoof")).isEqualTo(true)
+
+    }
+
+
+    @Test
     void "doDataImport can import a dynamic Enum based dynamic attribute"() {
 
         //given:
-        CategoryAttribute dynamicAttribute = createAndStoreDynamicAttribute(
-                'ddcdi$MlbTeam',
-                'Stadium Information',
-                'stadiumSize',
-                PropertyType.ENUMERATION)
-
-        dynamicAttribute.enumeration = 'SMALL,MEDIUM,BIG'
-        dataManager.commit(dynamicAttribute)
-
-        assertThat(simpleDataLoader.loadAll(Category).size()).isEqualTo(1)
-
-        dynamicAttributesManagerAPI.loadCache()
-
-        importConfiguration = new ImportConfiguration(
-                entityClass: 'ddcdi$MlbTeam',
-                importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name'),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code'),
-                        new ImportAttributeMapper(entityAttribute: '+stadiumSize', fileColumnAlias: 'stadiumSize', dynamicAttribute: true),
-                ],
-                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        createAndStoreDynamicAttribute(
+                entityClass:  'ddcdi$MlbTeam',
+                categoryName: 'Stadium Information',
+                attributeName: 'stadiumSize',
+                dataType: PropertyType.ENUMERATION,
+                enumValues: 'SMALL,MEDIUM,BIG'
         )
+
+        importConfiguration = importConfigurationWithDynamicAttribute('+stadiumSize', 'stadiumSize')
 
         ImportData importData = createData([
                 [name: 'Baltimore Orioles', code: 'BAL', stadiumSize: "BIG"]
         ])
 
+        //when:
         sut.doDataImport(importConfiguration, importData)
 
-        LoadContext<MlbTeam> loadContext = LoadContext.create(MlbTeam)
-                .setQuery(LoadContext.createQuery('select e from ddcdi$MlbTeam e'))
-                .setLoadDynamicAttributes(true)
-        def mlbTeams = dataManager.loadList(loadContext);
-
-        def baltimoreTeam = mlbTeams.first()
+        //then:
+        def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
         assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumSize")).isEqualTo("BIG")
 
     }
 
+    private MlbTeam loadMlbTeamWithDynamicAttributes() {
+        LoadContext<MlbTeam> loadContext = LoadContext.create(MlbTeam)
+                .setQuery(LoadContext.createQuery('select e from ddcdi$MlbTeam e'))
+                .setLoadDynamicAttributes(true)
+        dataManager.loadList(loadContext).first()
+    }
 
-    private CategoryAttribute createAndStoreDynamicAttribute(String entityClass, String categoryName, String attributeName, PropertyType dataType) {
+    private CategoryAttribute createAndStoreDynamicAttribute(Map<String, Object> options) {
         Category category = metadata.create(Category)
-        category.entityType = entityClass
-        category.name = categoryName
+        category.entityType = options.entityClass
+        category.name = options.categoryName
         List<CategoryAttribute> categoryAttrs = []
 
         def categoryAttribute = metadata.create(CategoryAttribute)
         categoryAttribute.category = category
-        categoryAttribute.name = attributeName
-        categoryAttribute.code = attributeName
-        categoryAttribute.categoryEntityType = entityClass
-        categoryAttribute.dataType = dataType
+        categoryAttribute.name = options.attributeName
+        categoryAttribute.code = options.attributeName
+        categoryAttribute.categoryEntityType = options.entityClass
+        categoryAttribute.dataType = options.dataType
+        categoryAttribute.enumeration = options.enumValues
 
         categoryAttrs << categoryAttribute
         category.setCategoryAttrs(categoryAttrs)
@@ -251,10 +232,27 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
 
         dataManager.commit(commitContext)
 
+        assertThat(simpleDataLoader.loadAll(Category).size()).isEqualTo(1)
+
+        dynamicAttributesManagerAPI.loadCache()
+
         categoryAttribute
     }
 
 
+
+
+    private ImportConfiguration importConfigurationWithDynamicAttribute(String dynamicAttributeName, String fileColumnAlias) {
+        new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name'),
+                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code'),
+                        new ImportAttributeMapper(entityAttribute: dynamicAttributeName, fileColumnAlias: fileColumnAlias, dynamicAttribute: true),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+    }
 
 
 }
