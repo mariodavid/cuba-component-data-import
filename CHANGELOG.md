@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.3.0] - not released
 
 ### Added
-- JSON support
-- XML
+- Import file types: JSON support
+- Import file types: XML support
+- default Binding: BigDecimal supported 
 
 ## [0.2.0] - 28/04/2018
 

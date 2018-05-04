@@ -331,6 +331,7 @@ The following variables are injected and available for usage:
 
 
 #### veto right of pre-commit script
+
 It is also possible to prevent the import for this entity instance.
 
 To do this, the script has to return a boolean value, which represents if the entity should get imported or not.
@@ -374,6 +375,7 @@ By default the following attribute types are supported in the default binding:
 * String
 * Integer
 * Double
+* BigDecimal
 * Boolean
 * Date (java.util.Date)
 
