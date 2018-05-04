@@ -61,6 +61,25 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
     }
 
     @Test
+    void "bindAttributes binds a BigDecimal attribute"() {
+
+        ImportData importData = createData([
+                [annualSalary: "10"]
+        ])
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.annualSalary', fileColumnAlias: 'annualSalary'),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getAnnualSalary()).isEqualTo(BigDecimal.TEN)
+    }
+
+    @Test
     void "bindAttributes binds a boolean attribute"() {
 
         ImportData importData = createData([
