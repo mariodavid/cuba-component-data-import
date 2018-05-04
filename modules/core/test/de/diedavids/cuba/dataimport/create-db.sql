@@ -16,6 +16,7 @@ create table DDCDI_MLB_PLAYER (
     AGE double precision,
     BIRTHDAY date,
     LEFT_HANDED boolean,
+    ANNUAL_SALARY decimal(19, 2),
     --
     primary key (ID)
 )^
