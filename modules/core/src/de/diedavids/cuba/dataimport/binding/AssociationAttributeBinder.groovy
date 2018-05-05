@@ -16,7 +16,9 @@ class AssociationAttributeBinder implements AttributeBinder {
     void bindAttribute(Entity entity, AttributeBindRequest bindRequest) {
         try {
             def value = handleAssociationAttribute(bindRequest.importEntityPropertyPath, bindRequest.rawValue, entity)
-            entity.setValueEx(bindRequest.entityAttributePath, value)
+            if (value) {
+                entity.setValueEx(bindRequest.entityAttributePath, value)
+            }
         }
         catch (MultipleAssociationValuesFoundException e) {
             e.dataRow = bindRequest.dataRow
@@ -38,10 +40,13 @@ class AssociationAttributeBinder implements AttributeBinder {
     private loadAssociationValue(Class<?> associationJavaType, String propertyPath, String rawValue) {
         def allResults = simpleDataLoader.loadAllByProperty(associationJavaType, propertyPath, rawValue)
 
+
         if (allResults.size() > 1) {
             throw new MultipleAssociationValuesFoundException(value: rawValue, allResults: allResults)
         } else {
-            return allResults.first()
+            if (!allResults.isEmpty()) {
+                return allResults.first()
+            }
         }
     }
 
