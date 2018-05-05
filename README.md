@@ -7,6 +7,28 @@
 This application component let's you easily import data into your application from various sources.
 
 
+Table of Contents
+=================
+
+   * [CUBA Platform Component - Data import](#cuba-platform-component---data-import)
+      * [Installation](#installation)
+      * [Supported DBMS](#supported-dbms)
+      * [Using the application component](#using-the-application-component)
+      * [Import wizard](#import-wizard)
+      * [Supported file types](#supported-file-types)
+      * [Import Configuration](#import-configuration)
+         * [Entity Attribute mapping](#entity-attribute-mapping)
+         * [Unique Configuration](#unique-configuration)
+         * [Transaction strategy](#transaction-strategy)
+         * [Pre-Commit Script](#pre-commit-script)
+      * [Default binding behavior](#default-binding-behavior)
+         * [Datatype binding](#datatype-binding)
+         * [Enum binding](#enum-binding)
+         * [Entity association binding](#entity-association-binding)
+         * [Dynamic attribute binding](#dynamic-attribute-binding)
+
+
+
 ## Installation
 
 1. Add the following maven repository `https://dl.bintray.com/mariodavid/cuba-components` to the build.gradle of your CUBA application:
@@ -426,7 +448,7 @@ For all not supported cases, the [custom attribute binding script](#custom-attri
 #### N:1 entity association
 
 Many-to-one associations are supported by the default binding. In order to use this behavior, it is required that the
-entity instance that should get referenced is already in the databsae.
+entity instance that should get referenced is already in the database.
 
 In order to reference an entity in a N:1 fashion, the entity attribute in the "Entity attribute mapper" has to be set.
 
@@ -505,3 +527,21 @@ The following examples will lead to a non-unique result and therefore will not w
 In case such a situation occurs, the corresponding data row with all non-unique results are logged. Nothing will be bound in this case.
 
 
+### Dynamic attribute binding
+
+[Dynamic attributes](https://doc.cuba-platform.com/manual-6.8/dynamic_attributes.html) are supported as a binding target. Currently the following dynamic attribute datatypes are supported:
+
+* String
+* Integer
+* Double
+* Boolean 
+* Date (java.util.Date)
+* Enumeration
+
+Note: Entity references within dynamic attributes are not supported currently.
+
+In order to configure a dynamic attribute the Entity attribute mapper has to be configured with a plus sign as a prefix of the dynamic attribute name:
+
+Let's assume the Entity `MlbTeam` as a dynamic attribute category `Stadium Information`. Within this category, there is one
+dynamic attribute defined with the name `stadiumName`. In this case the Entity attribute in the 
+Entity attribute mapper would be: `+myDynamicAttribute`
