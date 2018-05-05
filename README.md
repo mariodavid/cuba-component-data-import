@@ -538,7 +538,7 @@ In case such a situation occurs, the corresponding data row with all non-unique 
 * Date (java.util.Date)
 * Enumeration
 
-Note: Entity references within dynamic attributes are not supported currently.
+> NOTE: Entity references within dynamic attributes are not supported currently.
 
 In order to configure a dynamic attribute the Entity attribute mapper has to be configured with a plus sign as a prefix of the dynamic attribute name:
 
