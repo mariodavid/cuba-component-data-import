@@ -10,22 +10,21 @@ This application component let's you easily import data into your application fr
 Table of Contents
 =================
 
-   * [CUBA Platform Component - Data import](#cuba-platform-component---data-import)
-      * [Installation](#installation)
-      * [Supported DBMS](#supported-dbms)
-      * [Using the application component](#using-the-application-component)
-      * [Import wizard](#import-wizard)
-      * [Supported file types](#supported-file-types)
-      * [Import Configuration](#import-configuration)
-         * [Entity Attribute mapping](#entity-attribute-mapping)
-         * [Unique Configuration](#unique-configuration)
-         * [Transaction strategy](#transaction-strategy)
-         * [Pre-Commit Script](#pre-commit-script)
-      * [Default binding behavior](#default-binding-behavior)
-         * [Datatype binding](#datatype-binding)
-         * [Enum binding](#enum-binding)
-         * [Entity association binding](#entity-association-binding)
-         * [Dynamic attribute binding](#dynamic-attribute-binding)
+  * [Installation](#installation)
+  * [Supported DBMS](#supported-dbms)
+  * [Using the application component](#using-the-application-component)
+  * [Import wizard](#import-wizard)
+  * [Supported file types](#supported-file-types)
+  * [Import Configuration](#import-configuration)
+     * [Entity Attribute mapping](#entity-attribute-mapping)
+     * [Unique Configuration](#unique-configuration)
+     * [Transaction strategy](#transaction-strategy)
+     * [Pre-Commit Script](#pre-commit-script)
+  * [Default binding behavior](#default-binding-behavior)
+     * [Datatype binding](#datatype-binding)
+     * [Enum binding](#enum-binding)
+     * [Entity association binding](#entity-association-binding)
+     * [Dynamic attribute binding](#dynamic-attribute-binding)
 
 
 
