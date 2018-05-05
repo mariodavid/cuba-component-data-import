@@ -20,6 +20,7 @@ class AttributeBinderFactory {
     @Inject
     DataManager dataManager
 
+
     AttributeBinder createAttributeBinderFromBindingRequest(AttributeBindRequest bindRequest) {
 
         if (bindRequest.customScriptBindingRequest) {
@@ -27,13 +28,19 @@ class AttributeBinderFactory {
                     scripting: scripting,
                     dataManager: dataManager
             )
-        } else if (bindRequest.isAssociationBindingRequest()) {
+        }
+        else if (bindRequest.isDynamicAttributeBindingRequest()) {
+            return new DatatypeAttributeBinder()
+        }
+        else if (bindRequest.isAssociationBindingRequest()) {
             return new AssociationAttributeBinder(
                     simpleDataLoader: simpleDataLoader
             )
-        } else if (bindRequest.isDatatypeBindingRequest()) {
+        }
+        else if (bindRequest.isDatatypeBindingRequest()) {
             return new DatatypeAttributeBinder()
-        } else if (bindRequest.isEnumBindingRequest()) {
+        }
+        else if (bindRequest.isEnumBindingRequest()) {
             return new EnumAttributeBinder()
         }
 

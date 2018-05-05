@@ -1,5 +1,6 @@
 package de.diedavids.cuba.dataimport.binding
 
+import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
@@ -19,6 +20,9 @@ class EntityBinderImpl implements EntityBinder {
 
     @Inject
     AttributeBinderFactory attributeBinderFactory
+
+    @Inject
+    DynamicAttributes dynamicAttributes
 
 
     @Override
@@ -41,11 +45,13 @@ class EntityBinderImpl implements EntityBinder {
     }
 
     AttributeBindRequest createAttributeBindRequest(ImportConfiguration importConfiguration, DataRow dataRow, ImportAttributeMapper importAttributeMapper) {
+
         new AttributeBindRequest(
                 importConfiguration: importConfiguration,
                 importAttributeMapper: importAttributeMapper,
                 dataRow: dataRow,
-                metadata: metadata
+                metadata: metadata,
+                dynamicAttributes: dynamicAttributes
         )
     }
 

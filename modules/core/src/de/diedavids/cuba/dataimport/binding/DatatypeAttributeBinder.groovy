@@ -17,7 +17,7 @@ class DatatypeAttributeBinder implements AttributeBinder {
     }
 
     private getValue(AttributeBindRequest bindRequest) {
-        switch (bindRequest.metaProperty.javaType) {
+        switch (bindRequest.javaType) {
             case Integer: return getIntegerValue(bindRequest.rawValue, bindRequest.dataRow)
             case Double: return getDoubleValue(bindRequest.rawValue, bindRequest.dataRow)
             case Date: return getDateValue(bindRequest.importConfiguration, bindRequest.rawValue)

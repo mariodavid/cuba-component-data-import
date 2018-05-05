@@ -25,6 +25,9 @@ public class ImportAttributeMapper extends StandardEntity {
     @Column(name = "ENTITY_ATTRIBUTE", nullable = false)
     protected String entityAttribute;
 
+    @Column(name = "DYNAMIC_ATTRIBUTE")
+    protected Boolean dynamicAttribute;
+
     @NotNull
     @Column(name = "FILE_COLUMN_NUMBER", nullable = false)
     protected Integer fileColumnNumber;
@@ -37,6 +40,15 @@ public class ImportAttributeMapper extends StandardEntity {
     @Lob
     @Column(name = "CUSTOM_ATTRIBUTE_BIND_SCRIPT")
     protected String customAttributeBindScript;
+
+    public void setDynamicAttribute(Boolean dynamicAttribute) {
+        this.dynamicAttribute = dynamicAttribute;
+    }
+
+    public Boolean getDynamicAttribute() {
+        return dynamicAttribute;
+    }
+
 
     public void setCustomAttributeBindScript(String customAttributeBindScript) {
         this.customAttributeBindScript = customAttributeBindScript;
