@@ -82,6 +82,7 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     --
     CONFIGURATION_ID varchar2(32) not null,
     ENTITY_ATTRIBUTE varchar2(255) not null,
+    DYNAMIC_ATTRIBUTE char(1),
     FILE_COLUMN_NUMBER number(10) not null,
     FILE_COLUMN_ALIAS varchar2(255),
     CUSTOM_ATTRIBUTE_BIND_SCRIPT clob,
