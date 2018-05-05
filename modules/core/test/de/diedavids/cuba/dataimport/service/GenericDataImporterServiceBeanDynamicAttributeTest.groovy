@@ -14,9 +14,13 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
+import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
+
+import java.text.SimpleDateFormat
 
 import static org.assertj.core.api.Assertions.assertThat
 
@@ -79,7 +83,6 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         //then:
         def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
-        assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumName")).isEqualTo("Oriole Park at Camden Yards")
 
     }
@@ -108,8 +111,36 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         //then:
         def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
-        assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumSeats")).isEqualTo(10000)
+
+    }
+
+    @Test
+    void "doDataImport can import a date based dynamic attribute"() {
+
+        //given:
+        createAndStoreDynamicAttribute(
+                entityClass:  'ddcdi$MlbTeam',
+                categoryName: 'Stadium Information',
+                attributeName: 'builtAt',
+                dataType: PropertyType.DATE
+        )
+
+
+        importConfiguration = importConfigurationWithDynamicAttribute("+builtAt", 'builtAt')
+        importConfiguration.dateFormat = "dd.MM.yyyy"
+
+        ImportData importData = createData([
+                [name: 'Baltimore Orioles', code: 'BAL', builtAt: "03.04.2010"]
+        ])
+
+        //when:
+        sut.doDataImport(importConfiguration, importData)
+
+        //then:
+        def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
+
+        assertThat(baltimoreTeam.getValue("+builtAt")).isEqualTo(Date.parse("dd.MM.yyyy", "03.04.2010"))
 
     }
 
@@ -136,7 +167,6 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         //then:
         def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
-        assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumSeats")).isEqualTo(10000)
 
     }
@@ -167,14 +197,13 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         //then:
         def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
-        assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+hasRoof")).isEqualTo(true)
 
     }
 
 
     @Test
-    void "doDataImport can import a dynamic Enum based dynamic attribute"() {
+    void "doDataImport can import an enum based dynamic attribute"() {
 
         //given:
         createAndStoreDynamicAttribute(
@@ -197,7 +226,6 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         //then:
         def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
-        assertThat(baltimoreTeam.name).isEqualTo("Baltimore Orioles")
         assertThat(baltimoreTeam.getValue("+stadiumSize")).isEqualTo("BIG")
 
     }
@@ -222,6 +250,7 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         categoryAttribute.categoryEntityType = options.entityClass
         categoryAttribute.dataType = options.dataType
         categoryAttribute.enumeration = options.enumValues
+        categoryAttribute.entityClass = options.referenceEntityClass
 
         categoryAttrs << categoryAttribute
         category.setCategoryAttrs(categoryAttrs)
