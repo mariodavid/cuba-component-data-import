@@ -543,4 +543,4 @@ In order to configure a dynamic attribute the Entity attribute mapper has to be 
 
 Let's assume the Entity `MlbTeam` as a dynamic attribute category `Stadium Information`. Within this category, there is one
 dynamic attribute defined with the name `stadiumName`. In this case the Entity attribute in the 
-Entity attribute mapper would be: `+myDynamicAttribute`
+Entity attribute mapper would be: `+stadiumName`
