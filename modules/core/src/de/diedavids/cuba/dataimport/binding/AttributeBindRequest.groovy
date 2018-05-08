@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
+import de.diedavids.cuba.dataimport.service.AssociationDirectReferenceException
 
 class AttributeBindRequest {
 
@@ -63,7 +64,22 @@ class AttributeBindRequest {
     }
 
     boolean isAssociationBindingRequest() {
-        importEntityPropertyPath?.metaProperties?.size() > 1 ?: false
+        def metaProperties = importEntityPropertyPath?.metaProperties
+        if (metaProperties) {
+            def firstMetaProperty = metaProperties[0]
+            def firstMetaPropertyIsAssociation = firstMetaProperty.type == MetaProperty.Type.ASSOCIATION
+
+            if (firstMetaPropertyIsAssociation && metaProperties.size() == 1) {
+                throw new AssociationDirectReferenceException(
+                        metaProperty: firstMetaProperty,
+                        attributeBindRequest: this
+                )
+            }
+
+            return firstMetaPropertyIsAssociation
+        }
+
+        false
     }
 
     boolean isDatatypeBindingRequest() {
