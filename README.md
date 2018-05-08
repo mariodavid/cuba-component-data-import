@@ -184,6 +184,47 @@ Example JSON file:
 ]
 ```
 
+
+
+##### programmatic access to nested JSON structures
+ 
+It is also possible to have nested structures in the JSON and bind it to a entity attribute. In order to do this, a [Custom attribute binding script](#custom-attribute-binding-script) has to be configured
+for the desired entity attribute.  
+
+An example JSON file for this would be:
+```
+[
+  {
+    "Name": "Mark",
+    "Lastname": "Andersson",
+    "Address": {
+        "street": "Dorfkrug 1",
+        "postcode": "51665",
+        "city": "Bad Neuendorf"
+    },
+    "orders": [
+        {
+            "orderId": 1
+        },
+        {
+            "orderId": 2
+        }
+    ]
+  }
+]
+```
+
+In the custom binding script, access to the nested structure can be achieved like this:
+```
+return rawValue.Address.street
+```
+
+Or in case of the `orders` Array it would be:
+
+```
+return rawValue.orders[0].orderId
+```
+
 ### XML - .xml
 
 For XML files it is required to be a List of XML elements directly under the root XML element which should get imported as an entity instance.
@@ -201,6 +242,38 @@ Example XML file:
         <Description>The mods of the system</Description>
     </role>
 </roles>
+```
+
+##### programmatic access to nested XML structures
+ 
+It is also possible to have nested structures in the XML and bind it to a entity attribute. In order to do this, a [Custom attribute binding script](#custom-attribute-binding-script) has to be configured
+for the desired entity attribute.  
+
+An example XML file for this would be:
+```
+<root>
+   <entry>
+       <Name>Users</Name>
+       <Description>The users of the system</Description>
+       <permission>
+           <code>ALLOW_EVERYTHING</code>
+           <name>Allow everything</name>
+       </permission>
+   </entry>
+   <entry>
+       <Name>Moderators</Name>
+       <Description>The mods of the system</Description>
+       <permission>
+           <code>DENY_ALL</code>
+           <name>Nothing is allowed</name>
+       </permission>
+   </entry>
+</root>
+```
+
+In the custom binding script, access to the nested structure can be achieved like this:
+```
+return rawValue.permission.code
 ```
 
 ## Import Configuration
