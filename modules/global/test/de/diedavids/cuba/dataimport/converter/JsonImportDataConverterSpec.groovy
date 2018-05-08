@@ -52,7 +52,7 @@ class JsonImportDataConverterSpec extends Specification {
         when:
         ImportData result = sut.convert(JSON_INPUT)
         then:
-        result.columns.size() == 3
+        result.columns.size() == 4
     }
 
     def "convert contains two DataRows"() {

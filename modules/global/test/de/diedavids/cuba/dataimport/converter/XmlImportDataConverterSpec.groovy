@@ -32,7 +32,7 @@ class XmlImportDataConverterSpec extends Specification {
         when:
         ImportData result = this.sut.convert(XML_INPUT)
         then:
-        result.columns.size() == 2
+        result.columns.size() == 3
     }
 
     def "convert contains two DataRows"() {
