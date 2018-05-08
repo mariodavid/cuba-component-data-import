@@ -45,7 +45,7 @@ class EntityBinderImpl implements EntityBinder {
 
         }
         catch (AssociationDirectReferenceException e) {
-            log.warn("Direct association references are not supported. Specify the Lookup attribute for ${e.metaProperty}. See: https://github.com/mariodavid/cuba-component-data-import#n1-entity-association", e)
+            log.warn("Direct association references are not supported. Specify the Lookup attribute for ${e.metaProperty}. See: https://github.com/mariodavid/cuba-component-data-import#n1-entity-association. Will be ignored.", e)
         }
 
     }
