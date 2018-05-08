@@ -43,7 +43,7 @@ class AssociationAttributeBinder implements AttributeBinder {
             throw new MultipleAssociationValuesFoundException(value: rawValue, allResults: allResults)
         } else {
             if (allResults.empty) {
-                log.warn("No associations found for data row: [${bindRequest.dataRow}] and attribute: ${propertyPath} with value ${rawValue}. Will be ignored.")
+                log.warn("No associations found for data row: [${bindRequest.dataRow}] and attribute: [${propertyPath}] with value [${rawValue}]. Will be ignored.")
             }
             else {
                 return allResults.first()
