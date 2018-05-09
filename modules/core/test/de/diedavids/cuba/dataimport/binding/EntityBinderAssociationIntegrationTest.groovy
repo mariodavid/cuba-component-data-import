@@ -59,6 +59,40 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
 
 
     @Test
+    void "bindAttributes cannot create an entity if the entity attribute mapper points directly to the reference attribute"() {
+
+
+        ImportData importData = createData([
+                [team: "BAL"]
+        ])
+
+
+        MlbTeam balTeam = metadata.create(MlbTeam)
+        balTeam.name = 'Baltimore Orioles'
+        balTeam.code = 'BAL'
+        balTeam.state = State.MA
+
+        dataManager.commit(balTeam)
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team', fileColumnAlias: 'team'),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+
+        assertThat(entity.getTeam()).isNull()
+
+        cont.deleteRecord(balTeam)
+    }
+
+
+    @Test
     void "bindAttributes creates an Entity with a non-unique association value"() {
 
 
@@ -96,6 +130,36 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
 
         cont.deleteRecord(team1InMaryland)
         cont.deleteRecord(team2InMaryland)
+    }
+
+    @Test
+    void "bindAttributes creates an Entity with a not-existing association value"() {
+
+
+        ImportData importData = createData([
+                [team: "NOT_EXISTING_TEAM_CODE"]
+        ])
+
+        MlbTeam balTeam = metadata.create(MlbTeam)
+        balTeam.name = 'Baltimore Orioles'
+        balTeam.code = 'BAL'
+        balTeam.state = State.MA
+
+        dataManager.commit(balTeam)
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.code', fileColumnAlias: 'team'),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getTeam()).isNull()
+
+        cont.deleteRecord(balTeam)
     }
 
 }

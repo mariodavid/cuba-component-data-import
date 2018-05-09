@@ -276,7 +276,6 @@ configure(coreModule) {
         dbName = 'ddcdi4'
         dbms = 'hsql'
         host = 'localhost'
-        dbName = hsqlDbName
         dbUser = 'sa'
         dbPassword = ''
     }
@@ -285,7 +284,6 @@ configure(coreModule) {
         dbName = 'ddcdi4'
         dbms = 'hsql'
         host = 'localhost'
-        dbName = hsqlDbName
         dbUser = 'sa'
         dbPassword = ''
     }

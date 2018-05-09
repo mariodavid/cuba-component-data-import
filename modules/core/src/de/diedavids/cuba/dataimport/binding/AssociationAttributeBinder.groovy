@@ -1,6 +1,5 @@
 package de.diedavids.cuba.dataimport.binding
 
-import com.haulmont.chile.core.model.MetaPropertyPath
 import com.haulmont.cuba.core.entity.Entity
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.service.MultipleAssociationValuesFoundException
@@ -15,8 +14,10 @@ class AssociationAttributeBinder implements AttributeBinder {
     @Override
     void bindAttribute(Entity entity, AttributeBindRequest bindRequest) {
         try {
-            def value = handleAssociationAttribute(bindRequest.importEntityPropertyPath, bindRequest.rawValue, entity)
-            entity.setValueEx(bindRequest.entityAttributePath, value)
+            def value = handleAssociationAttribute(bindRequest, entity)
+            if (value) {
+                entity.setValueEx(bindRequest.entityAttributePath, value)
+            }
         }
         catch (MultipleAssociationValuesFoundException e) {
             e.dataRow = bindRequest.dataRow
@@ -25,23 +26,28 @@ class AssociationAttributeBinder implements AttributeBinder {
         }
     }
 
-    private void handleAssociationAttribute(MetaPropertyPath path, String rawValue, Entity entity) {
-        def propertyPathFromAssociation = path.path.drop(1)
+    private void handleAssociationAttribute(AttributeBindRequest bindRequest, Entity entity) {
+        def propertyPathFromAssociation = bindRequest.importEntityPropertyPath.path.drop(1)
         def propertyPath = propertyPathFromAssociation.join('.')
-        def associationJavaType = path.metaProperties[0].javaType
-        def associationProperty = path.metaProperties[0].name
+        def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].javaType
+        def associationProperty = bindRequest.importEntityPropertyPath.metaProperties[0].name
 
-        def associationValue = loadAssociationValue(associationJavaType, propertyPath, rawValue)
+        def associationValue = loadAssociationValue(bindRequest, associationJavaType, propertyPath, bindRequest.rawValue)
         entity.setValueEx(associationProperty, associationValue)
     }
 
-    private loadAssociationValue(Class<?> associationJavaType, String propertyPath, String rawValue) {
+    private loadAssociationValue(AttributeBindRequest bindRequest, Class<?> associationJavaType, String propertyPath, String rawValue) {
         def allResults = simpleDataLoader.loadAllByProperty(associationJavaType, propertyPath, rawValue)
 
         if (allResults.size() > 1) {
             throw new MultipleAssociationValuesFoundException(value: rawValue, allResults: allResults)
         } else {
-            return allResults.first()
+            if (allResults.empty) {
+                log.warn("No associations found for data row: [${bindRequest.dataRow}] and attribute: [${propertyPath}] with value [${rawValue}]. Will be ignored.")
+            }
+            else {
+                return allResults.first()
+            }
         }
     }
 
