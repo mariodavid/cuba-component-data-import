@@ -41,7 +41,7 @@ Add custom application component to your project:
 
 ```groovy
 dependencies {
-  appComponent("de.diedavids.cuba.dataimport:dataimport-global:<<addon-version>>")
+  appComponent("de.diedavids.cuba.dataimport:dataimport-global:*addon-version*")
 }
 ```
 
