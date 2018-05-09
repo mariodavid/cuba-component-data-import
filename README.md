@@ -7,6 +7,27 @@
 This application component let's you easily import data into your application from various sources.
 
 
+Table of Contents
+=================
+
+  * [Installation](#installation)
+  * [Supported DBMS](#supported-dbms)
+  * [Using the application component](#using-the-application-component)
+  * [Import wizard](#import-wizard)
+  * [Supported file types](#supported-file-types)
+  * [Import Configuration](#import-configuration)
+     * [Entity Attribute mapping](#entity-attribute-mapping)
+     * [Unique Configuration](#unique-configuration)
+     * [Transaction strategy](#transaction-strategy)
+     * [Pre-Commit Script](#pre-commit-script)
+  * [Default binding behavior](#default-binding-behavior)
+     * [Datatype binding](#datatype-binding)
+     * [Enum binding](#enum-binding)
+     * [Entity association binding](#entity-association-binding)
+     * [Dynamic attribute binding](#dynamic-attribute-binding)
+
+
+
 ## Installation
 
 1. Add the following maven repository `https://dl.bintray.com/mariodavid/cuba-components` to the build.gradle of your CUBA application:
@@ -28,7 +49,7 @@ This application component let's you easily import data into your application fr
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.8.x            | 0.1.x - 0.2.x  |
+| 6.8.x            | 0.1.x - 0.3.x  |
 
 
 The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/cuba-component-data-import/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/cuba-component-data-import/_latestVersion)
@@ -62,6 +83,8 @@ Currently the following file-types are supported:
 
 * Excel `.xlsx` 
 * comma separated values `.csv`
+* JSON `.json`
+* XML `.xml`
 
 In order to configure various import options, there is a UI based configuration possibility to define
 
@@ -108,6 +131,150 @@ will be triggered. Afterwards the user will see a summary of how many entities w
 #### Step 5: Import Summary
 ![import-wizard-step-5](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-5.png)
 
+## Supported file types
+
+Multiple filetypes are supported by this application component. Information and requirements
+for certain file types will be described below. 
+
+Example files can be found in the [example-data](https://github.com/mariodavid/cuba-component-data-import/blob/master/example-data) subdirectory. 
+
+### Excel - .xlsx
+
+For Excel files the first row has to be the column names. 
+Unnamed columns are not supported currently. 
+
+
+Example Excel file:
+
+| Name             | Description            |
+| ---------------- | ---------------------- |
+| Users            | This will be the users |
+| Managers         | The moderators         |
+
+	
+### CSV - .csv
+
+For CSV files the first row has to be the column names. 
+Unnamed columns are not supported currently. 
+
+Example CSV file:
+```
+"Name","Description"
+"Users", "This will be the users"
+"Moderators", "The Moderators"
+```
+
+### JSON - .json
+
+For JSON files it is required to be a JSON array, where each entry in this array 
+is itself a JSON object, which should get imported as an entity instance.
+ 
+
+Example JSON file:
+```
+[
+  {
+    "Name": "Users",
+    "Description": "The users of the system"
+  },
+  {
+    "Name": "Moderators",
+    "Description": "The mods of the system"
+  }
+]
+```
+
+
+
+##### programmatic access to nested JSON structures
+ 
+It is also possible to have nested structures in the JSON and bind it to a entity attribute. In order to do this, a [Custom attribute binding script](#custom-attribute-binding-script) has to be configured
+for the desired entity attribute.  
+
+An example JSON file for this would be:
+```
+[
+  {
+    "Name": "Mark",
+    "Lastname": "Andersson",
+    "Address": {
+        "street": "Dorfkrug 1",
+        "postcode": "51665",
+        "city": "Bad Neuendorf"
+    },
+    "orders": [
+        {
+            "orderId": 1
+        },
+        {
+            "orderId": 2
+        }
+    ]
+  }
+]
+```
+
+In the custom binding script, access to the nested structure can be achieved like this:
+```
+return rawValue.Address.street
+```
+
+Or in case of the `orders` Array it would be:
+
+```
+return rawValue.orders[0].orderId
+```
+
+### XML - .xml
+
+For XML files it is required to be a List of XML elements directly under the root XML element which should get imported as an entity instance.
+ 
+
+Example XML file:
+```
+<roles>
+    <role>
+        <Name>Users</Name>
+        <Description>The users of the system</Description>
+    </role>
+    <role>
+        <Name>Moderators</Name>
+        <Description>The mods of the system</Description>
+    </role>
+</roles>
+```
+
+##### programmatic access to nested XML structures
+ 
+It is also possible to have nested structures in the XML and bind it to a entity attribute. In order to do this, a [Custom attribute binding script](#custom-attribute-binding-script) has to be configured
+for the desired entity attribute.  
+
+An example XML file for this would be:
+```
+<root>
+   <entry>
+       <Name>Users</Name>
+       <Description>The users of the system</Description>
+       <permission>
+           <code>ALLOW_EVERYTHING</code>
+           <name>Allow everything</name>
+       </permission>
+   </entry>
+   <entry>
+       <Name>Moderators</Name>
+       <Description>The mods of the system</Description>
+       <permission>
+           <code>DENY_ALL</code>
+           <name>Nothing is allowed</name>
+       </permission>
+   </entry>
+</root>
+```
+
+In the custom binding script, access to the nested structure can be achieved like this:
+```
+return rawValue.permission.code
+```
 
 ## Import Configuration
 
@@ -258,6 +425,7 @@ The following variables are injected and available for usage:
 
 
 #### veto right of pre-commit script
+
 It is also possible to prevent the import for this entity instance.
 
 To do this, the script has to return a boolean value, which represents if the entity should get imported or not.
@@ -301,6 +469,7 @@ By default the following attribute types are supported in the default binding:
 * String
 * Integer
 * Double
+* BigDecimal
 * Boolean
 * Date (java.util.Date)
 
@@ -351,7 +520,7 @@ For all not supported cases, the [custom attribute binding script](#custom-attri
 #### N:1 entity association
 
 Many-to-one associations are supported by the default binding. In order to use this behavior, it is required that the
-entity instance that should get referenced is already in the databsae.
+entity instance that should get referenced is already in the database.
 
 In order to reference an entity in a N:1 fashion, the entity attribute in the "Entity attribute mapper" has to be set.
 
@@ -430,3 +599,21 @@ The following examples will lead to a non-unique result and therefore will not w
 In case such a situation occurs, the corresponding data row with all non-unique results are logged. Nothing will be bound in this case.
 
 
+### Dynamic attribute binding
+
+[Dynamic attributes](https://doc.cuba-platform.com/manual-6.8/dynamic_attributes.html) are supported as a binding target. Currently the following dynamic attribute datatypes are supported:
+
+* String
+* Integer
+* Double
+* Boolean 
+* Date (java.util.Date)
+* Enumeration
+
+> NOTE: Entity references within dynamic attributes are not supported currently.
+
+In order to configure a dynamic attribute the Entity attribute mapper has to be configured with a plus sign as a prefix of the dynamic attribute name:
+
+Let's assume the Entity `MlbTeam` as a dynamic attribute category `Stadium Information`. Within this category, there is one
+dynamic attribute defined with the name `stadiumName`. In this case the Entity attribute in the 
+Entity attribute mapper would be: `+stadiumName`
