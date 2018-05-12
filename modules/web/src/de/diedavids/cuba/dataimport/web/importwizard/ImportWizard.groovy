@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.CollectionDatasource
 import com.haulmont.cuba.gui.data.Datasource
+import com.haulmont.cuba.gui.data.ValueListener
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
@@ -59,6 +60,9 @@ class ImportWizard extends AbstractWindow {
     LookupField entityLookup
 
     @Inject
+    LookupField configLookup
+
+    @Inject
     Metadata metadata
 
     @Inject
@@ -99,23 +103,60 @@ class ImportWizard extends AbstractWindow {
     @Inject
     ImportAttributeMapperCreator importAttributeMapperCreator
 
+    ImportConfiguration defaultImportConfiguration;
+
+    @Inject
+    Button toStep3;
+
     @Override
     void init(Map<String, Object> params) {
 
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
 
         importConfigurationDs.setItem(createImportConfiguration())
-
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
         initImportFileHandler()
         initImportFileParser()
+        initTitles();
+        configLookup.addListener(new ValueListener() {
+
+            void valueChanged(Object source, String property, Object prevValue, Object value) {
+                if (value) {
+                    def vv = (ImportConfiguration) value;
+                    /*def importConfiguration = metadata.create(ImportConfiguration)
+                    importConfiguration.dateFormat = vv.dateFormat
+                    importConfiguration.booleanTrueValue = vv.booleanTrueValue
+                    importConfiguration.booleanFalseValue = vv.booleanFalseValue
+                    importConfiguration.importAttributeMappers = vv.importAttributeMappers
+                    */
+
+                    importConfigurationDs.setItem(vv)
+                } else {
+                    importConfigurationDs.setItem(defaultImportConfiguration)
+                    entityLookup.setValue(importConfigurationDs.getItem().entityClass)
+                }
+
+            }
+        });
+
+
+    }
+
+    void initTitles() {
+        try {
+            def tabs = wizardAccordion.getTabs()
+            tabs.each {
+                it.caption = formatMessage(it.name.concat("Title"), "")
+            }
+        } catch (Exception e) {
+        }
     }
 
     void initImportFileParser() {
         importFileParser = new ImportFileParser(
-                importFileHandler: importFileHandler,
-                dataConverterFactory: dataConverterFactory
+                        importFileHandler: importFileHandler,
+                        dataConverterFactory: dataConverterFactory
         )
     }
 
@@ -144,11 +185,11 @@ class ImportWizard extends AbstractWindow {
     }
 
     private ImportConfiguration createImportConfiguration() {
-        def importConfiguration = metadata.create(ImportConfiguration)
-        importConfiguration.dateFormat = 'dd/MM/yyyy'
-        importConfiguration.booleanTrueValue = 'Yes'
-        importConfiguration.booleanFalseValue = 'No'
-        importConfiguration
+        defaultImportConfiguration = metadata.create(ImportConfiguration)
+        defaultImportConfiguration.dateFormat = 'dd/MM/yyyy'
+        defaultImportConfiguration.booleanTrueValue = 'Yes'
+        defaultImportConfiguration.booleanFalseValue = 'No'
+        defaultImportConfiguration
     }
 
 
@@ -158,18 +199,31 @@ class ImportWizard extends AbstractWindow {
             void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
 
                 if (e.property == 'entityClass') {
-                    MetaClass selectedEntity = metadata.getClass(e.value.toString())
+                    def className = e.value.toString()
+                    //((CreateAction) mapAttributesTable.getAction('create')).setWindowParams([SELECTED_ENTITY: className])
+                    //((EditAction) mapAttributesTable.getAction('edit')).setWindowParams([SELECTED_ENTITY: className])
+
+                    MetaClass selectedEntity = metadata.getClass(className)
                     importData = importFileParser.parseFile()
 
+                    def selectedConfiguration = importConfigurationDs.getItem();
 
                     def mappers = importAttributeMapperCreator.createMappers(importData, selectedEntity)
                     mappers.each {
+                        it.setConfiguration(selectedConfiguration)
                         importAttributeMappersDatasource.addItem(it)
                     }
 
                     importConfigurationDs.item.importAttributeMappers = mappers
+                    if (configLookup.getValue() == null) {
+                        defaultImportConfiguration.importAttributeMappers = mappers
+                    }
 
                     mapAttributesTable.visible = true
+
+                    configLookup.setOptionsList(importWizardService.getImportConfigurations(selectedEntity))
+                    configLookup.visible = true
+                    toStep3.enabled = true
                 }
             }
         })
@@ -179,11 +233,14 @@ class ImportWizard extends AbstractWindow {
     void toStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
         showFilenameInStep1Title()
+        toStep3.enabled = false
+        //start auto-selection for the entity based on fuzzy search
+
     }
 
     private void showFilenameInStep1Title() {
         Accordion.Tab step1Tab = wizardAccordion.getTab(WIZARD_STEP_1)
-        step1Tab.caption += " - ${importFileHandler.fileName}"
+        step1Tab.caption = formatMessage('step1Title', " - ${importFileHandler.fileName} ${check}")
     }
 
     void toStep3() {
@@ -236,9 +293,13 @@ class ImportWizard extends AbstractWindow {
     }
 
     void startImport() {
-        ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
-        importLogDs.item = importLog
-        toStep5()
+        try {
+            ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
+            importLogDs.item = importLog
+            toStep5()
+        } catch (Exception i) {
+            showNotification("Couldn't bind attributes, please modify entity attributes and try again.", NotificationType.WARNING_HTML)
+        }
     }
 
     void toStep5() {
@@ -252,7 +313,8 @@ class ImportWizard extends AbstractWindow {
         wizardAccordion.selectedTab = nextTabName
 
         Accordion.Tab previousTab = wizardAccordion.getTab(previousTabName)
-        previousTab.caption = "${previousTab.caption} $check"
-        previousTab.enabled = false
+        previousTab.caption = formatMessage(previousTab.name + 'Title', " $check")
+        //allow to return back: true
+        previousTab.enabled = true
     }
 }
