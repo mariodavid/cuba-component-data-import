@@ -3,7 +3,7 @@ package de.diedavids.cuba.dataimport.service
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
-import de.diedavids.cuba.dataimport.data.EntityAttributeValueImpl
+import de.diedavids.cuba.dataimport.data.EntityAttributeValueFactory
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
@@ -20,6 +20,9 @@ class ImportWizardServiceBean implements ImportWizardService {
 
     @Inject
     SimpleDataLoader simpleDataLoader
+
+    @Inject
+    EntityAttributeValueFactory entityAttributeValueFactory
 
     final String viewName = 'importConfiguration-view'
 
@@ -48,39 +51,32 @@ class ImportWizardServiceBean implements ImportWizardService {
 
     @Override
     Collection<ImportConfiguration> getImportConfigurations(MetaClass metaClass) {
-        if (!metaClass) {
-            return []
+
+        Collection<ImportConfiguration> importConfigurations = []
+
+        if (metaClass) {
+            importConfigurations = loadImportConfigurationWithAttributes(entityClass: metaClass.name)
         }
 
-        simpleDataLoader.loadAllByAttributes(ImportConfiguration, [
-                new EntityAttributeValueImpl(
-                        entityAttribute: 'entityClass',
-                        value: metaClass.name
-                )
-        ], viewName)
+        importConfigurations
     }
 
     @Override
-    @SuppressWarnings('DuplicateStringLiteral')
     ImportConfiguration getImportConfigurationByName(MetaClass metaClass, String configName) {
-        if (!metaClass) {
-            return []
+
+        ImportConfiguration importConfiguration = null
+
+        if (metaClass) {
+            def allImportConfigurations = loadImportConfigurationWithAttributes(entityClass: metaClass.name, name: configName)
+            importConfiguration = allImportConfigurations?.first()
         }
 
-        def results = simpleDataLoader.loadAllByAttributes(ImportConfiguration, [
-                new EntityAttributeValueImpl(
-                        entityAttribute: 'entityClass',
-                        value: metaClass.name
-                ),
-                new EntityAttributeValueImpl(
-                        entityAttribute: 'name',
-                        value: configName
-                )
-        ], viewName)
-
-        if (results && results.size() > 0) {
-            return results.first()
-        }
-        []
+        importConfiguration
     }
+
+
+    private Collection<ImportConfiguration> loadImportConfigurationWithAttributes(Map<String, Object> attributeMap) {
+        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap), viewName)
+    }
+
 }

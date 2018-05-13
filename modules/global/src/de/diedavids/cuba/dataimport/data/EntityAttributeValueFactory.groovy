@@ -12,4 +12,17 @@ class EntityAttributeValueFactory {
                 value: entity.getValueEx(entityAttribute)
         )
     }
+
+    EntityAttributeValue createEntityAttributeValue(String entityAttribute, Object attributeValue) {
+        new EntityAttributeValueImpl(
+                entityAttribute: entityAttribute,
+                value: attributeValue
+        )
+    }
+
+    Collection<EntityAttributeValue> ofMap(Map<String, Object> attributeValueMap) {
+        attributeValueMap.collect { String entityAttribute, Object attributeValue ->
+            createEntityAttributeValue(entityAttribute, attributeValue)
+        }
+    }
 }

@@ -277,8 +277,8 @@ class ImportWizard extends AbstractWindow {
             importLogDs.item = importLog
             toStep5()
         } catch (Exception e) {
-            log.error("An Error occurred during import", e)
-            showNotification("An Error occurred during import. See logs for more information", Frame.NotificationType.WARNING_HTML)
+            log.error('An Error occurred during import', e)
+            showNotification('An Error occurred during import. See logs for more information', Frame.NotificationType.ERROR)
         }
     }
 
