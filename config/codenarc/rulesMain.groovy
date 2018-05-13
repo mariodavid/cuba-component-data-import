@@ -276,5 +276,5 @@ ruleset {
     RemoveAllOnSelf { priority = 1 }
     UnnecessaryBigDecimalInstantiation { priority = 1 }
 
-    ClassSize { maxLines = 300 }
+    ClassSize { maxLines = 250 }
 }

@@ -20,10 +20,12 @@ import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileHandler
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
 import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
+import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
 import javax.inject.Named
 
+@Slf4j
 class ImportWizard extends AbstractWindow {
 
     public static final String WIZARD_STEP_2 = 'step2'
@@ -120,7 +122,7 @@ class ImportWizard extends AbstractWindow {
     }
 
     void initConfigLookupChange() {
-        configLookup.addValueChangeListener(new com.haulmont.cuba.gui.components.Component.ValueChangeListener() {
+        configLookup.addValueChangeListener(new Component.ValueChangeListener() {
             @Override
             void valueChanged(Component.ValueChangeEvent e) {
                 if (e.value) {
@@ -201,7 +203,7 @@ class ImportWizard extends AbstractWindow {
                     if (!configLookup.value) {
                         defaultImportConfiguration.importAttributeMappers = mappers
                     }
-                    configLookup.setOptionsList(importWizardService.getImportConfigurations(selectedEntity))
+                    configLookup.setOptionsList(importWizardService.getImportConfigurations(selectedEntity) as List)
                     mapAttributesTable.visible = true
                     configLookup.visible = true
                     toStep3.enabled = true
@@ -274,8 +276,9 @@ class ImportWizard extends AbstractWindow {
             ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
             importLogDs.item = importLog
             toStep5()
-        } catch (Exception i) {
-            showNotification("Couldn't bind attributes, please modify entity attributes and try again.", NotificationType.WARNING_HTML)
+        } catch (Exception e) {
+            log.error("An Error occurred during import", e)
+            showNotification("An Error occurred during import. See logs for more information", Frame.NotificationType.WARNING_HTML)
         }
     }
 
