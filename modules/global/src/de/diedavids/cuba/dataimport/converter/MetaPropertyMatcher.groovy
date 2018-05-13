@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component
 @Component('ddcdi_MetaPropertyMatcher')
 class MetaPropertyMatcher {
 
+    private static final SEPARATOR = '.'
+
 
     String findEntityAttributeForColumn(String column, MetaClass selectedEntity) {
 
@@ -22,32 +24,32 @@ class MetaPropertyMatcher {
     }
 
     List<String> listProperties(List<String> s, String prev, MetaClass selectedEntity) {
-        if (selectedEntity && s!=null && selectedEntity.getProperties() ) {
-            selectedEntity.getProperties().each {
-                if (prev == null || prev.isEmpty())
-                    prev = ""
-                else if (!prev.endsWith("."))
-                    prev += "."
+        if (!selectedEntity?.properties || s == null) {
+            return []
+        }
 
-                if (isSimpleDatatype(it)) {
-                    def val = prev.concat(it.name)
-                    if(!s.contains(val))
-                        s.add(val)
-                } else {
-                    def nn = prev.concat(it.name)
-                    if (!prev.contains(it.name)){
-                        def nextEntityName = it.getRange().asClass();
-                        if(selectedEntity!=nextEntityName) {
-                            listProperties(s, nn, nextEntityName)
-                        }
-                    }
+        selectedEntity.properties.each {
+            def tempPrev = appendPathSeparator(prev ?: '')
+            def attribute = tempPrev.concat(it.name)
 
-
+            if (isSimpleDatatype(it) && !s.contains(attribute)) {
+                s.add(attribute)
+            } else if (!tempPrev.contains(it.name) && it.range) {
+                def nextEntityName = it.range.asClass()
+                if (selectedEntity != nextEntityName) {
+                    listProperties(s, attribute, nextEntityName)
                 }
             }
-            return s;
         }
-        return null
+        s
+    }
+
+    private String appendPathSeparator(String s) {
+        def result = s
+        if (result && result.size() > 1 && !result.endsWith(SEPARATOR)) {
+            result += SEPARATOR
+        }
+        result
     }
 
     private boolean isSimpleDatatype(MetaProperty possibleProperty) {
@@ -60,7 +62,8 @@ class MetaPropertyMatcher {
             return null
         }
 
-        def propertiesNames =  listProperties(new ArrayList<String>(), "", selectedEntity) //selectedEntity.properties*.name
+        def propertiesNames = listProperties([], '', selectedEntity)
+        //selectedEntity.properties*.name
 
         String match = null
 
@@ -80,18 +83,16 @@ class MetaPropertyMatcher {
         def distances = calculateLevensteinDistances(propertiesNames, column)
         def mostLikelyMatch = distances.min { it.value }
 
-        if (mostLikelyMatch && mostLikelyMatch.value < 5) {
+        if (mostLikelyMatch?.value < 5) {
             return mostLikelyMatch.key
         }
     }
 
     private String searchForDirectMatch(List<String> propertiesNames, column) {
         propertiesNames.find {
-            if (it != null) {
-                it = it.toLowerCase();
-            }
-            column.toLowerCase().startsWith(it) ||
-                    column.toLowerCase().endsWith(it)
+            def lowercasePropertyName = it?.toLowerCase()
+            column.toLowerCase().startsWith(lowercasePropertyName) ||
+                    column.toLowerCase().endsWith(lowercasePropertyName)
         }
     }
 

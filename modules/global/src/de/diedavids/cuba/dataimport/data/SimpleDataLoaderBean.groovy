@@ -26,7 +26,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
         LoadContext<E> loadContext = getLoadContext(entityClass)
                 .setId(id)
-                .setView(view)
+                .setView(view) as LoadContext<E>
 
         dataManager.load(loadContext) as E
     }
@@ -57,7 +57,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
     @Override
     <E extends Entity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view = '_local') {
-        LoadContext.Query query = createQueryByProperty(getMetaClassName(entityClass),propertyPath, propertyValue)
+        LoadContext.Query query = createQueryByProperty(getMetaClassName(entityClass), propertyPath, propertyValue)
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
@@ -70,7 +70,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
-        dataManager.loadList(loadContext)as Collection<E>
+        dataManager.loadList(loadContext) as Collection<E>
     }
 
     protected LoadContext.Query createQueryForSelectAll(String metaClassName) {
@@ -91,7 +91,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
 
         def queryString = "${getSelectPart(metaClassName)} where "
 
-        def conditionParts = entityAttributeValues.withIndex().collect {EntityAttributeValue entityAttributeValue, int i ->
+        def conditionParts = entityAttributeValues.withIndex().collect { EntityAttributeValue entityAttributeValue, int i ->
             "e.${entityAttributeValue.entityAttribute} = :propertyValue$i"
         }
 
@@ -114,7 +114,17 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
 
-        dataManager.loadList(loadContext)as Collection<E>
+        dataManager.loadList(loadContext) as Collection<E>
+    }
+
+    @Override
+    def <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues, String view) {
+        LoadContext.Query query = createQueryByEntityAttributeValues(getMetaClassName(entityClass), entityAttributeValues)
+        LoadContext loadContext = getLoadContext(entityClass)
+                .setQuery(query)
+                .setView(view)
+
+        dataManager.loadList(loadContext) as Collection<E>
     }
 
     protected String getSelectPart(String metaClassName) {

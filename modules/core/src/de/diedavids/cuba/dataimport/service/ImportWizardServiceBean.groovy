@@ -3,7 +3,8 @@ package de.diedavids.cuba.dataimport.service
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
-import com.haulmont.cuba.core.global.LoadContext
+import de.diedavids.cuba.dataimport.data.EntityAttributeValueImpl
+import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
@@ -16,6 +17,11 @@ class ImportWizardServiceBean implements ImportWizardService {
 
     @Inject
     DataManager dataManager
+
+    @Inject
+    SimpleDataLoader simpleDataLoader
+
+    final String viewName = 'importConfiguration-view'
 
     @Override
     void saveImportConfiguration(ImportConfiguration importConfiguration, Collection<ImportAttributeMapper> importAttributeMapper, ImportLog importLog) {
@@ -35,8 +41,6 @@ class ImportWizardServiceBean implements ImportWizardService {
 
         commitContext.addInstanceToCommit(importLog)
 
-
-
         importConfiguration.importerBeanName = GenericDataImporterService.NAME
 
         dataManager.commit(commitContext)
@@ -44,36 +48,39 @@ class ImportWizardServiceBean implements ImportWizardService {
 
     @Override
     Collection<ImportConfiguration> getImportConfigurations(MetaClass metaClass) {
-        if(metaClass==null)
-            return Collections.emptyList();
+        if (!metaClass) {
+            return []
+        }
 
-        def entityName = metaClass.name
-
-        LoadContext loadContext =
-                LoadContext.create(ImportConfiguration.class)
-                .setQuery(
-                LoadContext.createQuery('select o from ddcdi$ImportConfiguration o where o.entityClass = :entityName')
-                .setParameter("entityName", entityName))
-                .setView("importConfiguration-view")
-
-        return dataManager.loadList(loadContext);
+        simpleDataLoader.loadAllByAttributes(ImportConfiguration, [
+                new EntityAttributeValueImpl(
+                        entityAttribute: 'entityClass',
+                        value: metaClass.name
+                )
+        ], viewName)
     }
 
     @Override
-    ImportConfiguration getImportConfigurations(MetaClass metaClass, String configName) {
-        if(metaClass==null)
-            return Collections.emptyList();
+    @SuppressWarnings('DuplicateStringLiteral')
+    ImportConfiguration getImportConfigurationByName(MetaClass metaClass, String configName) {
+        if (!metaClass) {
+            return []
+        }
 
-        def entityName = metaClass.name
+        def results = simpleDataLoader.loadAllByAttributes(ImportConfiguration, [
+                new EntityAttributeValueImpl(
+                        entityAttribute: 'entityClass',
+                        value: metaClass.name
+                ),
+                new EntityAttributeValueImpl(
+                        entityAttribute: 'name',
+                        value: configName
+                )
+        ], viewName)
 
-        LoadContext loadContext =
-                LoadContext.create(ImportConfiguration.class)
-                        .setQuery(
-                        LoadContext.createQuery('select o from ddcdi$ImportConfiguration o where o.entityClass = :entityName AND o.name = :cName')
-                                .setParameter("entityName", entityName)
-                                .setParameter("cName", configName))
-                        .setView("importConfiguration-view")
-
-        return dataManager.loadList(loadContext).first();
+        if (results && results.size() > 0) {
+            return results.first()
+        }
+        []
     }
 }

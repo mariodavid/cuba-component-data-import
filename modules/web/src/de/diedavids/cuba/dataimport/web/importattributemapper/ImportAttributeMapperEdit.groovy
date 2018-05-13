@@ -18,9 +18,8 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
     Metadata metadata
 
     @Inject
-    private LookupField entityAttributeId;
+    private LookupField entityAttributeId
 
-    private List<String> list = new ArrayList<>();
 
     @Inject
     MetaPropertyMatcher metaPropertyMatcher
@@ -28,54 +27,23 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
 
     @Override
     protected void postInit() {
-        if (getItem()) {
-
+        if (item) {
             //get selected entity
             try {
                 def entityClass = item.configuration.entityClass
                 def focusedClazz = metadata.getClass(entityClass)
-                list = metaPropertyMatcher.listProperties(new ArrayList<String>(), "", focusedClazz)
+                def list = metaPropertyMatcher.listProperties([], '', focusedClazz)
 
                 def found = list.find {
-                    it.toLowerCase().startsWith(getItem().fileColumnAlias.toLowerCase())
+                    it.toLowerCase().startsWith(item.fileColumnAlias.toLowerCase())
                 }
                 entityAttributeId.setOptionsList(list)
                 entityAttributeId.setValue(found)
 
             } catch (Exception e) {
-                showNotification("Something went wrong", NotificationType.ERROR)
+                showNotification('Something went wrong', NotificationType.ERROR)
             }
 
-        }
-    }
-
-    @Override
-    void init(Map<String, Object> params) {
-        entityAttributeId.setNewOptionAllowed(false)
-    }
-
-    /* Depreciated */
-
-    void listProperties(String prev, String entityName) {
-        if (entityName) {
-            def focusedClazz = metadata.getClass(entityName)
-            if (focusedClazz) {
-                focusedClazz.getProperties().each {
-                    if (!it.type.equals(com.haulmont.chile.core.model.MetaProperty.Type.ASSOCIATION)) {
-                        if (prev == null || prev.isEmpty())
-                            prev = ""
-                        else if (!prev.endsWith("."))
-                            prev += "."
-
-                        def val = prev.concat(it.name)
-                        list.add(val);
-                    } else {
-                        def nn = it.name
-                        def nextEntityName = it.getRange().asClass().name;
-                        listProperties(nn, nextEntityName)
-                    }
-                }
-            }
         }
     }
 }

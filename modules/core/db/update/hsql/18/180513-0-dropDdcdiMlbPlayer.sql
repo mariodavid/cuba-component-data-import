@@ -1,0 +1,1 @@
+alter table DDCDI_MLB_PLAYER rename to DDCDI_MLB_PLAYER__U79117 ;

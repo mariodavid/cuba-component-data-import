@@ -6,7 +6,6 @@ import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.CollectionDatasource
 import com.haulmont.cuba.gui.data.Datasource
-import com.haulmont.cuba.gui.data.ValueListener
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
@@ -32,6 +31,7 @@ class ImportWizard extends AbstractWindow {
     public static final String WIZARD_STEP_3 = 'step3'
     public static final String WIZARD_STEP_4 = 'step4'
     public static final String WIZARD_STEP_5 = 'step5'
+    public static final String TITLE_SUFFIX = 'Title'
 
     @Inject
     Accordion wizardAccordion
@@ -85,7 +85,6 @@ class ImportWizard extends AbstractWindow {
     @Inject
     EntityClassSelector entityClassSelector
 
-
     @Inject
     Datasource<ImportLog> importLogDs
 
@@ -103,60 +102,52 @@ class ImportWizard extends AbstractWindow {
     @Inject
     ImportAttributeMapperCreator importAttributeMapperCreator
 
-    ImportConfiguration defaultImportConfiguration;
+    ImportConfiguration defaultImportConfiguration
 
     @Inject
-    Button toStep3;
+    Button toStep3
 
     @Override
     void init(Map<String, Object> params) {
-
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
-
         importConfigurationDs.setItem(createImportConfiguration())
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
         initImportFileHandler()
         initImportFileParser()
-        initTitles();
-        configLookup.addListener(new ValueListener() {
+        initTitles()
+        initConfigLookupChange()
+    }
 
-            void valueChanged(Object source, String property, Object prevValue, Object value) {
-                if (value) {
-                    def vv = (ImportConfiguration) value;
-                    /*def importConfiguration = metadata.create(ImportConfiguration)
-                    importConfiguration.dateFormat = vv.dateFormat
-                    importConfiguration.booleanTrueValue = vv.booleanTrueValue
-                    importConfiguration.booleanFalseValue = vv.booleanFalseValue
-                    importConfiguration.importAttributeMappers = vv.importAttributeMappers
-                    */
-
-                    importConfigurationDs.setItem(vv)
+    void initConfigLookupChange() {
+        configLookup.addValueChangeListener(new com.haulmont.cuba.gui.components.Component.ValueChangeListener() {
+            @Override
+            void valueChanged(Component.ValueChangeEvent e) {
+                if (e.value) {
+                    importConfigurationDs.setItem((ImportConfiguration) e.value)
                 } else {
                     importConfigurationDs.setItem(defaultImportConfiguration)
-                    entityLookup.setValue(importConfigurationDs.getItem().entityClass)
+                    entityLookup.setValue(importConfigurationDs.item.entityClass)
                 }
-
             }
-        });
-
-
+        })
     }
 
     void initTitles() {
-        try {
-            def tabs = wizardAccordion.getTabs()
+
+        def tabs = wizardAccordion.tabs
+        if (tabs) {
             tabs.each {
-                it.caption = formatMessage(it.name.concat("Title"), "")
+                it.caption = formatMessage(it.name.concat(TITLE_SUFFIX), '')
             }
-        } catch (Exception e) {
         }
+
     }
 
     void initImportFileParser() {
         importFileParser = new ImportFileParser(
-                        importFileHandler: importFileHandler,
-                        dataConverterFactory: dataConverterFactory
+                importFileHandler: importFileHandler,
+                dataConverterFactory: dataConverterFactory
         )
     }
 
@@ -197,31 +188,21 @@ class ImportWizard extends AbstractWindow {
         importConfigurationDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener() {
             @Override
             void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
-
                 if (e.property == 'entityClass') {
-                    def className = e.value.toString()
-                    //((CreateAction) mapAttributesTable.getAction('create')).setWindowParams([SELECTED_ENTITY: className])
-                    //((EditAction) mapAttributesTable.getAction('edit')).setWindowParams([SELECTED_ENTITY: className])
-
-                    MetaClass selectedEntity = metadata.getClass(className)
+                    MetaClass selectedEntity = metadata.getClass(e.value.toString())
                     importData = importFileParser.parseFile()
-
-                    def selectedConfiguration = importConfigurationDs.getItem();
-
                     def mappers = importAttributeMapperCreator.createMappers(importData, selectedEntity)
                     mappers.each {
-                        it.setConfiguration(selectedConfiguration)
+                        it.setConfiguration(importConfigurationDs.item)
                         importAttributeMappersDatasource.addItem(it)
                     }
 
                     importConfigurationDs.item.importAttributeMappers = mappers
-                    if (configLookup.getValue() == null) {
+                    if (!configLookup.value) {
                         defaultImportConfiguration.importAttributeMappers = mappers
                     }
-
-                    mapAttributesTable.visible = true
-
                     configLookup.setOptionsList(importWizardService.getImportConfigurations(selectedEntity))
+                    mapAttributesTable.visible = true
                     configLookup.visible = true
                     toStep3.enabled = true
                 }
@@ -235,7 +216,6 @@ class ImportWizard extends AbstractWindow {
         showFilenameInStep1Title()
         toStep3.enabled = false
         //start auto-selection for the entity based on fuzzy search
-
     }
 
     private void showFilenameInStep1Title() {
@@ -265,7 +245,6 @@ class ImportWizard extends AbstractWindow {
     }
 
     void closeWizard() {
-
         if (importConfigurationDs.item.reuse) {
             importLogDs.item.file = importFileHandler.saveFile()
 
@@ -275,8 +254,6 @@ class ImportWizard extends AbstractWindow {
                     importLogDs.item
             )
         }
-
-
         close(CLOSE_ACTION_ID, true)
     }
 
@@ -307,13 +284,12 @@ class ImportWizard extends AbstractWindow {
         closeWizardAction.enabled = true
     }
 
-
     private void switchTabs(String previousTabName, String nextTabName) {
         wizardAccordion.getTab(nextTabName).enabled = true
         wizardAccordion.selectedTab = nextTabName
 
         Accordion.Tab previousTab = wizardAccordion.getTab(previousTabName)
-        previousTab.caption = formatMessage(previousTab.name + 'Title', " $check")
+        previousTab.caption = formatMessage(previousTab.name + TITLE_SUFFIX, " $check")
         //allow to return back: true
         previousTab.enabled = true
     }
