@@ -1,1 +1,0 @@
-alter table DDCDI_CUSTOMER rename to DDCDI_CUSTOMER__U77847 ;
