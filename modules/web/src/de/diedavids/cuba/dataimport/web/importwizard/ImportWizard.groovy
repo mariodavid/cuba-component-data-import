@@ -28,8 +28,8 @@ import javax.inject.Named
 @Slf4j
 class ImportWizard extends AbstractWindow {
 
-    public static final String WIZARD_STEP_2 = 'step2'
     public static final String WIZARD_STEP_1 = 'step1'
+    public static final String WIZARD_STEP_2 = 'step2'
     public static final String WIZARD_STEP_3 = 'step3'
     public static final String WIZARD_STEP_4 = 'step4'
     public static final String WIZARD_STEP_5 = 'step5'
@@ -112,7 +112,8 @@ class ImportWizard extends AbstractWindow {
     @Override
     void init(Map<String, Object> params) {
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
-        importConfigurationDs.setItem(createImportConfiguration())
+        importConfigurationDs.setItem(metadata.create(ImportConfiguration))
+
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
         initImportFileHandler()
@@ -176,15 +177,6 @@ class ImportWizard extends AbstractWindow {
             }
         })
     }
-
-    private ImportConfiguration createImportConfiguration() {
-        defaultImportConfiguration = metadata.create(ImportConfiguration)
-        defaultImportConfiguration.dateFormat = 'dd/MM/yyyy'
-        defaultImportConfiguration.booleanTrueValue = 'Yes'
-        defaultImportConfiguration.booleanFalseValue = 'No'
-        defaultImportConfiguration
-    }
-
 
     private initEntityClassPropertyChangeListener() {
         importConfigurationDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener() {
