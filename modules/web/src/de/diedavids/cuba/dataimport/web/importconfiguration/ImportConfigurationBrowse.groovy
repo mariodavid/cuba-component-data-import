@@ -5,6 +5,7 @@ import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.AbstractLookup
 import com.haulmont.cuba.gui.components.Frame
 import com.haulmont.cuba.gui.components.Table
+import com.haulmont.cuba.gui.components.Window
 import com.haulmont.cuba.gui.components.actions.CreateAction
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 
@@ -32,8 +33,6 @@ class ImportConfigurationBrowse extends AbstractLookup {
     }
 
     void executeImport() {
-
-        def importConfiguration = importConfigurationsTable.singleSelected
-        openEditor('ddcdi$import-with-import-configuration-wizard', importConfiguration, WindowManager.OpenType.DIALOG)
+        openEditor('ddcdi$import-with-import-configuration-wizard', importConfigurationsTable.singleSelected, WindowManager.OpenType.DIALOG)
     }
 }

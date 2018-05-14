@@ -31,6 +31,7 @@
                 <action id="remove"/>
                 <action id="import"
                         caption="msg://import"
+                        icon="icons/wf-design-import.png"
                         invoke="executeImport"
                         trackSelection="true"/>
             </actions>
@@ -41,8 +42,7 @@
             </columns>
             <rows datasource="importConfigurationsDs"/>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
+            <buttonsPanel id="buttonsPanel">
                 <button id="createBtn"
                         action="importConfigurationsTable.create"/>
                 <button id="editBtn"
@@ -51,7 +51,7 @@
                         action="importConfigurationsTable.remove"/>
                 <button id="importBtn"
                         action="importConfigurationsTable.import"
-                        icon="icons/wf-design-import.png"/>
+                        />
             </buttonsPanel>
         </groupTable>
     </layout>

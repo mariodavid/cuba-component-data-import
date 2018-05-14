@@ -9,6 +9,8 @@
             template="/de/diedavids/cuba/dataimport/web/importwizard/import-with-import-configuration-wizard.xml"/>
     <screen id="ddcdi$ImportAttributeMapper.edit"
             template="de/diedavids/cuba/dataimport/web/importattributemapper/import-attribute-mapper-edit.xml"/>
+    <screen id="ddcdi$ImportConfiguration.lookup"
+            template="de/diedavids/cuba/dataimport/web/importconfiguration/import-configuration-lookup.xml"/>
     <screen id="ddcdi$ImportConfiguration.browse"
             template="de/diedavids/cuba/dataimport/web/importconfiguration/import-configuration-browse.xml"/>
     <screen id="ddcdi$ImportConfiguration.edit"

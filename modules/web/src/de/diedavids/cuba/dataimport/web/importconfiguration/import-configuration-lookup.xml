@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://lookupCaption"
+        class="de.diedavids.cuba.dataimport.web.importconfiguration.ImportConfigurationLookup"
+        focusComponent="importConfigurationsTable"
+        lookupComponent="importConfigurationsTable"
+        messagesPack="de.diedavids.cuba.dataimport.web.importconfiguration">
+    <dsContext>
+        <collectionDatasource id="importConfigurationsDs"
+                              class="de.diedavids.cuba.dataimport.entity.ImportConfiguration"
+                              view="_local">
+            <query>
+                <![CDATA[select e from ddcdi$ImportConfiguration e]]>
+                <filter>
+                    <c>e.entityClass = :param$entityClass</c>
+                </filter>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="importConfigurationsTable"
+            spacing="true">
+        <table id="importConfigurationsTable"
+               settingsEnabled="false"
+               contextMenuEnabled="false"
+               presentations="false"
+               columnControlVisible="false"
+               width="100%">
+            <columns>
+                <column id="name"/>
+                <column id="comment"/>
+            </columns>
+            <rows datasource="importConfigurationsDs"/>
+            <rowsCount/>
+        </table>
+    </layout>
+</window>
