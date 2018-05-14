@@ -118,7 +118,6 @@ class ImportWizard extends AbstractWindow {
         initReusePropertyChangeListener()
         initImportFileHandler()
         initImportFileParser()
-        initTitles()
         initConfigLookupChange()
     }
 
@@ -134,17 +133,6 @@ class ImportWizard extends AbstractWindow {
                 }
             }
         })
-    }
-
-    void initTitles() {
-
-        def tabs = wizardAccordion.tabs
-        if (tabs) {
-            tabs.each {
-                it.caption = formatMessage(it.name.concat(TITLE_SUFFIX), '')
-            }
-        }
-
     }
 
     void initImportFileParser() {
@@ -190,9 +178,9 @@ class ImportWizard extends AbstractWindow {
                         it.setConfiguration(importConfigurationDs.item)
                         importAttributeMappersDatasource.addItem(it)
                     }
-
                     importConfigurationDs.item.importAttributeMappers = mappers
                     if (!configLookup.value) {
+                        defaultImportConfiguration = metadata.create(ImportConfiguration)
                         defaultImportConfiguration.importAttributeMappers = mappers
                     }
                     configLookup.setOptionsList(importWizardService.getImportConfigurations(selectedEntity) as List)
@@ -214,7 +202,7 @@ class ImportWizard extends AbstractWindow {
 
     private void showFilenameInStep1Title() {
         Accordion.Tab step1Tab = wizardAccordion.getTab(WIZARD_STEP_1)
-        step1Tab.caption = formatMessage('step1Title', " - ${importFileHandler.fileName} ${check}")
+        step1Tab.caption += " - ${importFileHandler.fileName}"
     }
 
     void toStep3() {
@@ -284,7 +272,10 @@ class ImportWizard extends AbstractWindow {
         wizardAccordion.selectedTab = nextTabName
 
         Accordion.Tab previousTab = wizardAccordion.getTab(previousTabName)
-        previousTab.caption = formatMessage(previousTab.name + TITLE_SUFFIX, " $check")
+        def caption = previousTab.caption
+        if (!caption.contains("$check")) {
+            previousTab.caption = "${previousTab.caption} $check"
+        }
         //allow to return back: true
         previousTab.enabled = true
     }

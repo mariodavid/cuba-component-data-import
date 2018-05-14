@@ -22,12 +22,10 @@
                 <fieldGroup id="fieldGroup"
                             datasource="importAttributeMapperDs">
                     <column width="250px">
-                        <field property="entityAttribute">
-                            <lookupField id="entityAttributeId" datasource="importAttributeMapperDs" property="entityAttribute"/>
-                        </field>
+                        <field property="dynamicAttribute"/>
+                        <field property="entityAttribute" custom="true"/>
                         <field property="fileColumnNumber"/>
                         <field property="fileColumnAlias"/>
-                        <field property="dynamicAttribute"/>
                     </column>
                 </fieldGroup>
             </tab>
