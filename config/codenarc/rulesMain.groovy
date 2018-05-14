@@ -119,7 +119,7 @@ ruleset {
     SynchronizedOnThis { priority = 1 }
     SynchronizedReadObjectMethod { priority = 1 }
     SystemRunFinalizersOnExit { priority = 1 }
-    ThisReferenceEscapesConstructor { priority = 1 }
+    // ThisReferenceEscapesConstructor { priority = 1 }
     ThreadGroup { priority = 1 }
     ThreadLocalNotStaticFinal { priority = 1 }
     ThreadYield { priority = 1 }

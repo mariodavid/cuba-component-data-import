@@ -13,6 +13,7 @@ public interface ImportWizardService {
 
     void saveImportConfiguration(ImportConfiguration importConfiguration, Collection<ImportAttributeMapper> importAttributeMapper, ImportLog importLog);
 
+
     Collection<ImportConfiguration> getImportConfigurations(MetaClass metaClass);
     
     ImportConfiguration getImportConfigurationByName(MetaClass metaClass, String configName);

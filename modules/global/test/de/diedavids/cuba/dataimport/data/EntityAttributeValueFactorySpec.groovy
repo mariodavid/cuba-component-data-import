@@ -4,6 +4,7 @@ import spock.lang.Specification
 
 class EntityAttributeValueFactorySpec extends Specification {
 
+
     def "ofMap returns a list of EntityAttributeValue elements for each key in the map"() {
         given:
         def sut = new EntityAttributeValueFactory()
@@ -22,4 +23,5 @@ class EntityAttributeValueFactorySpec extends Specification {
         entityAttributeValues[1].entityAttribute == 'description'
         entityAttributeValues[1].value == 'test description'
     }
+
 }

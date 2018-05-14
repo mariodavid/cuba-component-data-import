@@ -15,6 +15,7 @@ import javax.inject.Inject
 @Service(ImportWizardService.NAME)
 class ImportWizardServiceBean implements ImportWizardService {
 
+
     @Inject
     DataManager dataManager
 
@@ -23,8 +24,6 @@ class ImportWizardServiceBean implements ImportWizardService {
 
     @Inject
     EntityAttributeValueFactory entityAttributeValueFactory
-
-    final String viewName = 'importConfiguration-view'
 
     @Override
     void saveImportConfiguration(ImportConfiguration importConfiguration, Collection<ImportAttributeMapper> importAttributeMapper, ImportLog importLog) {
@@ -76,7 +75,8 @@ class ImportWizardServiceBean implements ImportWizardService {
 
 
     private Collection<ImportConfiguration> loadImportConfigurationWithAttributes(Map<String, Object> attributeMap) {
-        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap), viewName)
+        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap))
     }
+
 
 }
