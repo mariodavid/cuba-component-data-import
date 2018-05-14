@@ -23,8 +23,8 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
     @Inject
     MetaPropertyMatcher metaPropertyMatcher
 
-    @Named("fieldGroup.dynamicAttribute")
-    private CheckBox dynamicAttribute;
+    @Named('fieldGroup.dynamicAttribute')
+    private CheckBox dynamicAttribute
 
     @Inject
     private ComponentsFactory componentsFactory
@@ -50,10 +50,16 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
             }
         })
 
+        initDynamicAttributeChanger(lookupField)
+
+
+    }
+
+    void initDynamicAttributeChanger(LookupField lookupField) {
         dynamicAttribute.addValueChangeListener(new Component.ValueChangeListener() {
             @Override
             void valueChanged(Component.ValueChangeEvent e) {
-                if (Boolean.FALSE.equals(e.getValue())) {
+                if (Boolean.FALSE == e.value) {
                     lookupField.setNewOptionAllowed(false)
                     updateList(lookupField)
                 } else {
@@ -62,13 +68,10 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
                 }
             }
         })
-
-
     }
 
     void updateList(LookupField entityAttributeId) {
         if (item) {
-            //get selected entity
             try {
                 def entityClass = item.configuration.entityClass
                 def focusedClazz = metadata.getClass(entityClass)
@@ -78,9 +81,8 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
                     it.toLowerCase().startsWith(item.fileColumnAlias.toLowerCase())
                 }
 
-                if(item.dynamicAttribute){
-                    def attribute = item.entityAttribute
-                    found = attribute
+                if (item.dynamicAttribute) {
+                    found = item.entityAttribute
                     list = [found]
                 }
 
@@ -88,10 +90,8 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
                 entityAttributeId.setValue(found)
 
             } catch (Exception e) {
-                //showNotification('Something went wrong', NotificationType.ERROR)
                 entityAttributeId.setNewOptionAllowed(true)
             }
-
         }
     }
 }

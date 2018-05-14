@@ -33,7 +33,6 @@ class ImportWizard extends AbstractWindow {
     public static final String WIZARD_STEP_3 = 'step3'
     public static final String WIZARD_STEP_4 = 'step4'
     public static final String WIZARD_STEP_5 = 'step5'
-    public static final String TITLE_SUFFIX = 'Title'
 
     @Inject
     Accordion wizardAccordion
@@ -113,7 +112,6 @@ class ImportWizard extends AbstractWindow {
     void init(Map<String, Object> params) {
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
         importConfigurationDs.setItem(metadata.create(ImportConfiguration))
-
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
         initImportFileHandler()
@@ -192,12 +190,10 @@ class ImportWizard extends AbstractWindow {
         })
     }
 
-
     void toStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
         showFilenameInStep1Title()
         toStep3.enabled = false
-        //start auto-selection for the entity based on fuzzy search
     }
 
     private void showFilenameInStep1Title() {
@@ -243,7 +239,6 @@ class ImportWizard extends AbstractWindow {
         switchTabs(WIZARD_STEP_3, WIZARD_STEP_4)
         parseFileAndDisplay()
     }
-
 
     void parseFileAndDisplay() {
         importData = importFileParser.parseFile()
