@@ -104,7 +104,7 @@ class ImportWizard extends AbstractWindow {
 
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
 
-        importConfigurationDs.setItem(createImportConfiguration())
+        importConfigurationDs.setItem(metadata.create(ImportConfiguration))
 
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
@@ -142,15 +142,6 @@ class ImportWizard extends AbstractWindow {
             }
         })
     }
-
-    private ImportConfiguration createImportConfiguration() {
-        def importConfiguration = metadata.create(ImportConfiguration)
-        importConfiguration.dateFormat = 'dd/MM/yyyy'
-        importConfiguration.booleanTrueValue = 'Yes'
-        importConfiguration.booleanFalseValue = 'No'
-        importConfiguration
-    }
-
 
     private initEntityClassPropertyChangeListener() {
         importConfigurationDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener() {
