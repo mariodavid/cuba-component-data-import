@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="de.diedavids.cuba.dataimport.web.importwizard.ImportWithImportConfigurationWizard"
+        datasource="importConfigurationDs"
+        messagesPack="de.diedavids.cuba.dataimport.web.importwizard">
+    <dsContext>
+        <datasource id="importConfigurationDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportConfiguration"
+                    view="importConfiguration-view">
+            <collectionDatasource id="importAttributeMappersDatasource"
+                                  property="importAttributeMappers"/>
+            <collectionDatasource id="uniqueConfigurationDs"
+                                  property="uniqueConfigurations">
+                <collectionDatasource id="entityAttributesDs" property="entityAttributes" />
+            </collectionDatasource>
+        </datasource>
+        <datasource id="importLogDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportLog"/>
+    </dsContext>
+    <actions>
+        <action id="cancelWizardAction"
+                caption="mainMsg://action.cancel"
+                icon="icons/cancel.png"
+                invoke="cancelWizard"/>
+        <action id="toStep3"
+                caption="mainMsg://actions.Ok"
+                icon="icons/ok.png"
+                invoke="toStep3"/>
+        <action id="startImport"
+                caption="msg://startImport"
+                icon="icons/ok.png"
+                invoke="startImport"/>
+        <action id="closeWizardAction"
+                caption="mainMsg://actions.Ok"
+                enable="false"
+                icon="icons/ok.png"
+                invoke="closeWizard"/>
+    </actions>
+    <dialogMode forceDialog="true"
+                height="90%"
+                resizable="true"
+                width="75%"/>
+    <layout expand="wizardAccordion"
+            spacing="true">
+        <accordion id="wizardAccordion">
+            <tab id="step1"
+                 caption="msg://stepUploadFile"
+                 expand="dropZone"
+                 margin="true"
+                 spacing="true">
+                <buttonsPanel align="TOP_CENTER">
+                    <upload id="importFileUploadBtn"
+                            dropZone="dropZone"
+                            uploadButtonCaption="msg://uploadBtnCaption"
+                            uploadButtonDescription="msg://uploadBtnDescription"
+                            uploadButtonIcon="icons/upload.png"/>
+                </buttonsPanel>
+                <vbox id="dropZone"
+                      spacing="true"
+                      stylename="cuba-static-drop-zone">
+                    <label align="MIDDLE_CENTER"
+                           stylename="cuba-upload-dropzone-description"
+                           value="Drop file here..."/>
+                </vbox>
+            </tab>
+            <tab id="step2"
+                 caption="msg://stepImportPreview"
+                 enable="false"
+                 expand="resultTableBox"
+                 margin="true"
+                 spacing="true">
+                <vbox id="resultTableBox"
+                      height="100%"
+                      width="100%"/>
+                <buttonsPanel align="BOTTOM_RIGHT">
+                    <button id="startImportBtn"
+                            action="startImport"/>
+                </buttonsPanel>
+            </tab>
+            <tab id="step3"
+                 caption="msg://stepSummary"
+                 enable="false"
+                 margin="true"
+                 spacing="true">
+                <fieldGroup id="importSummaryFieldGroup"
+                            datasource="importLogDs">
+                    <field property="success"
+                           editable="false"/>
+                    <field property="entitiesProcessed"
+                           editable="false"/>
+                    <field property="entitiesImportSuccess"
+                           editable="false"/>
+                    <field property="entitiesImportValidationError"
+                           editable="false"/>
+                    <field property="entitiesPreCommitSkipped"
+                           editable="false"/>
+                    <field property="entitiesUniqueConstraintSkipped"
+                           editable="false"/>
+                </fieldGroup>
+            </tab>
+        </accordion>
+        <buttonsPanel align="BOTTOM_RIGHT">
+            <button id="closeWizard"
+                    action="closeWizardAction"/>
+            <button id="cancelWizard"
+                    action="cancelWizardAction"/>
+        </buttonsPanel>
+    </layout>
+</window>
