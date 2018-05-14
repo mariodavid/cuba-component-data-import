@@ -34,7 +34,6 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
 
     @Override
     protected void postInit() {
-
         FieldGroup.FieldConfig entityClassFieldConfig = fieldGroup.getField(ENTITY_ATTRIBUTE_FIELD_NAME)
         LookupField lookupField = componentsFactory.createComponent(LookupField)
         lookupField.setDatasource(importAttributeMapperDs, ENTITY_ATTRIBUTE_FIELD_NAME)
@@ -44,51 +43,59 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
         lookupField.setNewOptionHandler(new LookupField.NewOptionHandler() {
             @Override
             void addNewOption(String caption) {
-                showNotification(caption)
+                showNotification(String.format('Using a dynamic attribute: %s', caption))
                 lookupField.setValue(caption)
                 //TODO: check if new value is already in in the list, it shouldn't be dynamic in this case
             }
         })
-
         initDynamicAttributeChanger(lookupField)
-
-
     }
 
     void initDynamicAttributeChanger(LookupField lookupField) {
         dynamicAttribute.addValueChangeListener(new Component.ValueChangeListener() {
             @Override
             void valueChanged(Component.ValueChangeEvent e) {
-                if (Boolean.FALSE == e.value) {
-                    lookupField.setNewOptionAllowed(false)
-                    updateList(lookupField)
-                } else {
-                    lookupField.setNewOptionAllowed(true)
-                    updateList(lookupField)
-                }
+                updateList(lookupField)
             }
         })
+    }
+
+    void useDynamicAttributeInput(LookupField lookupField) {
+        lookupField.setNewOptionAllowed(true)
+        lookupField.setDescription('Add new dynamic attribute to the object')
+    }
+
+    void userPropertiesListInput(LookupField lookupField) {
+        lookupField.setNewOptionAllowed(false)
+        lookupField.setDescription(null)
+    }
+
+    List getList(ImportAttributeMapper item) {
+        if (item) {
+            def entityClass = item.configuration.entityClass
+            def focusedClazz = metadata.getClass(entityClass)
+            return metaPropertyMatcher.listProperties([], '', focusedClazz)
+        }
+        []
     }
 
     void updateList(LookupField entityAttributeId) {
         if (item) {
             try {
-                def entityClass = item.configuration.entityClass
-                def focusedClazz = metadata.getClass(entityClass)
-                def list = metaPropertyMatcher.listProperties([], '', focusedClazz)
-
+                def list = getList(item)
                 def found = list.find {
                     it.toLowerCase().startsWith(item.fileColumnAlias.toLowerCase())
                 }
 
                 if (item.dynamicAttribute) {
+                    useDynamicAttributeInput(entityAttributeId)
                     found = item.entityAttribute
                     list = [found]
+                } else {
+                    userPropertiesListInput(entityAttributeId)
                 }
-
                 entityAttributeId.setOptionsList(list)
                 entityAttributeId.setValue(found)
-
             } catch (Exception e) {
                 entityAttributeId.setNewOptionAllowed(true)
             }

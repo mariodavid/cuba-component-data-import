@@ -75,7 +75,7 @@ class ImportWizardServiceBean implements ImportWizardService {
 
 
     private Collection<ImportConfiguration> loadImportConfigurationWithAttributes(Map<String, Object> attributeMap) {
-        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap))
+        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap), 'importConfiguration-view')
     }
 
 
