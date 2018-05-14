@@ -1,5 +1,7 @@
 package de.diedavids.cuba.dataimport.web.action
 
+import com.haulmont.cuba.core.global.AppBeans
+import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.Component
 import com.haulmont.cuba.gui.components.ListComponent
@@ -8,9 +10,15 @@ import com.haulmont.cuba.gui.components.actions.BaseAction
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 
 class TableWithImportAction extends BaseAction {
+
+
+    Messages messages = AppBeans.<Messages> get(Messages)
+
     TableWithImportAction(ListComponent listComponent) {
         super('startImport')
         target = listComponent
+        setIcon('icons/wf-design-import.png')
+        setCaption(messages.getMainMessage('actions.Import'))
     }
 
     @Override
