@@ -49,7 +49,7 @@
             spacing="true">
         <accordion id="wizardAccordion">
             <tab id="step1"
-                 caption="msg://step1Title"
+                 caption="msg://stepUploadFile"
                  expand="dropZone"
                  margin="true"
                  spacing="true">
@@ -69,7 +69,7 @@
                 </vbox>
             </tab>
             <tab id="step2"
-                 caption="msg://step2Title"
+                 caption="msg://stepEntityMapping"
                  enable="false"
                  expand="mapAttributesTable"
                  margin="true"
@@ -113,7 +113,7 @@
                 </buttonsPanel>
             </tab>
             <tab id="step3"
-                 caption="msg://step3Title"
+                 caption="msg://stepImportConfiguration"
                  enable="false"
                  expand="importConfigurationContentBox"
                  margin="true"
@@ -216,7 +216,7 @@
                 </buttonsPanel>
             </tab>
             <tab id="step4"
-                 caption="msg://step4Title"
+                 caption="msg://stepImportPreview"
                  enable="false"
                  expand="resultTableBox"
                  margin="true"
@@ -230,7 +230,7 @@
                 </buttonsPanel>
             </tab>
             <tab id="step5"
-                 caption="msg://step5Title"
+                 caption="msg://stepSummary"
                  enable="false"
                  margin="true"
                  spacing="true">

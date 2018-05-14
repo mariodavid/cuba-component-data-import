@@ -29,6 +29,11 @@
                 <action id="create"/>
                 <action id="edit"/>
                 <action id="remove"/>
+                <action id="import"
+                        caption="msg://import"
+                        icon="icons/wf-design-import.png"
+                        invoke="executeImport"
+                        trackSelection="true"/>
             </actions>
             <columns>
                 <column id="name"/>
@@ -37,14 +42,16 @@
             </columns>
             <rows datasource="importConfigurationsDs"/>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
+            <buttonsPanel id="buttonsPanel">
                 <button id="createBtn"
                         action="importConfigurationsTable.create"/>
                 <button id="editBtn"
                         action="importConfigurationsTable.edit"/>
                 <button id="removeBtn"
                         action="importConfigurationsTable.remove"/>
+                <button id="importBtn"
+                        action="importConfigurationsTable.import"
+                        />
             </buttonsPanel>
         </groupTable>
     </layout>
