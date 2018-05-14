@@ -3,6 +3,9 @@ package de.diedavids.cuba.dataimport.entity;
 import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.haulmont.chile.core.datatypes.FormatStrings;
+import com.haulmont.chile.core.datatypes.FormatStringsRegistry;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -15,11 +18,12 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.List;
 import javax.persistence.OneToMany;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import javax.persistence.Transient;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.global.UserSessionSource;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")
@@ -214,8 +218,26 @@ public class ImportConfiguration extends StandardEntity {
 
 
     @PostConstruct
-    protected void initTransactionStrategy() {
+    protected void initDefaultValues() {
+        initDefaultTransactionStrategy();
+        initDefaultFormats();
+    }
+
+    private void initDefaultTransactionStrategy() {
         setTransactionStrategy(ImportTransactionStrategy.SINGLE_TRANSACTION);
+    }
+
+    private void initDefaultFormats() {
+        FormatStrings formatStrings = getFormatStrings();
+        setDateFormat(formatStrings.getDateFormat());
+        setBooleanTrueValue(formatStrings.getTrueString());
+        setBooleanFalseValue(formatStrings.getFalseString());
+    }
+
+    private FormatStrings getFormatStrings() {
+        UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
+        FormatStringsRegistry formatStringsRegistry = AppBeans.get(FormatStringsRegistry.NAME);
+        return formatStringsRegistry.getFormatStrings(userSessionSource.getLocale());
     }
 
 }
