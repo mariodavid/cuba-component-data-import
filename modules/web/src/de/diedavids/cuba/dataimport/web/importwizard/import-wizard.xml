@@ -11,7 +11,8 @@
                                   property="importAttributeMappers"/>
             <collectionDatasource id="uniqueConfigurationDs"
                                   property="uniqueConfigurations">
-                <collectionDatasource id="entityAttributesDs" property="entityAttributes" />
+                <collectionDatasource id="entityAttributesDs"
+                                      property="entityAttributes"/>
             </collectionDatasource>
         </datasource>
         <datasource id="importLogDs"
@@ -54,7 +55,6 @@
                  spacing="true">
                 <buttonsPanel align="TOP_CENTER">
                     <upload id="importFileUploadBtn"
-                            accept=".csv,.xlsx"
                             dropZone="dropZone"
                             uploadButtonCaption="msg://uploadBtnCaption"
                             uploadButtonDescription="msg://uploadBtnDescription"
@@ -115,90 +115,100 @@
             <tab id="step3"
                  caption="msg://stepImportConfiguration"
                  enable="false"
-                 margin="true"
                  expand="importConfigurationContentBox"
+                 margin="true"
                  spacing="true">
                 <vbox id="importConfigurationContentBox"
-                      spacing="true"
-                      expand="importConfigurationTabSheet">
+                      expand="importConfigurationTabSheet"
+                      spacing="true">
+                    <tabSheet id="importConfigurationTabSheet">
+                        <tab id="generalConfigurationTab"
+                             caption="msg://generalConfiguration"
+                             margin="true"
+                             spacing="true">
+                            <hbox spacing="true">
+                            <fieldGroup id="generalConfigurationFieldGroup"
+                                        border="visible"
+                                        caption="msg://generalConfiguration"
+                                        datasource="importConfigurationDs"
+                                        fieldCaptionWidth="200px"
+                                        >
+                                <field contextHelpText="msg://transactionStrategyHelp"
+                                       property="transactionStrategy"/>
+                            </fieldGroup>
+                            <fieldGroup id="formatConfigurationFieldGroup"
+                                        border="visible"
+                                        caption="msg://formatConfiguration"
+                                        datasource="importConfigurationDs"
+                                        fieldCaptionWidth="200px"
+                                        >
+                                <field property="dateFormat"/>
+                                <field property="booleanTrueValue"/>
+                                <field property="booleanFalseValue"/>
+                            </fieldGroup>
+                            </hbox>
 
-                        <tabSheet id="importConfigurationTabSheet">
-
-                            <tab id="formatConfigurationTab"
-                                 caption="msg://formatConfiguration"
-                                 margin="true"
-                                 spacing="true">
-                                <fieldGroup id="importConfigurationFieldGroup"
-                                            width="100%"
-                                            border="visible"
-                                            fieldCaptionWidth="250px"
-                                            caption="msg://formatConfiguration"
-                                            datasource="importConfigurationDs">
-                                    <field property="dateFormat"/>
-                                    <field property="booleanTrueValue"/>
-                                    <field property="booleanFalseValue"/>
-                                </fieldGroup>
-
-                                <fieldGroup id="reuseFieldGroup"
-                                            width="100%"
-                                            border="visible"
-                                            fieldCaptionWidth="250px"
-                                            caption="msg://saveConfiguration"
-                                            datasource="importConfigurationDs">
-                                    <field property="reuse"/>
-                                    <field property="name"
-                                           visible="false"/>
-                                    <field property="comment"
-                                           rows="3"
-                                           width="100%"
-                                           visible="false"/>
-                                </fieldGroup>
-                            </tab>
-
-
-                            <tab id="preCommitScriptTab"
-                                 margin="true"
-                                 spacing="true"
-                                 expand="preCommitScriptEditor"
-                                 caption="msg://preCommitScriptTab">
-                                <sourceCodeEditor id="preCommitScriptEditor"
-                                                  mode="Groovy"
-                                                  datasource="importConfigurationDs"
-                                                  property="preCommitScript"
-                                                  width="100%"
-                                                  height="100%"
-                                                  contextHelpText="msg://preCommitScriptHelp"
-                                />
-                            </tab>
-                            <tab id="uniqueConfigurationTab"
-                                     caption="msg://uniqueConfigurationsTab"
-                                     expand="uniqueConfigurationsTable"
-                                     margin="true"
-                                     spacing="true">
-                                    <table id="uniqueConfigurationsTable"
-                                           height="100%"
-                                           width="100%">
-                                        <actions>
-                                            <action id="create" openType="DIALOG"/>
-                                            <action id="edit" openType="DIALOG"/>
-                                            <action id="remove"/>
-                                        </actions>
-                                        <columns>
-                                            <column id="policy" />
-                                            <column id="entityAttributes" />
-                                        </columns>
-                                        <rows datasource="uniqueConfigurationDs"/>
-                                        <buttonsPanel>
-                                            <button action="uniqueConfigurationsTable.create"/>
-                                            <button action="uniqueConfigurationsTable.edit"/>
-                                            <button action="uniqueConfigurationsTable.remove"/>
-                                        </buttonsPanel>
-                                    </table>
-                            </tab>
-
-                        </tabSheet>
-
-
+                        </tab>
+                        <tab id="preCommitScriptTab"
+                             caption="msg://preCommitScriptTab"
+                             expand="preCommitScriptEditor"
+                             margin="true"
+                             spacing="true">
+                            <sourceCodeEditor id="preCommitScriptEditor"
+                                              contextHelpText="msg://preCommitScriptHelp"
+                                              datasource="importConfigurationDs"
+                                              height="100%"
+                                              mode="Groovy"
+                                              property="preCommitScript"
+                                              width="100%"/>
+                        </tab>
+                        <tab id="uniqueConfigurationTab"
+                             caption="msg://uniqueConfigurationsTab"
+                             expand="uniqueConfigurationsTable"
+                             margin="true"
+                             spacing="true">
+                            <table id="uniqueConfigurationsTable"
+                                   height="100%"
+                                   width="100%">
+                                <actions>
+                                    <action id="create"
+                                            openType="DIALOG"/>
+                                    <action id="edit"
+                                            openType="DIALOG"/>
+                                    <action id="remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="policy"/>
+                                    <column id="entityAttributes"/>
+                                </columns>
+                                <rows datasource="uniqueConfigurationDs"/>
+                                <buttonsPanel>
+                                    <button action="uniqueConfigurationsTable.create"/>
+                                    <button action="uniqueConfigurationsTable.edit"/>
+                                    <button action="uniqueConfigurationsTable.remove"/>
+                                </buttonsPanel>
+                            </table>
+                        </tab>
+                        <tab id="saveConfigurationTab"
+                             caption="msg://saveConfigurationTab"
+                             margin="true"
+                             spacing="true">
+                            <fieldGroup id="reuseFieldGroup"
+                                        border="visible"
+                                        caption="msg://saveConfiguration"
+                                        datasource="importConfigurationDs"
+                                        fieldCaptionWidth="250px"
+                                        width="100%">
+                                <field property="reuse"/>
+                                <field property="name"
+                                       visible="false"/>
+                                <field property="comment"
+                                       rows="3"
+                                       visible="false"
+                                       width="100%"/>
+                            </fieldGroup>
+                        </tab>
+                    </tabSheet>
                 </vbox>
                 <buttonsPanel align="BOTTOM_RIGHT">
                     <button id="toStep4"
@@ -226,10 +236,18 @@
                  spacing="true">
                 <fieldGroup id="importSummaryFieldGroup"
                             datasource="importLogDs">
-                    <field editable="false"
-                           property="success"/>
-                    <field editable="false"
-                           property="entitiesProcessed"/>
+                    <field property="success"
+                           editable="false"/>
+                    <field property="entitiesProcessed"
+                           editable="false"/>
+                    <field property="entitiesImportSuccess"
+                           editable="false"/>
+                    <field property="entitiesImportValidationError"
+                           editable="false"/>
+                    <field property="entitiesPreCommitSkipped"
+                           editable="false"/>
+                    <field property="entitiesUniqueConstraintSkipped"
+                           editable="false"/>
                 </fieldGroup>
             </tab>
         </accordion>

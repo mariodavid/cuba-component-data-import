@@ -6,6 +6,7 @@ import com.haulmont.chile.core.model.Range
 import com.haulmont.cuba.core.app.importexport.EntityImportExportAPI
 import com.haulmont.cuba.core.app.importexport.EntityImportView
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour
+import com.haulmont.cuba.core.entity.BaseGenericIdEntity
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
@@ -19,6 +20,7 @@ import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 
 import javax.inject.Inject
+import javax.validation.ConstraintViolation
 
 @Slf4j
 @Service(GenericDataImporterService.NAME)
@@ -33,17 +35,15 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     @Inject
     EntityBinder dataImportEntityBinder
 
-
-
     @Inject
     Scripting scripting
 
     @Inject
     DataManager dataManager
 
-
     @Inject
     UniqueEntityFinderService uniqueEntityFinderService
+
 
     @Override
     ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
@@ -52,82 +52,114 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         ImportLog importLog = createImportLog(importConfiguration)
 
-        try {
-            Collection<Entity> importEntities = importEntities(entities, importConfiguration)
-            importLog.entitiesProcessed = importEntities.size()
-            importLog.success = true
-        }
-        catch (EntityValidationException e) {
-            log.error('Import failed due to validation errors of one or more entities', e)
-            importLog.entitiesProcessed = 0
-            importLog.success = false
-        }
-        importLog
+        importEntities(entities, importConfiguration, importLog)
     }
 
-    private Collection<Entity> importEntities(Collection<BindedEntity> entities, ImportConfiguration importConfiguration) {
+    private ImportLog importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
         def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
         def importEntityClass = importEntityMetaClass.javaClass
-        EntityImportView importView = creteEntityImportView(importEntityClass, importConfiguration)
-        Collection<Entity> importedEntities = []
+        EntityImportView importView = createEntityImportView(importEntityClass, importConfiguration)
+        Collection<ImportEntityRequest> importedEntities = []
 
-        entities.each { BindedEntity bindedEntity ->
-            importEntity(bindedEntity, importView, importedEntities, importConfiguration)
+        if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
+            entities.each { ImportEntityRequest importEntityRequest ->
+                importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
+            }
+        } else {
+            importAllEntities(entities, importView, importedEntities, importConfiguration, importLog)
+
         }
 
-        importedEntities
+        importLog
 
     }
 
-    private List<UniqueConfiguration> importEntity(BindedEntity bindedEntity, EntityImportView importView, Collection<Entity> importedEntities, ImportConfiguration importConfiguration) {
+    private void importAllEntities(Collection<ImportEntityRequest> entities, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
+        entities.each { ImportEntityRequest importEntityRequest ->
+            importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
+        }
+
+        try {
+            entityImportExportAPI.importEntities(importedEntities*.entity, importView, true)
+            importLog.entitiesProcessed = entities.size()
+            importLog.entitiesImportSuccess = importedEntities.size()
+
+        }
+        catch (EntityValidationException e) {
+            log.warn('Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.', e)
+            importLog.entitiesProcessed = 0
+            importLog.success = false
+        }
+    }
+
+    private void importSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
         if (importConfiguration.uniqueConfigurations) {
             importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
 
-                def alreadyExistingEntity = uniqueEntityFinderService.findEntity(bindedEntity.entity, uniqueConfiguration)
+                def alreadyExistingEntity = uniqueEntityFinderService.findEntity(importEntityRequest.entity, uniqueConfiguration)
 
                 if (!alreadyExistingEntity) {
-                    doImportEntity(bindedEntity, importView, importedEntities, importConfiguration)
-                }
+                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
+                } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
+                    importEntityRequest.entity = bindAttributes(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity)
 
-                if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
-                    bindedEntity.entity = bindAttributes(importConfiguration, bindedEntity.dataRow, alreadyExistingEntity)
-                    doImportEntity(bindedEntity, importView, importedEntities, importConfiguration)
+                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
+                } else {
+                    importLog.entitiesUniqueConstraintSkipped++
                 }
-
             }
-        }
-        else {
-            doImportEntity(bindedEntity, importView, importedEntities, importConfiguration)
+        } else {
+            doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
         }
     }
 
-    private void doImportEntity(BindedEntity bindedEntity, EntityImportView importView, Collection<Entity> importedEntities, ImportConfiguration importConfiguration) {
+    private void doImportSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
-        def binding = new Binding(
-                entity: bindedEntity.entity,
-                dataRow: bindedEntity.dataRow,
+        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration)
+
+        if (entityShouldBeImported) {
+            if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
+                tryToExecuteImport(importEntityRequest, importView, importLog)
+            }
+            importedEntities << importEntityRequest
+        } else {
+            importLog.entitiesPreCommitSkipped++
+        }
+
+        importLog.entitiesProcessed++
+
+    }
+
+    private void tryToExecuteImport(ImportEntityRequest importEntityRequest, EntityImportView importView, ImportLog importLog) {
+        try {
+            entityImportExportAPI.importEntities([importEntityRequest.entity], importView, true)
+            importLog.entitiesImportSuccess++
+        }
+        catch (EntityValidationException e) {
+            importEntityRequest.constraintViolations = e.constraintViolations
+            importLog.entitiesImportValidationError++
+            importLog.success = false
+        }
+    }
+
+    private Binding createPreCommitBinding(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration) {
+        new Binding(
+                entity: importEntityRequest.entity,
+                dataRow: importEntityRequest.dataRow,
                 dataManager: dataManager,
                 importConfiguration: importConfiguration,
         )
-
-        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importConfiguration, binding)
-
-        if (entityShouldBeImported) {
-            entityImportExportAPI.importEntities([bindedEntity.entity], importView, true)
-            importedEntities << bindedEntity.entity
-        }
-
     }
 
 
-
-    private boolean executePreCommitScriptIfNecessary(ImportConfiguration importConfiguration, Binding binding) {
+    private boolean executePreCommitScriptIfNecessary(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration) {
+        Binding preCommitBinding = createPreCommitBinding(importEntityRequest, importConfiguration)
         def preCommitScript = importConfiguration.preCommitScript
         try {
             if (preCommitScript) {
-                return scripting.evaluateGroovy(preCommitScript, binding)
+                return scripting.evaluateGroovy(preCommitScript, preCommitBinding)
             }
             return true
         }
@@ -138,14 +170,19 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
 
-
     private ImportLog createImportLog(ImportConfiguration importConfiguration) {
         ImportLog importLog = metadata.create(ImportLog)
+        importLog.entitiesProcessed = 0
+        importLog.entitiesImportSuccess = 0
+        importLog.entitiesImportValidationError = 0
+        importLog.entitiesPreCommitSkipped = 0
+        importLog.entitiesUniqueConstraintSkipped = 0
+        importLog.success = true
         importLog.configuration = importConfiguration
         importLog
     }
 
-    private EntityImportView creteEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {
+    private EntityImportView createEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {
         EntityImportView importView = new EntityImportView(importEntityClass)
                 .addLocalProperties()
         addAssociationPropertiesToImportView(importConfiguration, importView)
@@ -153,14 +190,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importView
     }
 
-    private void addAssociationPropertiesToImportView(ImportConfiguration importConfiguration, importView) {
+    private void addAssociationPropertiesToImportView(ImportConfiguration importConfiguration, EntityImportView importView) {
         importConfiguration.importAttributeMappers.each { ImportAttributeMapper importAttributeMapper ->
             def importEntityClassName = importConfiguration.entityClass
 
             def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + '.')
             MetaPropertyPath path = metadata.getClass(importEntityClassName).getPropertyPath(entityAttribute)
 
-            if (isAssociatedAttribute(path)) {
+            if (isAssociationAttribute(importAttributeMapper, path)) {
                 def associationMetaProperty = path.metaProperties[0]
                 def associationMetaPropertyName = associationMetaProperty.name
                 if (associationMetaProperty.type == MetaProperty.Type.ASSOCIATION && associationMetaProperty.range.cardinality == Range.Cardinality.MANY_TO_ONE) {
@@ -170,21 +207,20 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    private boolean isAssociatedAttribute(MetaPropertyPath path) {
-        path.metaProperties.size() > 1
+    private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper, MetaPropertyPath path) {
+        !importAttributeMapper.dynamicAttribute && path?.metaProperties?.size() > 1
     }
 
-
-    Collection<BindedEntity> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
+    Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
         importData.rows.collect {
             createEntityFromRow(importConfiguration, it)
         }
     }
 
-    BindedEntity createEntityFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
+    ImportEntityRequest createEntityFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
-        new BindedEntity(
+        new ImportEntityRequest(
                 entity: bindAttributes(importConfiguration, dataRow, entityInstance),
                 dataRow: dataRow
         )
@@ -195,11 +231,18 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private Entity createEntityInstance(ImportConfiguration importConfiguration) {
-        metadata.create(importConfiguration.entityClass)
+        Entity entity = metadata.create(importConfiguration.entityClass)
+        ((BaseGenericIdEntity) entity).dynamicAttributes = [:]
+        entity
     }
 }
 
-class BindedEntity {
+class ImportEntityRequest {
     Entity entity
     DataRow dataRow
+    Set<ConstraintViolation> constraintViolations = []
+
+    boolean isSuccess() {
+        constraintViolations.isEmpty()
+    }
 }

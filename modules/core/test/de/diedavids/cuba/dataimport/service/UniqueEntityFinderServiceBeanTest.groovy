@@ -29,7 +29,8 @@ class UniqueEntityFinderServiceBeanTest extends AbstractDbIntegrationTest {
                 importAttributeMappers: [
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'name', fileColumnNumber: 0),
                         new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.height', fileColumnAlias: 'height', fileColumnNumber: 2),
-                ]
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
 

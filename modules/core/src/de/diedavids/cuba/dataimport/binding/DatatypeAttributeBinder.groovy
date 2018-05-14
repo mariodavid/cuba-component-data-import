@@ -17,11 +17,12 @@ class DatatypeAttributeBinder implements AttributeBinder {
     }
 
     private getValue(AttributeBindRequest bindRequest) {
-        switch (bindRequest.metaProperty.javaType) {
+        switch (bindRequest.javaType) {
             case Integer: return getIntegerValue(bindRequest.rawValue, bindRequest.dataRow)
             case Double: return getDoubleValue(bindRequest.rawValue, bindRequest.dataRow)
             case Date: return getDateValue(bindRequest.importConfiguration, bindRequest.rawValue)
             case Boolean: return getBooleanValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
+            case BigDecimal: return getBigDecimalValue(bindRequest.rawValue, bindRequest.dataRow)
             case String: return getStringValue(bindRequest.rawValue)
         }
     }
@@ -52,7 +53,7 @@ class DatatypeAttributeBinder implements AttributeBinder {
         try {
             return Boolean.parseBoolean(rawValue)
         }
-        catch (NumberFormatException e) {
+        catch (Exception e) {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
         }
     }
@@ -70,6 +71,15 @@ class DatatypeAttributeBinder implements AttributeBinder {
     private Double getDoubleValue(String rawValue, DataRow dataRow) {
         try {
             return Double.parseDouble(rawValue)
+        }
+        catch (NumberFormatException e) {
+            log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
+    }
+
+    private BigDecimal getBigDecimalValue(String rawValue, DataRow dataRow) {
+        try {
+            return new BigDecimal(rawValue)
         }
         catch (NumberFormatException e) {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")

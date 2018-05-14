@@ -1,7 +1,11 @@
 package de.diedavids.cuba.dataimport.entity;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.haulmont.chile.core.datatypes.FormatStrings;
+import com.haulmont.chile.core.datatypes.FormatStringsRegistry;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -14,11 +18,12 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.List;
 import javax.persistence.OneToMany;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import javax.persistence.Transient;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.global.UserSessionSource;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")
@@ -29,6 +34,10 @@ public class ImportConfiguration extends StandardEntity {
     @NotNull
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @NotNull
+    @Column(name = "TRANSACTION_STRATEGY", nullable = false)
+    protected String transactionStrategy;
 
     @NotNull
     @Column(name = "ENTITY_CLASS", nullable = false)
@@ -77,6 +86,15 @@ public class ImportConfiguration extends StandardEntity {
     @Lob
     @Column(name = "PRE_COMMIT_SCRIPT")
     protected String preCommitScript;
+
+    public void setTransactionStrategy(ImportTransactionStrategy transactionStrategy) {
+        this.transactionStrategy = transactionStrategy == null ? null : transactionStrategy.getId();
+    }
+
+    public ImportTransactionStrategy getTransactionStrategy() {
+        return transactionStrategy == null ? null : ImportTransactionStrategy.fromId(transactionStrategy);
+    }
+
 
     public void setPreCommitScript(String preCommitScript) {
         this.preCommitScript = preCommitScript;
@@ -198,5 +216,28 @@ public class ImportConfiguration extends StandardEntity {
         return importerBeanName;
     }
 
+
+    @PostConstruct
+    protected void initDefaultValues() {
+        initDefaultTransactionStrategy();
+        initDefaultFormats();
+    }
+
+    private void initDefaultTransactionStrategy() {
+        setTransactionStrategy(ImportTransactionStrategy.SINGLE_TRANSACTION);
+    }
+
+    private void initDefaultFormats() {
+        FormatStrings formatStrings = getFormatStrings();
+        setDateFormat(formatStrings.getDateFormat());
+        setBooleanTrueValue(formatStrings.getTrueString());
+        setBooleanFalseValue(formatStrings.getFalseString());
+    }
+
+    private FormatStrings getFormatStrings() {
+        UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
+        FormatStringsRegistry formatStringsRegistry = AppBeans.get(FormatStringsRegistry.NAME);
+        return formatStringsRegistry.getFormatStrings(userSessionSource.getLocale());
+    }
 
 }

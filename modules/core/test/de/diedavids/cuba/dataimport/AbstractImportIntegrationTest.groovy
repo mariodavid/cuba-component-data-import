@@ -4,7 +4,7 @@ import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 
-abstract class AbstractImpotrIntegrationTest extends AbstractDbIntegrationTest {
+abstract class AbstractImportIntegrationTest extends AbstractDbIntegrationTest {
 
 
     ImportData createData(List<Map<String, Object>> data) {

@@ -14,7 +14,6 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
-import de.diedavids.cuba.dataimport.service.DataImportService
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
@@ -72,9 +71,6 @@ class ImportWizard extends AbstractWindow {
     Datasource<ImportConfiguration> importConfigurationDs
 
     @Inject
-    DataImportService dataImportService
-
-    @Inject
     GenericDataImporterService genericDataImporterService
 
     ImportData importData
@@ -108,7 +104,7 @@ class ImportWizard extends AbstractWindow {
 
         entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
 
-        importConfigurationDs.setItem(createImportConfiguration())
+        importConfigurationDs.setItem(metadata.create(ImportConfiguration))
 
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
@@ -146,15 +142,6 @@ class ImportWizard extends AbstractWindow {
             }
         })
     }
-
-    private ImportConfiguration createImportConfiguration() {
-        def importConfiguration = metadata.create(ImportConfiguration)
-        importConfiguration.dateFormat = 'dd/MM/yyyy'
-        importConfiguration.booleanTrueValue = 'Yes'
-        importConfiguration.booleanFalseValue = 'No'
-        importConfiguration
-    }
-
 
     private initEntityClassPropertyChangeListener() {
         importConfigurationDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener() {
@@ -230,7 +217,6 @@ class ImportWizard extends AbstractWindow {
     void toStep4() {
         switchTabs(WIZARD_STEP_3, WIZARD_STEP_4)
         parseFileAndDisplay()
-        closeWizardAction.enabled = true
     }
 
 

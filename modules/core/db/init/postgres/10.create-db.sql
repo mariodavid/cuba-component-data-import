@@ -13,6 +13,10 @@ create table DDCDI_IMPORT_LOG (
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED integer,
+    ENTITIES_IMPORT_SUCCESS integer,
+    ENTITIES_IMPORT_VAL_ERROR integer,
+    ENTITIES_PRE_COMMIT_SKIPPED integer,
+    ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
     SUCCESS boolean not null,
     CONFIGURATION_ID uuid not null,
     --
@@ -51,6 +55,7 @@ create table DDCDI_IMPORT_CONFIGURATION (
     DELETED_BY varchar(50),
     --
     NAME varchar(255) not null,
+    TRANSACTION_STRATEGY varchar(50) not null,
     ENTITY_CLASS varchar(255) not null,
     AD_HOC boolean,
     TEMPLATE_ID uuid,
@@ -77,6 +82,7 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     --
     CONFIGURATION_ID uuid not null,
     ENTITY_ATTRIBUTE varchar(255) not null,
+    DYNAMIC_ATTRIBUTE boolean,
     FILE_COLUMN_NUMBER integer not null,
     FILE_COLUMN_ALIAS varchar(255),
     CUSTOM_ATTRIBUTE_BIND_SCRIPT text,

@@ -5,6 +5,8 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,6 +42,18 @@ public class MlbPlayer extends StandardEntity {
 
     @Column(name = "LEFT_HANDED")
     protected Boolean leftHanded;
+
+    @Column(name = "ANNUAL_SALARY")
+    protected BigDecimal annualSalary;
+
+    public void setAnnualSalary(BigDecimal annualSalary) {
+        this.annualSalary = annualSalary;
+    }
+
+    public BigDecimal getAnnualSalary() {
+        return annualSalary;
+    }
+
 
     public void setLeftHanded(Boolean leftHanded) {
         this.leftHanded = leftHanded;

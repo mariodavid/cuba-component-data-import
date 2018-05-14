@@ -13,8 +13,15 @@ class MetaPropertyMatcher {
 
         MetaProperty possibleProperty = findPropertyByColumn(selectedEntity, column)
 
-        possibleProperty?.toString() ?: ''
+        String result = ''
+        if (possibleProperty && isSimpleDatatype(possibleProperty)) {
+                result = possibleProperty.name
+        }
+        result
+    }
 
+    private boolean isSimpleDatatype(MetaProperty possibleProperty) {
+        possibleProperty.type != MetaProperty.Type.ASSOCIATION && possibleProperty.type != MetaProperty.Type.COMPOSITION
     }
 
     private MetaProperty findPropertyByColumn(MetaClass selectedEntity, String column) {

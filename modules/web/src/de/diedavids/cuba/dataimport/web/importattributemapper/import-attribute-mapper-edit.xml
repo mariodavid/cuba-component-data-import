@@ -10,33 +10,36 @@
                     class="de.diedavids.cuba.dataimport.entity.ImportAttributeMapper"
                     view="_local"/>
     </dsContext>
-    <dialogMode
-        height="600px"
-        width="800px" />
+    <dialogMode height="400px"
+                width="600px"/>
     <layout expand="contentTabSheet"
             spacing="true">
-
-
         <tabSheet id="contentTabSheet">
-            <tab id="dataTab" caption="msg://dataTab" spacing="true" margin="true">
+            <tab id="dataTab"
+                 caption="msg://dataTab"
+                 margin="true"
+                 spacing="true">
                 <fieldGroup id="fieldGroup"
                             datasource="importAttributeMapperDs">
                     <column width="250px">
                         <field property="entityAttribute"/>
                         <field property="fileColumnNumber"/>
                         <field property="fileColumnAlias"/>
+                        <field property="dynamicAttribute"/>
                     </column>
                 </fieldGroup>
             </tab>
-            <tab id="customBindingScriptTab" caption="msg://customBindingScriptTab" spacing="true" margin="true">
+            <tab id="customBindingScriptTab"
+                 caption="msg://customBindingScriptTab"
+                 margin="true"
+                 spacing="true">
                 <sourceCodeEditor id="customAttributeBindScriptEditor"
-                                  mode="Groovy"
-                                  datasource="importAttributeMapperDs"
-                                  property="customAttributeBindScript"
-                                  width="100%"
-                                  height="100%"
                                   contextHelpText="msg://customAttributeBindScriptHelp"
-                                  />
+                                  datasource="importAttributeMapperDs"
+                                  height="100%"
+                                  mode="Groovy"
+                                  property="customAttributeBindScript"
+                                  width="100%"/>
             </tab>
         </tabSheet>
         <frame id="windowActions"
