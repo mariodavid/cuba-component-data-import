@@ -10,6 +10,11 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
+
+
+        maven {
+            url  "https://dl.bintray.com/balvi/cuba-components"
+        }
         
     }
     dependencies {
@@ -95,6 +100,7 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.4.0")
 
 }
 
