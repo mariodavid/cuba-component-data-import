@@ -42,8 +42,8 @@ class WithImportBrowseAnnotationExecutor implements BrowseAnnotationExecutor<Wit
         listComponent.addAction(action)
         if (annotation.buttonsPanel()) {
             ButtonsPanel buttonsPanel = browse.getComponent(annotation.buttonsPanel()) as ButtonsPanel
-            Button attachmentsBtn = buttonsPanelHelper.createButton(annotation.buttonId(), buttonsPanel, PRE_BUTTONS)
-            attachmentsBtn.action = action
+            Button destinationBtn = buttonsPanelHelper.createButton(annotation.buttonId(), buttonsPanel, PRE_BUTTONS)
+            destinationBtn.action = action
         }
     }
 
