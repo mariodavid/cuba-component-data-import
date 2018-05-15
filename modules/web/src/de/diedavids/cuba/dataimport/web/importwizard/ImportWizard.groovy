@@ -61,9 +61,6 @@ class ImportWizard extends AbstractWindow {
     LookupField entityLookup
 
     @Inject
-    LookupField configLookup
-
-    @Inject
     Metadata metadata
 
     @Inject
@@ -116,21 +113,6 @@ class ImportWizard extends AbstractWindow {
         initReusePropertyChangeListener()
         initImportFileHandler()
         initImportFileParser()
-        initConfigLookupChange()
-    }
-
-    void initConfigLookupChange() {
-        configLookup.addValueChangeListener(new Component.ValueChangeListener() {
-            @Override
-            void valueChanged(Component.ValueChangeEvent e) {
-                if (e.value) {
-                    importConfigurationDs.setItem((ImportConfiguration) e.value)
-                } else {
-                    importConfigurationDs.setItem(defaultImportConfiguration)
-                    entityLookup.setValue(importConfigurationDs.item.entityClass)
-                }
-            }
-        })
     }
 
     void initImportFileParser() {
@@ -177,13 +159,7 @@ class ImportWizard extends AbstractWindow {
                         importAttributeMappersDatasource.addItem(it)
                     }
                     importConfigurationDs.item.importAttributeMappers = mappers
-                    if (!configLookup.value) {
-                        defaultImportConfiguration = metadata.create(ImportConfiguration)
-                        defaultImportConfiguration.importAttributeMappers = mappers
-                    }
-                    configLookup.setOptionsList(importWizardService.getImportConfigurations(selectedEntity) as List)
                     mapAttributesTable.visible = true
-                    configLookup.visible = true
                     toStep3.enabled = true
                 }
             }
