@@ -20,10 +20,14 @@
                  margin="true"
                  spacing="true">
                 <fieldGroup id="fieldGroup"
+                            fieldCaptionWidth="200px"
                             datasource="importAttributeMapperDs">
                     <column width="250px">
-                        <field property="dynamicAttribute"/>
-                        <field property="entityAttribute" custom="true"/>
+                        <field property="attributeType" custom="true"/>
+                        <field property="entityAttribute" custom="true" />
+                        <field property="dynamicEntityAttribute" custom="true" />
+                        <field property="associationEntityAttribute" custom="true" />
+                        <field property="associationLookupAttribute" custom="true" />
                         <field property="fileColumnNumber"/>
                         <field property="fileColumnAlias"/>
                     </column>

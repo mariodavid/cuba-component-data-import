@@ -15,7 +15,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
-import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
+import de.diedavids.cuba.dataimport.web.util.MetadataSelector
 import org.apache.commons.io.FileUtils
 
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
     private ComponentsFactory componentsFactory
 
     @Inject
-    EntityClassSelector entityClassSelector
+    MetadataSelector entityClassSelector
 
     @Inject
     ImportAttributeMapperCreator importAttributeMapperCreator

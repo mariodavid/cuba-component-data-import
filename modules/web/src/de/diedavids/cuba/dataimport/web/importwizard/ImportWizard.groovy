@@ -19,7 +19,7 @@ import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileHandler
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
-import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
+import de.diedavids.cuba.dataimport.web.util.MetadataSelector
 import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
@@ -81,7 +81,7 @@ class ImportWizard extends AbstractWindow {
     Action closeWizardAction
 
     @Inject
-    EntityClassSelector entityClassSelector
+    MetadataSelector metadataSelector
 
     @Inject
     Datasource<ImportLog> importLogDs
@@ -107,7 +107,7 @@ class ImportWizard extends AbstractWindow {
 
     @Override
     void init(Map<String, Object> params) {
-        entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
+        entityLookup.setOptionsMap(metadataSelector.entitiesLookupFieldOptions)
         importConfigurationDs.setItem(metadata.create(ImportConfiguration))
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()

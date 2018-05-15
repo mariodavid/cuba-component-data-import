@@ -1,18 +1,18 @@
 package de.diedavids.cuba.dataimport.web.importattributemapper
 
+import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.MetaPropertyMatcher
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.web.util.MetadataSelector
 
 import javax.inject.Inject
-import javax.inject.Named
 
 class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
-
-    private static final String ENTITY_ATTRIBUTE_FIELD_NAME = 'entityAttribute'
 
     @Inject
     Datasource<ImportAttributeMapper> importAttributeMapperDs
@@ -23,82 +23,133 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
     @Inject
     MetaPropertyMatcher metaPropertyMatcher
 
-    @Named('fieldGroup.dynamicAttribute')
-    private CheckBox dynamicAttribute
-
     @Inject
     private ComponentsFactory componentsFactory
 
     @Inject
     private FieldGroup fieldGroup
 
+    @Inject
+    private MetadataSelector metadataSelector
+
+
+    private LookupField dynamicEntityAttribute
+    private LookupField entityAttribute
+    private LookupField associationEntityAttribute
+    private LookupField associationLookupAttribute
+    private static final String ENTITY_ATTRIBUTE_NAME = 'entityAttribute'
+    private static final String ATTRIBUTE_TYPE_NAME = 'attributeType'
+    private static final String ASSOCIATION_LOOKUP_NAME = 'associationLookupAttribute'
+    private static final String DYNAMIC_ENTITY_ATTRIBUTE_NAME = 'dynamicEntityAttribute'
+
     @Override
     protected void postInit() {
-        FieldGroup.FieldConfig entityClassFieldConfig = fieldGroup.getField(ENTITY_ATTRIBUTE_FIELD_NAME)
-        LookupField lookupField = componentsFactory.createComponent(LookupField)
-        lookupField.setDatasource(importAttributeMapperDs, ENTITY_ATTRIBUTE_FIELD_NAME)
-        updateList(lookupField)
-        entityClassFieldConfig.setComponent(lookupField)
+        initDynamicEntityAttributeLookup()
+        initEntityAttributeLookup()
+        initAssociationEntityAttributeLookup()
+        initAssociationLookupAttributeLookup()
+        initAttributeTypeOptionsGroup()
+        showLookupFieldsForAttributeType(item.attributeType)
+    }
 
-        lookupField.setNewOptionHandler(new LookupField.NewOptionHandler() {
+    def initAssociationEntityAttributeLookup() {
+        FieldGroup.FieldConfig fieldConfig = fieldGroup.getField('associationEntityAttribute')
+        associationEntityAttribute = componentsFactory.createComponent(LookupField)
+        associationEntityAttribute.setOptionsMap(metadataSelector.getAssociationAttributes(metaClassOfItem))
+        associationEntityAttribute.setDatasource(importAttributeMapperDs, ENTITY_ATTRIBUTE_NAME)
+        associationEntityAttribute.setNewOptionAllowed(true)
+        associationEntityAttribute.caption = 'Entity Attribute'
+        fieldConfig.setComponent(associationEntityAttribute)
+    }
+
+    def initAssociationLookupAttributeLookup() {
+        FieldGroup.FieldConfig fieldConfig = fieldGroup.getField(ASSOCIATION_LOOKUP_NAME)
+        associationLookupAttribute = componentsFactory.createComponent(LookupField)
+        associationLookupAttribute.setDatasource(importAttributeMapperDs, ASSOCIATION_LOOKUP_NAME)
+        associationLookupAttribute.enabled = false
+        fieldConfig.setComponent(associationLookupAttribute)
+
+        importAttributeMapperDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener<ImportAttributeMapper>() {
             @Override
-            void addNewOption(String caption) {
-                showNotification(String.format('Using a dynamic attribute: %s', caption))
-                lookupField.setValue(caption)
-                //TODO: check if new value is already in in the list, it shouldn't be dynamic in this case
+            void itemPropertyChanged(Datasource.ItemPropertyChangeEvent<ImportAttributeMapper> e) {
+                if (e.property == ENTITY_ATTRIBUTE_NAME && item.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE) {
+                    activateAssociationLookupAttributes(e.value as String)
+                }
             }
         })
-        initDynamicAttributeChanger(lookupField)
+
     }
 
-    void initDynamicAttributeChanger(LookupField lookupField) {
-        dynamicAttribute.addValueChangeListener(new Component.ValueChangeListener() {
+    void activateAssociationLookupAttributes(String metaProperty) {
+
+        MetaClass importConfigurationMetaClass = metadata.session.getClass(item.configuration.entityClass)
+
+
+        associationLookupAttribute.optionsMap = metadataSelector.getLookupMetaProperties(importConfigurationMetaClass.getProperty(metaProperty).domain.properties)
+
+        associationLookupAttribute.enabled = true
+
+    }
+
+    def initDynamicEntityAttributeLookup() {
+        FieldGroup.FieldConfig fieldConfig = fieldGroup.getField(DYNAMIC_ENTITY_ATTRIBUTE_NAME)
+        dynamicEntityAttribute = componentsFactory.createComponent(LookupField)
+        dynamicEntityAttribute.setOptionsMap(metadataSelector.getDynamicAttributesLookupFieldOptions(metaClassOfItem))
+        dynamicEntityAttribute.setDatasource(importAttributeMapperDs, DYNAMIC_ENTITY_ATTRIBUTE_NAME)
+        fieldConfig.setComponent(dynamicEntityAttribute)
+    }
+
+    private MetaClass getMetaClassOfItem() {
+        metadata.session.getClass(item.configuration.entityClass)
+    }
+
+    def initEntityAttributeLookup() {
+        FieldGroup.FieldConfig fieldConfig = fieldGroup.getField(ENTITY_ATTRIBUTE_NAME)
+        entityAttribute = componentsFactory.createComponent(LookupField)
+
+        entityAttribute.setOptionsMap(metadataSelector.getDirectAttributesLookupFieldOptions(metaClassOfItem))
+        entityAttribute.setDatasource(importAttributeMapperDs, ENTITY_ATTRIBUTE_NAME)
+        fieldConfig.setComponent(entityAttribute)
+    }
+
+    void initAttributeTypeOptionsGroup() {
+
+        FieldGroup.FieldConfig fieldConfig = fieldGroup.getField(ATTRIBUTE_TYPE_NAME)
+        OptionsGroup component = componentsFactory.createComponent(OptionsGroup)
+        component.setOptionsEnum(AttributeType)
+        component.setDatasource(importAttributeMapperDs, ATTRIBUTE_TYPE_NAME)
+        fieldConfig.setComponent(component)
+
+        importAttributeMapperDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener<ImportAttributeMapper>() {
             @Override
-            void valueChanged(Component.ValueChangeEvent e) {
-                updateList(lookupField)
+            void itemPropertyChanged(Datasource.ItemPropertyChangeEvent<ImportAttributeMapper> e) {
+                if (e.property == ATTRIBUTE_TYPE_NAME) {
+                    showLookupFieldsForAttributeType(e.value as AttributeType)
+                }
             }
         })
     }
 
-    void useDynamicAttributeInput(LookupField lookupField) {
-        lookupField.setNewOptionAllowed(true)
-        lookupField.setDescription('Add new dynamic attribute to the object')
-    }
-
-    void userPropertiesListInput(LookupField lookupField) {
-        lookupField.setNewOptionAllowed(false)
-        lookupField.setDescription(null)
-    }
-
-    List getList(ImportAttributeMapper item) {
-        if (item) {
-            def entityClass = item.configuration.entityClass
-            def focusedClazz = metadata.getClass(entityClass)
-            return metaPropertyMatcher.listProperties([], '', focusedClazz)
+    void showLookupFieldsForAttributeType(AttributeType attributeType) {
+        if (attributeType == AttributeType.DYNAMIC_ATTRIBUTE) {
+            dynamicEntityAttribute.visible = true
+            entityAttribute.visible = false
+            associationEntityAttribute.visible = false
+            associationLookupAttribute.visible = false
         }
-        []
-    }
-
-    void updateList(LookupField entityAttributeId) {
-        if (item) {
-            try {
-                def list = getList(item)
-                def found = list.find {
-                    it.toLowerCase().startsWith(item.fileColumnAlias.toLowerCase())
-                }
-
-                if (item.dynamicAttribute) {
-                    useDynamicAttributeInput(entityAttributeId)
-                    found = item.entityAttribute
-                    list = [found]
-                } else {
-                    userPropertiesListInput(entityAttributeId)
-                }
-                entityAttributeId.setOptionsList(list)
-                entityAttributeId.setValue(found)
-            } catch (Exception e) {
-                entityAttributeId.setNewOptionAllowed(true)
-            }
+        else if (attributeType == AttributeType.DIRECT_ATTRIBUTE) {
+            dynamicEntityAttribute.visible = false
+            entityAttribute.visible = true
+            associationEntityAttribute.visible = false
+            associationLookupAttribute.visible = false
+        }
+        else if (attributeType == AttributeType.ASSOCIATION_ATTRIBUTE) {
+            dynamicEntityAttribute.visible = false
+            entityAttribute.visible = false
+            associationEntityAttribute.visible = true
+            associationLookupAttribute.visible = true
         }
     }
+
+
 }
