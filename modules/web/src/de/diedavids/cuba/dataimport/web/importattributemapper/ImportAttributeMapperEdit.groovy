@@ -164,6 +164,7 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
     void showLookupFieldsForAttributeType(AttributeType attributeType) {
         if (attributeType == AttributeType.DYNAMIC_ATTRIBUTE) {
             dynamicEntityAttribute.visible = true
+            dynamicEntityAttribute.required = true
             entityAttribute.visible = false
             associationEntityAttribute.visible = false
             associationLookupAttribute.visible = false
@@ -177,6 +178,13 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
             entityAttribute.visible = false
             associationEntityAttribute.visible = true
             associationLookupAttribute.visible = true
+            associationLookupAttribute.required = true
+        }
+        else {
+            dynamicEntityAttribute.visible = false
+            entityAttribute.visible = false
+            associationEntityAttribute.visible = false
+            associationLookupAttribute.visible = false
         }
     }
 
