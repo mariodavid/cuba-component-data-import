@@ -15,11 +15,13 @@ class ImportAttributeMapperCreator {
 
     List<ImportAttributeMapper> createMappers(ImportData importData, MetaClass selectedEntity) {
         importData.columns.withIndex().collect { String column, index ->
-            new ImportAttributeMapper(
-                    entityAttribute: metaPropertyMatcher.findEntityAttributeForColumn(column, selectedEntity),
-                    fileColumnAlias: column,
-                    fileColumnNumber: index,
-            )
+                new ImportAttributeMapper(
+                        entityAttribute: metaPropertyMatcher.findEntityAttributeForColumn(column, selectedEntity),
+                        fileColumnAlias: column,
+                        fileColumnNumber: index,
+                )
         }
     }
+
+
 }

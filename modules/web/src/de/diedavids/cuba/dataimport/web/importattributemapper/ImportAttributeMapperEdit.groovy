@@ -37,10 +37,35 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
     private LookupField entityAttribute
     private LookupField associationEntityAttribute
     private LookupField associationLookupAttribute
+
+
     private static final String ENTITY_ATTRIBUTE_NAME = 'entityAttribute'
     private static final String ATTRIBUTE_TYPE_NAME = 'attributeType'
     private static final String ASSOCIATION_LOOKUP_NAME = 'associationLookupAttribute'
     private static final String DYNAMIC_ENTITY_ATTRIBUTE_NAME = 'dynamicEntityAttribute'
+
+    @Override
+    void init(Map<String, Object> params) {
+
+        importAttributeMapperDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener<ImportAttributeMapper>() {
+            @Override
+            void itemPropertyChanged(Datasource.ItemPropertyChangeEvent<ImportAttributeMapper> e) {
+                if (e.property == ATTRIBUTE_TYPE_NAME) {
+                    clearEntityAttributeValues()
+                }
+            }
+        })
+
+
+        importAttributeMapperDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener<ImportAttributeMapper>() {
+            @Override
+            void itemPropertyChanged(Datasource.ItemPropertyChangeEvent<ImportAttributeMapper> e) {
+                if (e.property == ENTITY_ATTRIBUTE_NAME && item.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE) {
+                    activateAssociationLookupAttributes(e.value as String)
+                }
+            }
+        })
+    }
 
     @Override
     protected void postInit() {
@@ -50,6 +75,12 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
         initAssociationLookupAttributeLookup()
         initAttributeTypeOptionsGroup()
         showLookupFieldsForAttributeType(item.attributeType)
+    }
+
+    void clearEntityAttributeValues() {
+        item.entityAttribute = null
+        item.associationLookupAttribute = null
+        item.dynamicEntityAttribute = null
     }
 
     def initAssociationEntityAttributeLookup() {
@@ -66,29 +97,29 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
         FieldGroup.FieldConfig fieldConfig = fieldGroup.getField(ASSOCIATION_LOOKUP_NAME)
         associationLookupAttribute = componentsFactory.createComponent(LookupField)
         associationLookupAttribute.setDatasource(importAttributeMapperDs, ASSOCIATION_LOOKUP_NAME)
-        associationLookupAttribute.enabled = false
+
+        if (item.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE && item.entityAttribute) {
+            activateAssociationLookupAttributes(item.entityAttribute)
+        }
+        else {
+            associationLookupAttribute.enabled = false
+        }
         fieldConfig.setComponent(associationLookupAttribute)
 
-        importAttributeMapperDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener<ImportAttributeMapper>() {
-            @Override
-            void itemPropertyChanged(Datasource.ItemPropertyChangeEvent<ImportAttributeMapper> e) {
-                if (e.property == ENTITY_ATTRIBUTE_NAME && item.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE) {
-                    activateAssociationLookupAttributes(e.value as String)
-                }
-            }
-        })
+
 
     }
 
     void activateAssociationLookupAttributes(String metaProperty) {
 
-        MetaClass importConfigurationMetaClass = metadata.session.getClass(item.configuration.entityClass)
+        if (metaProperty) {
+            MetaClass importConfigurationMetaClass = metadata.session.getClass(item.configuration.entityClass)
 
 
-        associationLookupAttribute.optionsMap = metadataSelector.getLookupMetaProperties(importConfigurationMetaClass.getProperty(metaProperty).domain.properties)
+            associationLookupAttribute.optionsMap = metadataSelector.getLookupMetaProperties(importConfigurationMetaClass.getProperty(metaProperty).domain.properties)
 
-        associationLookupAttribute.enabled = true
-
+            associationLookupAttribute.enabled = true
+        }
     }
 
     def initDynamicEntityAttributeLookup() {
@@ -136,14 +167,12 @@ class ImportAttributeMapperEdit extends AbstractEditor<ImportAttributeMapper> {
             entityAttribute.visible = false
             associationEntityAttribute.visible = false
             associationLookupAttribute.visible = false
-        }
-        else if (attributeType == AttributeType.DIRECT_ATTRIBUTE) {
+        } else if (attributeType == AttributeType.DIRECT_ATTRIBUTE) {
             dynamicEntityAttribute.visible = false
             entityAttribute.visible = true
             associationEntityAttribute.visible = false
             associationLookupAttribute.visible = false
-        }
-        else if (attributeType == AttributeType.ASSOCIATION_ATTRIBUTE) {
+        } else if (attributeType == AttributeType.ASSOCIATION_ATTRIBUTE) {
             dynamicEntityAttribute.visible = false
             entityAttribute.visible = false
             associationEntityAttribute.visible = true
