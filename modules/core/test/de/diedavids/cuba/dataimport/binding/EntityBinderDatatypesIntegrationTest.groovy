@@ -1,6 +1,7 @@
 package de.diedavids.cuba.dataimport.binding
 
 import de.diedavids.cuba.dataimport.dto.ImportData
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
@@ -51,7 +52,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.age', fileColumnAlias: 'age', fileColumnNumber: 3),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'age', fileColumnAlias: 'age', fileColumnNumber: 3),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -70,7 +71,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.annualSalary', fileColumnAlias: 'annualSalary'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'annualSalary', fileColumnAlias: 'annualSalary'),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -89,7 +90,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -110,7 +111,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "Yes",
                 booleanFalseValue: "No",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -133,7 +134,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "",
                 booleanFalseValue: "No",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -155,7 +156,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "",
                 booleanFalseValue: "No",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -176,7 +177,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "Yes",
                 booleanFalseValue: "No",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -198,7 +199,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "Yes",
                 booleanFalseValue: "No",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -221,7 +222,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "X",
                 booleanFalseValue: "",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -243,7 +244,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "X",
                 booleanFalseValue: "",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -264,7 +265,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 booleanTrueValue: "Yes",
                 booleanFalseValue: "No",
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'leftHanded', fileColumnAlias: 'leftHanded', fileColumnNumber: 0),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -283,7 +284,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.age', fileColumnAlias: 'age', fileColumnNumber: 3),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'age', fileColumnAlias: 'age', fileColumnNumber: 3),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -303,7 +304,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.name', fileColumnAlias: 'lastname', fileColumnNumber: 0)
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'lastname', fileColumnNumber: 0)
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -324,7 +325,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'state', fileColumnAlias: 'state'),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -343,7 +344,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -362,7 +363,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -381,7 +382,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -401,7 +402,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$Customer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'ddcdi$Customer.priority', fileColumnAlias: 'priority'),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )

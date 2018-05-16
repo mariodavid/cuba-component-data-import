@@ -41,9 +41,9 @@ class GenericDataImporterServiceBeanTest extends AbstractImportIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
-                        new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
                 ],
                 uniqueConfigurations: [new UniqueConfiguration(
                         entityAttributes: [
@@ -80,9 +80,9 @@ class GenericDataImporterServiceBeanTest extends AbstractImportIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
-                        new ImportAttributeMapper(entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
                 ],
                 uniqueConfigurations: [new UniqueConfiguration(
                         entityAttributes: [

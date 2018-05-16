@@ -1,6 +1,7 @@
 package de.diedavids.cuba.dataimport.binding
 
 import de.diedavids.cuba.dataimport.dto.ImportData
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
@@ -43,7 +44,12 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.code', fileColumnAlias: 'team'),
+                        new ImportAttributeMapper(
+                                attributeType: AttributeType.ASSOCIATION_ATTRIBUTE,
+                                entityAttribute: 'team',
+                                associationLookupAttribute: 'code',
+                                fileColumnAlias: 'team'
+                        )
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -59,7 +65,7 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
 
 
     @Test
-    void "bindAttributes cannot create an entity if the entity attribute mapper points directly to the reference attribute"() {
+    void "bindAttributes cannot create an entity if the entity attribute mapper has no association Lookup attribute defined"() {
 
 
         ImportData importData = createData([
@@ -77,7 +83,12 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team', fileColumnAlias: 'team'),
+                        new ImportAttributeMapper(
+                                attributeType: AttributeType.ASSOCIATION_ATTRIBUTE,
+                                entityAttribute: 'team',
+                                associationLookupAttribute: null,
+                                fileColumnAlias: 'team'
+                        )
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -117,7 +128,13 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.state', fileColumnAlias: 'team_state'),
+
+                        new ImportAttributeMapper(
+                                attributeType: AttributeType.ASSOCIATION_ATTRIBUTE,
+                                entityAttribute: 'team',
+                                associationLookupAttribute: 'state',
+                                fileColumnAlias: 'team_state'
+                        )
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -150,7 +167,12 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'ddcdi$MlbPlayer.team.code', fileColumnAlias: 'team'),
+                        new ImportAttributeMapper(
+                                attributeType: AttributeType.ASSOCIATION_ATTRIBUTE,
+                                entityAttribute: 'team',
+                                associationLookupAttribute: 'code',
+                                fileColumnAlias: 'team'
+                        )
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )

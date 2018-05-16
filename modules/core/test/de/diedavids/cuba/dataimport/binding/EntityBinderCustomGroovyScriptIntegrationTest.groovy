@@ -23,7 +23,7 @@ class EntityBinderCustomGroovyScriptIntegrationTest extends AbstractEntityBinder
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(
-                                entityAttribute: 'ddcdi$MlbPlayer.name',
+                                entityAttribute: 'name',
                                 fileColumnAlias: 'name',
                                 fileColumnNumber: 3,
                                 customAttributeBindScript: "return 'NameFromCustomScript'"
@@ -48,7 +48,7 @@ class EntityBinderCustomGroovyScriptIntegrationTest extends AbstractEntityBinder
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(
-                                entityAttribute: 'ddcdi$MlbPlayer.name',
+                                entityAttribute: 'name',
                                 fileColumnAlias: 'name',
                                 fileColumnNumber: 3,
                                 customAttributeBindScript: """
@@ -81,7 +81,7 @@ else {
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(
-                                entityAttribute: 'ddcdi$MlbPlayer.name',
+                                entityAttribute: 'name',
                                 fileColumnAlias: 'name',
                                 fileColumnNumber: 3,
                                 customAttributeBindScript: "return rawValue + '-custom'"

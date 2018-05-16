@@ -7,9 +7,9 @@ import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
 import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributesUtils
 import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.service.AssociationDirectReferenceException
 
 class AttributeBindRequest {
 
@@ -36,7 +36,12 @@ class AttributeBindRequest {
     }
 
     String getEntityAttributePath() {
-        (importAttributeMapper.entityAttribute ?: '') - (importEntityClassName + PATH_SEPARATOR)
+        if (importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE && importAttributeMapper.associationLookupAttribute) {
+            (importAttributeMapper.entityAttribute + PATH_SEPARATOR + importAttributeMapper.associationLookupAttribute ?: '') - (importEntityClassName + PATH_SEPARATOR)
+        }
+        else {
+            (importAttributeMapper.entityAttribute ?: '') - (importEntityClassName + PATH_SEPARATOR)
+        }
     }
 
     MetaClass getImportEntityMetaClass() {
@@ -64,22 +69,7 @@ class AttributeBindRequest {
     }
 
     boolean isAssociationBindingRequest() {
-        def metaProperties = importEntityPropertyPath?.metaProperties
-        if (metaProperties) {
-            def firstMetaProperty = metaProperties[0]
-            def firstMetaPropertyIsAssociation = firstMetaProperty.type == MetaProperty.Type.ASSOCIATION
-
-            if (firstMetaPropertyIsAssociation && metaProperties.size() == 1) {
-                throw new AssociationDirectReferenceException(
-                        metaProperty: firstMetaProperty,
-                        attributeBindRequest: this
-                )
-            }
-
-            return firstMetaPropertyIsAssociation
-        }
-
-        false
+        importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
     boolean isDatatypeBindingRequest() {
@@ -91,10 +81,16 @@ class AttributeBindRequest {
     }
 
     boolean isDynamicAttributeBindingRequest() {
-        dynamicAttributes.getAttributeForMetaClass(importEntityMetaClass, entityAttributePath) as boolean
+        importAttributeMapper.attributeType == AttributeType.DYNAMIC_ATTRIBUTE &&
+                dynamicAttributes.getAttributeForMetaClass(importEntityMetaClass, entityAttributePath) as boolean
     }
 
     Class getJavaType() {
         metaProperty.javaType
     }
+
+    boolean isValidAssociationBindingRequest() {
+        isAssociationBindingRequest() && importAttributeMapper.associationLookupAttribute
+    }
+
 }

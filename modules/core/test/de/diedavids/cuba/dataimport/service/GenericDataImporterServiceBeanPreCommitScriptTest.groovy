@@ -40,8 +40,8 @@ class GenericDataImporterServiceBeanPreCommitScriptTest extends AbstractImportIn
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION,
                 preCommitScript: """
@@ -80,8 +80,8 @@ else {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
