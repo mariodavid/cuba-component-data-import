@@ -83,7 +83,6 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     CONFIGURATION_ID varchar(36) not null,
     ATTRIBUTE_TYPE varchar(50),
     ENTITY_ATTRIBUTE varchar(255) not null,
-    DYNAMIC_ENTITY_ATTRIBUTE varchar(255),
     ASSOCIATION_LOOKUP_ATTRIBUTE varchar(255),
     DYNAMIC_ATTRIBUTE boolean,
     FILE_COLUMN_NUMBER integer not null,

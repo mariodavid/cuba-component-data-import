@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.converter
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Component
 
@@ -60,6 +61,17 @@ class MetaPropertyMatcher {
     private Map<String, Integer> calculateLevensteinDistances(List<String> propertiesNames, String column) {
         propertiesNames.collectEntries {
             [(it): StringUtils.getLevenshteinDistance(it, column)]
+        }
+    }
+
+    AttributeType findAttributeTypeForColumn(String column, MetaClass selectedEntity) {
+        def metaProperty = findPropertyByColumn(selectedEntity, column)
+
+        switch(metaProperty?.type) {
+           case MetaProperty.Type.ASSOCIATION: return AttributeType.ASSOCIATION_ATTRIBUTE
+           case MetaProperty.Type.DATATYPE: return AttributeType.DIRECT_ATTRIBUTE
+           case MetaProperty.Type.ENUM: return AttributeType.DIRECT_ATTRIBUTE
+           default: return null
         }
     }
 }

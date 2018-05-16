@@ -81,6 +81,7 @@
                     <columns>
                         <column id="fileColumnNumber"/>
                         <column id="fileColumnAlias"/>
+                        <column id="attributeType"/>
                         <column id="entityAttribute"/>
                     </columns>
                     <rows datasource="importAttributeMappersDs"/>

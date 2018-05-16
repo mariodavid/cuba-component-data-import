@@ -17,6 +17,7 @@ class ImportAttributeMapperCreator {
         importData.columns.withIndex().collect { String column, index ->
                 new ImportAttributeMapper(
                         entityAttribute: metaPropertyMatcher.findEntityAttributeForColumn(column, selectedEntity),
+                        attributeType: metaPropertyMatcher.findAttributeTypeForColumn(column, selectedEntity),
                         fileColumnAlias: column,
                         fileColumnNumber: index,
                 )
