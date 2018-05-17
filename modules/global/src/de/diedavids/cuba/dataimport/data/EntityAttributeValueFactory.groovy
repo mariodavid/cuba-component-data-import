@@ -14,7 +14,6 @@ class EntityAttributeValueFactory {
     }
 
 
-
     EntityAttributeValue createEntityAttributeValue(String entityAttribute, Object attributeValue) {
         new EntityAttributeValueImpl(
                 entityAttribute: entityAttribute,

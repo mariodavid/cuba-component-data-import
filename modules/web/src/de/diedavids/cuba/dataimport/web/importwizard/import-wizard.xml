@@ -24,16 +24,16 @@
                 icon="icons/cancel.png"
                 invoke="cancelWizard"/>
         <action id="toStep3"
-                caption="mainMsg://actions.Ok"
-                icon="icons/ok.png"
+                caption="mainMsg://paging.nextCaption"
+                icon="icons/report-wizard-next.png"
                 invoke="toStep3"/>
         <action id="toStep4"
-                caption="mainMsg://actions.Ok"
-                icon="icons/ok.png"
+                caption="mainMsg://paging.nextCaption"
+                icon="icons/report-wizard-next.png"
                 invoke="toStep4"/>
         <action id="startImport"
                 caption="msg://startImport"
-                icon="icons/ok.png"
+                icon="icons/report-wizard-next.png"
                 invoke="startImport"/>
         <action id="closeWizardAction"
                 caption="mainMsg://actions.Ok"
@@ -74,11 +74,17 @@
                  expand="mapAttributesTable"
                  margin="true"
                  spacing="true">
-                <lookupField id="entityLookup"
-                             caption="Entity"
-                             datasource="importConfigurationDs"
-                             property="entityClass"
-                             width="100%"/>
+                <vbox>
+                    <lookupField id="entityLookup"
+                                 caption="Entity"
+                                 datasource="importConfigurationDs"
+                                 property="entityClass"
+                                 width="100%"/>
+                    <lookupField id="configLookup"
+                                 visible="false"
+                                 caption="Import Configuration"
+                                 width="100%"/>
+                </vbox>
                 <table id="mapAttributesTable"
                        editable="true"
                        height="200px"
@@ -94,6 +100,7 @@
                     <columns>
                         <column id="fileColumnNumber"/>
                         <column id="fileColumnAlias"/>
+                        <column id="attributeType"/>
                         <column id="entityAttribute"/>
                     </columns>
                     <buttonsPanel id="buttonsPanel"
@@ -127,25 +134,25 @@
                              margin="true"
                              spacing="true">
                             <hbox spacing="true">
-                            <fieldGroup id="generalConfigurationFieldGroup"
-                                        border="visible"
-                                        caption="msg://generalConfiguration"
-                                        datasource="importConfigurationDs"
-                                        fieldCaptionWidth="200px"
-                                        >
-                                <field contextHelpText="msg://transactionStrategyHelp"
-                                       property="transactionStrategy"/>
-                            </fieldGroup>
-                            <fieldGroup id="formatConfigurationFieldGroup"
-                                        border="visible"
-                                        caption="msg://formatConfiguration"
-                                        datasource="importConfigurationDs"
-                                        fieldCaptionWidth="200px"
-                                        >
-                                <field property="dateFormat"/>
-                                <field property="booleanTrueValue"/>
-                                <field property="booleanFalseValue"/>
-                            </fieldGroup>
+                                <fieldGroup id="generalConfigurationFieldGroup"
+                                            border="visible"
+                                            caption="msg://generalConfiguration"
+                                            datasource="importConfigurationDs"
+                                            fieldCaptionWidth="200px"
+                                >
+                                    <field contextHelpText="msg://transactionStrategyHelp"
+                                           property="transactionStrategy"/>
+                                </fieldGroup>
+                                <fieldGroup id="formatConfigurationFieldGroup"
+                                            border="visible"
+                                            caption="msg://formatConfiguration"
+                                            datasource="importConfigurationDs"
+                                            fieldCaptionWidth="200px"
+                                >
+                                    <field property="dateFormat"/>
+                                    <field property="booleanTrueValue"/>
+                                    <field property="booleanFalseValue"/>
+                                </fieldGroup>
                             </hbox>
 
                         </tab>

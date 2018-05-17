@@ -1,8 +1,7 @@
-
 buildscript {
     ext.cubaVersion = '6.8.8'
     repositories {
-        
+
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -15,7 +14,7 @@ buildscript {
         maven {
             url  "https://dl.bintray.com/balvi/cuba-components"
         }
-        
+
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -91,7 +90,7 @@ subprojects {
             version {
                 name = "${cuba.artifact.version}"
                 desc = ''
-                released  = new Date()
+                released = new Date()
                 vcsTag = "${cuba.artifact.version}"
             }
         }
@@ -100,7 +99,7 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.4.0")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.5.0")
 
 }
 
@@ -113,11 +112,11 @@ allprojects {
 
 
 def files = subprojects
-        .findAll{ !it.name.toLowerCase().contains('theme') }
-        .collect { new File(it.projectDir, '/build/cobertura/cobertura.ser')}
+        .findAll { !it.name.toLowerCase().contains('theme') }
+        .collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
 def sourceDirs = subprojects
-        .findAll{ !it.name.toLowerCase().contains('theme') }
-        .collect { new File(it.projectDir, '/src')}
+        .findAll { !it.name.toLowerCase().contains('theme') }
+        .collect { new File(it.projectDir, '/src') }
 
 cobertura {
     coverageFormats = ['html', 'xml']
@@ -132,7 +131,7 @@ cobertura {
 }
 
 
-test.dependsOn(subprojects.collect{ ":${it.name}:test"} )
+test.dependsOn(subprojects.collect { ":${it.name}:test" })
 test.finalizedBy(project.tasks.cobertura)
 test.finalizedBy(project.tasks.coberturaCheck)
 
@@ -219,7 +218,7 @@ configure(globalModule) {
         }
     }
 
-    
+
 }
 
 configure(coreModule) {
@@ -265,7 +264,7 @@ configure(coreModule) {
         dbName = hsqlDbName
     }
 
-    task stopDb(description: 'Stops local HSQLDB server', type: CubaHsqlStop)  {
+    task stopDb(description: 'Stops local HSQLDB server', type: CubaHsqlStop) {
         dbPort = hsqlPort
         dbName = hsqlDbName
     }
@@ -330,7 +329,7 @@ configure(webModule) {
         compile(guiModule)
 
     }
-    
+
     task webArchive(type: Zip) {
         from file("$buildDir/web")
         from file('web')

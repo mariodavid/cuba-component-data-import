@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
-               dependsOn="com.haulmont.cuba">
+               dependsOn="com.haulmont.cuba,de.balvi.cuba.declarativecontrollers">
     <module blocks="*"
             name="global">
         <artifact appJar="true"

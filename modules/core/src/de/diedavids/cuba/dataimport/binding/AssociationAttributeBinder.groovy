@@ -13,11 +13,9 @@ class AssociationAttributeBinder implements AttributeBinder {
 
     @Override
     void bindAttribute(Entity entity, AttributeBindRequest bindRequest) {
+
         try {
-            def value = handleAssociationAttribute(bindRequest, entity)
-            if (value) {
-                entity.setValueEx(bindRequest.entityAttributePath, value)
-            }
+            handleAssociationAttribute(bindRequest, entity)
         }
         catch (MultipleAssociationValuesFoundException e) {
             e.dataRow = bindRequest.dataRow
@@ -27,13 +25,21 @@ class AssociationAttributeBinder implements AttributeBinder {
     }
 
     private void handleAssociationAttribute(AttributeBindRequest bindRequest, Entity entity) {
-        def propertyPathFromAssociation = bindRequest.importEntityPropertyPath.path.drop(1)
-        def propertyPath = propertyPathFromAssociation.join('.')
-        def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].javaType
-        def associationProperty = bindRequest.importEntityPropertyPath.metaProperties[0].name
 
-        def associationValue = loadAssociationValue(bindRequest, associationJavaType, propertyPath, bindRequest.rawValue)
-        entity.setValueEx(associationProperty, associationValue)
+        if (bindRequest.validAssociationBindingRequest) {
+
+            def propertyPathFromAssociation = bindRequest.importEntityPropertyPath.path.drop(1)
+            def propertyPath = propertyPathFromAssociation.join('.')
+            def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].javaType
+            def associationProperty = bindRequest.importEntityPropertyPath.metaProperties[0].name
+
+            def associationValue = loadAssociationValue(bindRequest, associationJavaType, propertyPath, bindRequest.rawValue)
+            entity.setValueEx(associationProperty, associationValue)
+        }
+        else {
+            log.warn('Invalid Association bind request. Will be ignored.')
+        }
+
     }
 
     private loadAssociationValue(AttributeBindRequest bindRequest, Class<?> associationJavaType, String propertyPath, String rawValue) {

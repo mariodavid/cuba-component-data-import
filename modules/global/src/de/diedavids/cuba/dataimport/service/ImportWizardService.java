@@ -15,6 +15,6 @@ public interface ImportWizardService {
 
 
     Collection<ImportConfiguration> getImportConfigurations(MetaClass metaClass);
-
+    
     ImportConfiguration getImportConfigurationByName(MetaClass metaClass, String configName);
 }

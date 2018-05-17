@@ -197,7 +197,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + '.')
             MetaPropertyPath path = metadata.getClass(importEntityClassName).getPropertyPath(entityAttribute)
 
-            if (isAssociationAttribute(importAttributeMapper, path)) {
+            if (isAssociationAttribute(importAttributeMapper)) {
                 def associationMetaProperty = path.metaProperties[0]
                 def associationMetaPropertyName = associationMetaProperty.name
                 if (associationMetaProperty.type == MetaProperty.Type.ASSOCIATION && associationMetaProperty.range.cardinality == Range.Cardinality.MANY_TO_ONE) {
@@ -207,8 +207,8 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper, MetaPropertyPath path) {
-        !importAttributeMapper.dynamicAttribute && path?.metaProperties?.size() > 1
+    private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper) {
+        importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
     Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {

@@ -43,13 +43,10 @@ class ImportWizardServiceBean implements ImportWizardService {
 
         commitContext.addInstanceToCommit(importLog)
 
-
-
         importConfiguration.importerBeanName = GenericDataImporterService.NAME
 
         dataManager.commit(commitContext)
     }
-
 
     @Override
     Collection<ImportConfiguration> getImportConfigurations(MetaClass metaClass) {
@@ -78,7 +75,7 @@ class ImportWizardServiceBean implements ImportWizardService {
 
 
     private Collection<ImportConfiguration> loadImportConfigurationWithAttributes(Map<String, Object> attributeMap) {
-        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap))
+        simpleDataLoader.loadAllByAttributes(ImportConfiguration, entityAttributeValueFactory.ofMap(attributeMap), 'importConfiguration-view')
     }
 
 

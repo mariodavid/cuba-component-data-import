@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.global.LoadContext
 import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
@@ -275,9 +276,9 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(entityAttribute: 'name', fileColumnAlias: 'name'),
-                        new ImportAttributeMapper(entityAttribute: 'code', fileColumnAlias: 'code'),
-                        new ImportAttributeMapper(entityAttribute: dynamicAttributeName, fileColumnAlias: fileColumnAlias, dynamicAttribute: true),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE,entityAttribute: 'name', fileColumnAlias: 'name'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE,entityAttribute: 'code', fileColumnAlias: 'code'),
+                        new ImportAttributeMapper(attributeType: AttributeType.DYNAMIC_ATTRIBUTE, entityAttribute: dynamicAttributeName, fileColumnAlias: fileColumnAlias, dynamicAttribute: true),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )

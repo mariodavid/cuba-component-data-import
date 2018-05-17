@@ -1,7 +1,6 @@
 ruleset {
 
 
-
     IllegalClassReference {
         name = 'CUBADoNotReferenceLoadContextInController'
         priority = 1

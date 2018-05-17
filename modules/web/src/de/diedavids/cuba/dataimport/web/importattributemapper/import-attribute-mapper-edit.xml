@@ -20,12 +20,29 @@
                  margin="true"
                  spacing="true">
                 <fieldGroup id="fieldGroup"
-                            datasource="importAttributeMapperDs">
+                            datasource="importAttributeMapperDs"
+                            fieldCaptionWidth="200px">
                     <column width="250px">
-                        <field property="entityAttribute"/>
+                        <field custom="true"
+                               property="attributeType"/>
+                        <field custom="true"
+                               property="entityAttribute"
+                               contextHelpText="msg://entityAttributeHelpText"
+                        />
+                        <field custom="true"
+                               property="dynamicEntityAttribute"
+                               contextHelpText="msg://entityAttributeHelpText"
+                        />
+                        <field custom="true"
+                               property="associationEntityAttribute"
+                               contextHelpText="msg://entityAttributeHelpText"
+                        />
+                        <field custom="true"
+                               property="associationLookupAttribute"
+                               contextHelpText="msg://associationLookupAttributeHelpText"
+                        />
                         <field property="fileColumnNumber"/>
                         <field property="fileColumnAlias"/>
-                        <field property="dynamicAttribute"/>
                     </column>
                 </fieldGroup>
             </tab>

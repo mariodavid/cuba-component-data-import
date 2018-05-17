@@ -19,11 +19,13 @@ import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileHandler
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
-import de.diedavids.cuba.dataimport.web.util.EntityClassSelector
+import de.diedavids.cuba.dataimport.web.util.MetadataSelector
+import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
 import javax.inject.Named
 
+@Slf4j
 class ImportWizard extends AbstractWindow {
 
     public static final String WIZARD_STEP_1 = 'step1'
@@ -79,8 +81,7 @@ class ImportWizard extends AbstractWindow {
     Action closeWizardAction
 
     @Inject
-    EntityClassSelector entityClassSelector
-
+    MetadataSelector metadataSelector
 
     @Inject
     Datasource<ImportLog> importLogDs
@@ -99,13 +100,15 @@ class ImportWizard extends AbstractWindow {
     @Inject
     ImportAttributeMapperCreator importAttributeMapperCreator
 
+    ImportConfiguration defaultImportConfiguration
+
+    @Inject
+    Button toStep3
+
     @Override
     void init(Map<String, Object> params) {
-
-        entityLookup.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
-
+        entityLookup.setOptionsMap(metadataSelector.entitiesLookupFieldOptions)
         importConfigurationDs.setItem(metadata.create(ImportConfiguration))
-
         initEntityClassPropertyChangeListener()
         initReusePropertyChangeListener()
         initImportFileHandler()
@@ -147,29 +150,26 @@ class ImportWizard extends AbstractWindow {
         importConfigurationDs.addItemPropertyChangeListener(new Datasource.ItemPropertyChangeListener() {
             @Override
             void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
-
                 if (e.property == 'entityClass') {
                     MetaClass selectedEntity = metadata.getClass(e.value.toString())
                     importData = importFileParser.parseFile()
-
-
                     def mappers = importAttributeMapperCreator.createMappers(importData, selectedEntity)
                     mappers.each {
+                        it.setConfiguration(importConfigurationDs.item)
                         importAttributeMappersDatasource.addItem(it)
                     }
-
                     importConfigurationDs.item.importAttributeMappers = mappers
-
                     mapAttributesTable.visible = true
+                    toStep3.enabled = true
                 }
             }
         })
     }
 
-
     void toStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
         showFilenameInStep1Title()
+        toStep3.enabled = false
     }
 
     private void showFilenameInStep1Title() {
@@ -199,7 +199,6 @@ class ImportWizard extends AbstractWindow {
     }
 
     void closeWizard() {
-
         if (importConfigurationDs.item.reuse) {
             importLogDs.item.file = importFileHandler.saveFile()
 
@@ -209,8 +208,6 @@ class ImportWizard extends AbstractWindow {
                     importLogDs.item
             )
         }
-
-
         close(CLOSE_ACTION_ID, true)
     }
 
@@ -219,7 +216,6 @@ class ImportWizard extends AbstractWindow {
         parseFileAndDisplay()
     }
 
-
     void parseFileAndDisplay() {
         importData = importFileParser.parseFile()
         DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
@@ -227,9 +223,14 @@ class ImportWizard extends AbstractWindow {
     }
 
     void startImport() {
-        ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
-        importLogDs.item = importLog
-        toStep5()
+        try {
+            ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
+            importLogDs.item = importLog
+            toStep5()
+        } catch (Exception e) {
+            log.error('An Error occurred during import', e)
+            showNotification('An Error occurred during import. See logs for more information', Frame.NotificationType.ERROR)
+        }
     }
 
     void toStep5() {
@@ -237,13 +238,16 @@ class ImportWizard extends AbstractWindow {
         closeWizardAction.enabled = true
     }
 
-
     private void switchTabs(String previousTabName, String nextTabName) {
         wizardAccordion.getTab(nextTabName).enabled = true
         wizardAccordion.selectedTab = nextTabName
 
         Accordion.Tab previousTab = wizardAccordion.getTab(previousTabName)
-        previousTab.caption = "${previousTab.caption} $check"
-        previousTab.enabled = false
+        def caption = previousTab.caption
+        if (!caption.contains("$check")) {
+            previousTab.caption = "${previousTab.caption} $check"
+        }
+        //allow to return back: true
+        previousTab.enabled = true
     }
 }

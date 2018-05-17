@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.converter
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Component
 
@@ -9,22 +10,7 @@ import org.springframework.stereotype.Component
 class MetaPropertyMatcher {
 
 
-    String findEntityAttributeForColumn(String column, MetaClass selectedEntity) {
-
-        MetaProperty possibleProperty = findPropertyByColumn(selectedEntity, column)
-
-        String result = ''
-        if (possibleProperty && isSimpleDatatype(possibleProperty)) {
-                result = possibleProperty.name
-        }
-        result
-    }
-
-    private boolean isSimpleDatatype(MetaProperty possibleProperty) {
-        possibleProperty.type != MetaProperty.Type.ASSOCIATION && possibleProperty.type != MetaProperty.Type.COMPOSITION
-    }
-
-    private MetaProperty findPropertyByColumn(MetaClass selectedEntity, String column) {
+    MetaProperty findPropertyByColumn(MetaClass selectedEntity, String column) {
 
         def propertiesNames = selectedEntity.properties*.name
 
@@ -52,14 +38,26 @@ class MetaPropertyMatcher {
 
     private String searchForDirectMatch(List<String> propertiesNames, column) {
         propertiesNames.find {
-            column.toLowerCase().startsWith(it) ||
-                    column.toLowerCase().endsWith(it)
+            def value = it.toLowerCase()
+            column.toLowerCase().startsWith(value) ||
+                    column.toLowerCase().endsWith(value)
         }
     }
 
     private Map<String, Integer> calculateLevensteinDistances(List<String> propertiesNames, String column) {
         propertiesNames.collectEntries {
             [(it): StringUtils.getLevenshteinDistance(it, column)]
+        }
+    }
+
+    AttributeType findAttributeTypeForColumn(MetaClass selectedEntity, String column) {
+        def metaProperty = findPropertyByColumn(selectedEntity, column)
+
+        switch (metaProperty?.type) {
+            case MetaProperty.Type.ASSOCIATION: return AttributeType.ASSOCIATION_ATTRIBUTE
+            case MetaProperty.Type.DATATYPE: return AttributeType.DIRECT_ATTRIBUTE
+            case MetaProperty.Type.ENUM: return AttributeType.DIRECT_ATTRIBUTE
+            default: return null
         }
     }
 }

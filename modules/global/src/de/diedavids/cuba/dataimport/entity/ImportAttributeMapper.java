@@ -22,8 +22,15 @@ public class ImportAttributeMapper extends StandardEntity {
 
 
     @NotNull
+    @Column(name = "ATTRIBUTE_TYPE", nullable = false)
+    protected String attributeType;
+
+    @NotNull
     @Column(name = "ENTITY_ATTRIBUTE", nullable = false)
     protected String entityAttribute;
+
+    @Column(name = "ASSOCIATION_LOOKUP_ATTRIBUTE")
+    protected String associationLookupAttribute;
 
     @Column(name = "DYNAMIC_ATTRIBUTE")
     protected Boolean dynamicAttribute;
@@ -40,6 +47,24 @@ public class ImportAttributeMapper extends StandardEntity {
     @Lob
     @Column(name = "CUSTOM_ATTRIBUTE_BIND_SCRIPT")
     protected String customAttributeBindScript;
+
+    public void setAssociationLookupAttribute(String associationLookupAttribute) {
+        this.associationLookupAttribute = associationLookupAttribute;
+    }
+
+    public String getAssociationLookupAttribute() {
+        return associationLookupAttribute;
+    }
+
+
+    public void setAttributeType(AttributeType attributeType) {
+        this.attributeType = attributeType == null ? null : attributeType.getId();
+    }
+
+    public AttributeType getAttributeType() {
+        return attributeType == null ? null : AttributeType.fromId(attributeType);
+    }
+
 
     public void setDynamicAttribute(Boolean dynamicAttribute) {
         this.dynamicAttribute = dynamicAttribute;
