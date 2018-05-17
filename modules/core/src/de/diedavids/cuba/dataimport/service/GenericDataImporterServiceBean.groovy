@@ -208,7 +208,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper, MetaPropertyPath path) {
-        !importAttributeMapper.dynamicAttribute && path?.metaProperties?.size() > 1
+        importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
     Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
