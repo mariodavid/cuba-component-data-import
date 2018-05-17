@@ -104,7 +104,8 @@ class EntityAttributeSelectionHandler {
     void activateAssociationLookupAttributes(String metaProperty) {
         if (metaProperty) {
             MetaClass importConfigurationMetaClass = metadata.session.getClass(importAttributeMapperDs.item.configuration.entityClass)
-            associationLookupAttribute.optionsMap = metadataSelector.getLookupMetaProperties(importConfigurationMetaClass.getProperty(metaProperty).domain.properties)
+            def assocProperties = importConfigurationMetaClass.getProperty(metaProperty)?.range?.asClass()?.ownProperties
+            associationLookupAttribute.optionsMap = metadataSelector.getLookupMetaProperties(assocProperties)
             associationLookupAttribute.enabled = true
         }
     }
