@@ -11,41 +11,7 @@ import org.springframework.stereotype.Component
 class MetaPropertyMatcher {
 
 
-    ImportAttributeMapper findEntityAttributeForColumn(Integer index, String column, MetaClass selectedEntity) {
-
-        def inputColumnList = getAttributePath(column)
-        MetaProperty possibleProperty = findPropertyByColumn(selectedEntity, inputColumnList[(0)])
-        def attrType = findAttributeTypeForColumn(inputColumnList[(0)], selectedEntity)
-        def possiblePropertyName =  (attrType) ? possibleProperty?.name : ''
-
-        def result = new ImportAttributeMapper(
-                entityAttribute: possiblePropertyName,
-                attributeType: attrType,
-                fileColumnAlias: column,
-                fileColumnNumber: index,
-        )
-        if (possibleProperty && !isSimpleDatatype(possibleProperty)) {
-            MetaClass assocAttribute = possibleProperty.range?.asClass()
-            if (possiblePropertyName && assocAttribute) {
-                result.associationLookupAttribute = findPropertyByColumn(assocAttribute, inputColumnList[(1)])?.name
-            }
-        }
-        result
-    }
-
-    String[] getAttributePath(String column) {
-        if (!column) {
-            return ['']
-        }
-        def inputColumnWithDot = column.tokenize('.')
-        inputColumnWithDot
-    }
-
-    private boolean isSimpleDatatype(MetaProperty possibleProperty) {
-        possibleProperty.type != MetaProperty.Type.ASSOCIATION && possibleProperty.type != MetaProperty.Type.COMPOSITION
-    }
-
-    private MetaProperty findPropertyByColumn(MetaClass selectedEntity, String column) {
+    MetaProperty findPropertyByColumn(MetaClass selectedEntity, String column) {
 
         def propertiesNames = selectedEntity.properties*.name
 
@@ -85,7 +51,7 @@ class MetaPropertyMatcher {
         }
     }
 
-    AttributeType findAttributeTypeForColumn(String column, MetaClass selectedEntity) {
+    AttributeType findAttributeTypeForColumn(MetaClass selectedEntity, String column) {
         def metaProperty = findPropertyByColumn(selectedEntity, column)
 
         switch (metaProperty?.type) {
