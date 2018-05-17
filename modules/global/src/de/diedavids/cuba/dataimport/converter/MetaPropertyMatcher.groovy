@@ -3,6 +3,7 @@ package de.diedavids.cuba.dataimport.converter
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
 import de.diedavids.cuba.dataimport.entity.AttributeType
+import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import org.apache.commons.lang.StringUtils
 import org.springframework.stereotype.Component
 
@@ -10,15 +11,34 @@ import org.springframework.stereotype.Component
 class MetaPropertyMatcher {
 
 
-    String findEntityAttributeForColumn(String column, MetaClass selectedEntity) {
+    ImportAttributeMapper findEntityAttributeForColumn(Integer index, String column, MetaClass selectedEntity) {
 
-        MetaProperty possibleProperty = findPropertyByColumn(selectedEntity, column)
+        def inputColumnList = getAttributePath(column)
+        MetaProperty possibleProperty = findPropertyByColumn(selectedEntity, inputColumnList[(0)])
+        def attrType = findAttributeTypeForColumn(inputColumnList[(0)], selectedEntity)
+        def possiblePropertyName =  (attrType) ? possibleProperty?.name : ''
 
-        String result = ''
-        if (possibleProperty && isSimpleDatatype(possibleProperty)) {
-                result = possibleProperty.name
+        def result = new ImportAttributeMapper(
+                entityAttribute: possiblePropertyName,
+                attributeType: attrType,
+                fileColumnAlias: column,
+                fileColumnNumber: index,
+        )
+        if (possibleProperty && !isSimpleDatatype(possibleProperty)) {
+            MetaClass assocAttribute = possibleProperty.range?.asClass()
+            if (possiblePropertyName && assocAttribute) {
+                result.associationLookupAttribute = findPropertyByColumn(assocAttribute, inputColumnList[(1)])?.name
+            }
         }
         result
+    }
+
+    String[] getAttributePath(String column) {
+        if (!column) {
+            return ['']
+        }
+        def inputColumnWithDot = column.tokenize('.')
+        inputColumnWithDot
     }
 
     private boolean isSimpleDatatype(MetaProperty possibleProperty) {
@@ -53,8 +73,9 @@ class MetaPropertyMatcher {
 
     private String searchForDirectMatch(List<String> propertiesNames, column) {
         propertiesNames.find {
-            column.toLowerCase().startsWith(it) ||
-                    column.toLowerCase().endsWith(it)
+            def value = it.toLowerCase()
+            column.toLowerCase().startsWith(value) ||
+                    column.toLowerCase().endsWith(value)
         }
     }
 
@@ -67,11 +88,11 @@ class MetaPropertyMatcher {
     AttributeType findAttributeTypeForColumn(String column, MetaClass selectedEntity) {
         def metaProperty = findPropertyByColumn(selectedEntity, column)
 
-        switch(metaProperty?.type) {
-           case MetaProperty.Type.ASSOCIATION: return AttributeType.ASSOCIATION_ATTRIBUTE
-           case MetaProperty.Type.DATATYPE: return AttributeType.DIRECT_ATTRIBUTE
-           case MetaProperty.Type.ENUM: return AttributeType.DIRECT_ATTRIBUTE
-           default: return null
+        switch (metaProperty?.type) {
+            case MetaProperty.Type.ASSOCIATION: return AttributeType.ASSOCIATION_ATTRIBUTE
+            case MetaProperty.Type.DATATYPE: return AttributeType.DIRECT_ATTRIBUTE
+            case MetaProperty.Type.ENUM: return AttributeType.DIRECT_ATTRIBUTE
+            default: return null
         }
     }
 }
