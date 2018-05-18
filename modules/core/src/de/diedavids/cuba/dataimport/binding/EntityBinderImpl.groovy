@@ -26,21 +26,24 @@ class EntityBinderImpl implements EntityBinder {
 
 
     @Override
-    Entity bindAttributes(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
+    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
 
         importConfiguration.importAttributeMappers.each { ImportAttributeMapper importAttributeMapper ->
-            bindAttribute(importConfiguration, dataRow, entity, importAttributeMapper)
+            tryToBindAttribute(importConfiguration, dataRow, entity, importAttributeMapper)
         }
 
         entity
     }
 
-    private void bindAttribute(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, ImportAttributeMapper importAttributeMapper) {
+    private void tryToBindAttribute(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, ImportAttributeMapper importAttributeMapper) {
 
-        AttributeBindRequest bindRequest = createAttributeBindRequest(importConfiguration, dataRow, importAttributeMapper)
-        AttributeBinder binder = attributeBinderFactory.createAttributeBinderFromBindingRequest(bindRequest)
-        binder.bindAttribute(entity, bindRequest)
-
+        if (importAttributeMapper.attributeType && importAttributeMapper.entityAttribute) {
+            AttributeBindRequest bindRequest = createAttributeBindRequest(importConfiguration, dataRow, importAttributeMapper)
+            AttributeBinder binder = attributeBinderFactory.createAttributeBinderFromBindingRequest(bindRequest)
+            binder?.bindAttribute(entity, bindRequest)
+        } else {
+            log.warn("Import Attribute Mapper does not contain entity attribute: [$importAttributeMapper.fileColumnNumber, $importAttributeMapper.fileColumnAlias]. Will be ignored.")
+        }
 
     }
 

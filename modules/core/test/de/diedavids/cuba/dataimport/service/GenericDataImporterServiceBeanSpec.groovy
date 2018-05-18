@@ -12,7 +12,6 @@ import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.binding.EntityBinder
-import de.diedavids.cuba.dataimport.service.GenericDataImporterServiceBean
 import spock.lang.Specification
 
 class GenericDataImporterServiceBeanSpec extends Specification {
@@ -31,7 +30,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
 
         metadata.create('ddcdi$MlbPlayer') >> new MlbPlayer()
 
-        dataImportEntityBinder.bindAttributes(_,_,_) >> { ImportConfiguration importConfiguration, DataRow dataRow, Entity entity -> return entity }
+        dataImportEntityBinder.bindAttributesToEntity(_,_,_) >> { ImportConfiguration importConfiguration, DataRow dataRow, Entity entity -> return entity }
     }
 
     def "createEntities creates an entity for every row in the import data"() {
@@ -93,7 +92,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
         sut.createEntities(importConfiguration, importData)[0].entity as MlbPlayer
 
         then:
-        1 * dataImportEntityBinder.bindAttributes(importConfiguration, importData.rows[0], _)
+        1 * dataImportEntityBinder.bindAttributesToEntity(importConfiguration, importData.rows[0], _)
     }
 
     private ImportData createData(List<Map<String, Object>> data) {

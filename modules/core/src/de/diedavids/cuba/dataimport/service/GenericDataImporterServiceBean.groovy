@@ -103,7 +103,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 if (!alreadyExistingEntity) {
                     doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
                 } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
-                    importEntityRequest.entity = bindAttributes(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity)
+                    importEntityRequest.entity = bindAttributesToEntity(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity)
 
                     doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
                 } else {
@@ -191,7 +191,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private void addAssociationPropertiesToImportView(ImportConfiguration importConfiguration, EntityImportView importView) {
-        importConfiguration.importAttributeMappers.each { ImportAttributeMapper importAttributeMapper ->
+        validImportAttributeMappers(importConfiguration).each { ImportAttributeMapper importAttributeMapper ->
             def importEntityClassName = importConfiguration.entityClass
 
             def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + '.')
@@ -207,27 +207,31 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
+    private List<ImportAttributeMapper> validImportAttributeMappers(ImportConfiguration importConfiguration) {
+        importConfiguration.importAttributeMappers.findAll {it.entityAttribute && it.attributeType}
+    }
+
     private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper) {
         importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
     Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
         importData.rows.collect {
-            createEntityFromRow(importConfiguration, it)
+            createImportEntityRequestFromRow(importConfiguration, it)
         }
     }
 
-    ImportEntityRequest createEntityFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
+    ImportEntityRequest createImportEntityRequestFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
         new ImportEntityRequest(
-                entity: bindAttributes(importConfiguration, dataRow, entityInstance),
+                entity: bindAttributesToEntity(importConfiguration, dataRow, entityInstance),
                 dataRow: dataRow
         )
     }
 
-    Entity bindAttributes(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
-        dataImportEntityBinder.bindAttributes(importConfiguration, dataRow, entity)
+    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
+        dataImportEntityBinder.bindAttributesToEntity(importConfiguration, dataRow, entity)
     }
 
     private Entity createEntityInstance(ImportConfiguration importConfiguration) {
