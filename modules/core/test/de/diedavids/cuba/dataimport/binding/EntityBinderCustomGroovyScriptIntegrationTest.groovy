@@ -1,6 +1,7 @@
 package de.diedavids.cuba.dataimport.binding
 
 import de.diedavids.cuba.dataimport.dto.ImportData
+import de.diedavids.cuba.dataimport.entity.AttributeType
 import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
@@ -23,6 +24,7 @@ class EntityBinderCustomGroovyScriptIntegrationTest extends AbstractEntityBinder
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(
+                                attributeType: AttributeType.DIRECT_ATTRIBUTE,
                                 entityAttribute: 'name',
                                 fileColumnAlias: 'name',
                                 fileColumnNumber: 3,
@@ -31,7 +33,7 @@ class EntityBinderCustomGroovyScriptIntegrationTest extends AbstractEntityBinder
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getName()).isEqualTo("NameFromCustomScript")
     }
@@ -48,6 +50,7 @@ class EntityBinderCustomGroovyScriptIntegrationTest extends AbstractEntityBinder
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(
+                                attributeType: AttributeType.DIRECT_ATTRIBUTE,
                                 entityAttribute: 'name',
                                 fileColumnAlias: 'name',
                                 fileColumnNumber: 3,
@@ -63,7 +66,7 @@ else {
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
 
         assertThat(entity.getName()).isEqualTo("dataManager is available")
@@ -81,6 +84,7 @@ else {
                 entityClass: 'ddcdi$MlbPlayer',
                 importAttributeMappers: [
                         new ImportAttributeMapper(
+                                attributeType: AttributeType.DIRECT_ATTRIBUTE,
                                 entityAttribute: 'name',
                                 fileColumnAlias: 'name',
                                 fileColumnNumber: 3,
@@ -89,7 +93,7 @@ else {
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
 
         assertThat(entity.getName()).isEqualTo("Simpson-custom")
