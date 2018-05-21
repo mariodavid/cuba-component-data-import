@@ -6,6 +6,7 @@ import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.Action
 import com.haulmont.cuba.gui.components.Frame
 import com.haulmont.cuba.gui.components.Window
+import com.haulmont.cuba.gui.data.Datasource
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import groovy.transform.CompileStatic
@@ -27,6 +28,8 @@ class WithImportBean {
     @Inject
     ImportWizardService importWizardService
 
+    Datasource ds
+
 
     void setCaption(Action action) {
         action.setCaption(messages.getMainMessage(IMPORT_CAPTION_MSG_KEY))
@@ -34,6 +37,14 @@ class WithImportBean {
 
     void setIcon(Action action) {
         action.setIcon(IMPORT_ICON_KEY)
+    }
+
+    void setDs(Datasource dataSource) {
+        this.ds = dataSource
+    }
+
+    void refreshDs() {
+        ds?.refresh()
     }
 
 
@@ -76,6 +87,12 @@ class WithImportBean {
 
     private void openImportWizardForImportConfiguration(Frame frame, ImportConfiguration importConfiguration) {
         frame.openEditor('ddcdi$import-with-import-configuration-wizard', importConfiguration, WindowManager.OpenType.DIALOG)
+                .addCloseListener(new Window.CloseListener() {
+            @Override
+            void windowClosed(String actionId) {
+                refreshDs()
+            }
+        })
     }
 
 

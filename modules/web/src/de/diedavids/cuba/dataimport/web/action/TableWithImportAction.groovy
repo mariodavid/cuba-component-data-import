@@ -17,6 +17,7 @@ class TableWithImportAction extends BaseAction {
         target = listComponent
         withImportBean.setIcon(this)
         withImportBean.setCaption(this)
+        withImportBean.setDs(target.datasource)
     }
 
     @Override
