@@ -55,7 +55,7 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         )
 
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
 
         assertThat(entity.getTeam()).isEqualTo(balTeam)
@@ -94,7 +94,7 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         )
 
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
 
         assertThat(entity.getTeam()).isNull()
@@ -140,7 +140,7 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         )
 
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
 
         assertThat(entity.getTeam()).isNull()
@@ -177,7 +177,7 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getTeam()).isNull()
 

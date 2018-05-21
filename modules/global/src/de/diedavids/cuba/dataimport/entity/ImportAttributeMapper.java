@@ -20,13 +20,11 @@ public class ImportAttributeMapper extends StandardEntity {
     @JoinColumn(name = "CONFIGURATION_ID")
     protected ImportConfiguration configuration;
 
-
-    @NotNull
-    @Column(name = "ATTRIBUTE_TYPE", nullable = false)
+    @Column(name = "ATTRIBUTE_TYPE")
     protected String attributeType;
 
-    @NotNull
-    @Column(name = "ENTITY_ATTRIBUTE", nullable = false)
+    @Column(name = "ENTITY_ATTRIBUTE")
+
     protected String entityAttribute;
 
     @Column(name = "ASSOCIATION_LOOKUP_ATTRIBUTE")

@@ -3,10 +3,12 @@ package de.diedavids.cuba.dataimport.binding
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Scripting
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
+import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Component
 
 import javax.inject.Inject
 
+@Slf4j
 @Component('ddcdi_AttributeBinderFactory')
 class AttributeBinderFactory {
 
@@ -23,28 +25,28 @@ class AttributeBinderFactory {
 
     AttributeBinder createAttributeBinderFromBindingRequest(AttributeBindRequest bindRequest) {
 
+        AttributeBinder binder = null
+
         if (bindRequest.customScriptBindingRequest) {
-            return new CustomScriptAttributeBinder(
-                    scripting: scripting,
-                    dataManager: dataManager
-            )
+            binder = new CustomScriptAttributeBinder(scripting: scripting, dataManager: dataManager)
         }
         else if (bindRequest.isDynamicAttributeBindingRequest()) {
-            return new DatatypeAttributeBinder()
+            binder = new DatatypeAttributeBinder()
         }
         else if (bindRequest.isAssociationBindingRequest()) {
-            return new AssociationAttributeBinder(
-                    simpleDataLoader: simpleDataLoader
-            )
+            binder = new AssociationAttributeBinder(simpleDataLoader: simpleDataLoader)
         }
         else if (bindRequest.isDatatypeBindingRequest()) {
-            return new DatatypeAttributeBinder()
+            binder = new DatatypeAttributeBinder()
         }
         else if (bindRequest.isEnumBindingRequest()) {
-            return new EnumAttributeBinder()
+            binder = new EnumAttributeBinder()
+        }
+        else {
+            log.warn("No valid Attribute binder for AttributeBindRequest: $bindRequest found. Will be ignored")
         }
 
-        throw new IllegalStateException("No valid Attribute binder for AttributeBindRequest: $bindRequest found")
+        binder
     }
 
 }

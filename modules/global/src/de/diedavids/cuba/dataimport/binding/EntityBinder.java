@@ -7,6 +7,6 @@ import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
 public interface EntityBinder {
     String NAME = "ddcdi_EntityBinder";
 
-    Entity bindAttributes(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity);
+    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity);
 
 }

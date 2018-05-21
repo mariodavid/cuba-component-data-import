@@ -25,7 +25,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 [name: "Simpson", height: 120]
         ])
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getName()).isEqualTo("Simpson")
     }
@@ -37,7 +37,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 [name: "Simpson", height: 120]
         ])
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getHeight()).isEqualTo(120)
     }
@@ -56,7 +56,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getAge()).isEqualTo(22.5d)
     }
@@ -75,7 +75,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getAnnualSalary()).isEqualTo(BigDecimal.TEN)
     }
@@ -94,7 +94,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isTrue()
     }
@@ -115,7 +115,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isTrue()
     }
@@ -138,7 +138,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isTrue()
     }
@@ -160,7 +160,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isFalse()
     }
@@ -181,7 +181,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isTrue()
     }
@@ -203,7 +203,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isFalse()
     }
@@ -226,7 +226,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isTrue()
     }
@@ -248,7 +248,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isFalse()
     }
@@ -269,7 +269,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getLeftHanded()).isNull()
     }
@@ -288,7 +288,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getAge()).isNull()
     }
@@ -309,7 +309,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
 
-        MlbPlayer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getName()).isEqualTo("Simpson")
     }
@@ -329,7 +329,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        MlbTeam entity = sut.bindAttributes(importConfiguration, importData.rows[0], new MlbTeam()) as MlbTeam
+        MlbTeam entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbTeam()) as MlbTeam
 
         assertThat(entity.getState()).isEqualTo(State.AL)
     }
@@ -348,7 +348,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+        Customer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new Customer()) as Customer
 
         assertThat(entity.getPriority()).isEqualTo(CustomerPriority.HIGH)
     }
@@ -367,7 +367,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+        Customer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new Customer()) as Customer
 
         assertThat(entity.getPriority()).isEqualTo(CustomerPriority.HIGH)
     }
@@ -386,7 +386,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+        Customer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new Customer()) as Customer
 
         assertThat(entity.getPriority()).isNull()
     }
@@ -406,7 +406,7 @@ class EntityBinderDatatypesIntegrationTest extends AbstractEntityBinderIntegrati
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
-        Customer entity = sut.bindAttributes(importConfiguration, importData.rows[0], new Customer()) as Customer
+        Customer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new Customer()) as Customer
 
         assertThat(entity.getPriority()).isNull()
     }
