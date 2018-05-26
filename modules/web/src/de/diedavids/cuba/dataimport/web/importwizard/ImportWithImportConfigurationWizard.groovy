@@ -123,7 +123,7 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     }
 
     void closeWizard() {
-        close(CLOSE_ACTION_ID, true)
+        close(COMMIT_ACTION_ID, true)
     }
 
     void parseFileAndDisplay() {

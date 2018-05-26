@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.Action
 import com.haulmont.cuba.gui.components.Frame
+import com.haulmont.cuba.gui.components.ListComponent
 import com.haulmont.cuba.gui.components.Window
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.service.ImportWizardService
@@ -37,16 +38,16 @@ class WithImportBean {
     }
 
 
-    void openImportWizard(Frame frame, MetaClass entityMetaClass) {
-
+    void openImportWizard(ListComponent target, MetaClass entityMetaClass) {
+        def frame = target.frame
         def importConfigurations = importWizardService.getImportConfigurations(entityMetaClass)
 
         if (!importConfigurations) {
             showNoImportConfigurationsError(frame)
         } else if (importConfigurations.size() == 1) {
-            openImportWizardForImportConfiguration(frame, importConfigurations[0] as ImportConfiguration)
+            openImportWizardForImportConfiguration(target, importConfigurations[0] as ImportConfiguration)
         } else {
-            selectImportConfigurationAndOpen(frame, entityMetaClass)
+            selectImportConfigurationAndOpen(target, entityMetaClass)
         }
     }
 
@@ -54,13 +55,13 @@ class WithImportBean {
         frame.showNotification(messages.getMainMessage('noImportConfigurationsForEntityFound'), Frame.NotificationType.ERROR)
     }
 
-    private void selectImportConfigurationAndOpen(Frame frame, MetaClass entityMetaClass) {
-        frame.openLookup(
+    private void selectImportConfigurationAndOpen(ListComponent target, MetaClass entityMetaClass) {
+        target.frame.openLookup(
                 ImportConfiguration,
                 new Window.Lookup.Handler() {
                     @Override
                     void handleLookup(Collection items) {
-                        openImportWizardForImportConfiguration(frame, items[0] as ImportConfiguration)
+                        openImportWizardForImportConfiguration(target, items[0] as ImportConfiguration)
                     }
 
                 },
@@ -74,9 +75,12 @@ class WithImportBean {
         [entityClass: entityMetaClass.name] as Map<String, Object>
     }
 
-    private void openImportWizardForImportConfiguration(Frame frame, ImportConfiguration importConfiguration) {
-        frame.openEditor('ddcdi$import-with-import-configuration-wizard', importConfiguration, WindowManager.OpenType.DIALOG)
+    private void openImportWizardForImportConfiguration(ListComponent target, ImportConfiguration importConfiguration) {
+        Window.Editor importScreen = target.frame.openEditor('ddcdi$import-with-import-configuration-wizard', importConfiguration, WindowManager.OpenType.DIALOG)
+
+        importScreen.addCloseWithCommitListener {
+            target.datasource.refresh()
+        }
+
     }
-
-
 }
