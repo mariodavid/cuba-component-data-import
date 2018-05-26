@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 26/05/2018
+
+### Added
+- start import wizard from every screen (`@WithImport` Annotation) (#33)
+- start import wizard from from import Configuration screen (#32)
+- option to go steps back in import wizard (#71)
+- BREAKING: make entity attribute selectable in import wizard (#24)
+  This change requires to manually go through the existing import configurations and adjust the "Entity attribute" 
+  through the help of the new UI.
+  `ImportAttributeMapper.entityAttribute` now only stores direct attribute names (not a full path like `team.code` but rather only `team`)
+  `ImportAttributeMapper.associationLookupAttribute` is new and stores the Lookup attribute in case of an association (`code` from the example above)
+  `ImportAttributeMapper.dynamicAttribute` is no longer used
+  `ImportAttributeMapper.attributeType` is new and stores the type of attribute: direct, reference or dynamic
+  The adjustments can also be done manually through the entity inspector by changing the above mentioned attributes accordingly.
+   
+
+### Changed
+- ignore case for enum import (#77)
+- `ImportAttributeMapper.entityAttribute` is no longer mandatory. In case it is not configured correctly, the column will not be imported and a corresponding log message
+  will be created. This leads to less user facing errors in the import wizard.
+
+### Deleted
+- ORACLE DBMS support (has not worked anyways)
+
 ## [0.3.0] - 09/05/2018
 
 ### Added
