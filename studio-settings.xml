@@ -46,6 +46,24 @@
                 <item name="180425-0-dropDdcdiCustomer.sql">
                     <![CDATA[alter table DDCDI_CUSTOMER rename to DDCDI_CUSTOMER__U95202 ;]]>
                 </item>
+                <item name="180526-0-dropDdcdiCustomer.sql">
+                    <![CDATA[alter table DDCDI_CUSTOMER rename to DDCDI_CUSTOMER__U87239 ;]]>
+                </item>
+                <item name="180526-0-dropDdcdiCustomer_DropScript.sql">
+                    <![CDATA[drop table DDCDI_CUSTOMER__U87239 if exists cascade ;]]>
+                </item>
+                <item name="180526-0-dropDdcdiMlbPlayer.sql">
+                    <![CDATA[alter table DDCDI_MLB_PLAYER rename to DDCDI_MLB_PLAYER__U85525 ;]]>
+                </item>
+                <item name="180526-0-dropDdcdiMlbTeam_DropScript.sql">
+                    <![CDATA[drop table DDCDI_MLB_TEAM__U84164 if exists cascade ;]]>
+                </item>
+                <item name="180526-0-dropDdcdiMlbTeam.sql">
+                    <![CDATA[alter table DDCDI_MLB_TEAM rename to DDCDI_MLB_TEAM__U84164 ;]]>
+                </item>
+                <item name="180526-0-dropDdcdiMlbPlayer_DropScript.sql">
+                    <![CDATA[drop table DDCDI_MLB_PLAYER__U85525 if exists cascade ;]]>
+                </item>
             </hsql>
         </excludes>
     </dbScripts>

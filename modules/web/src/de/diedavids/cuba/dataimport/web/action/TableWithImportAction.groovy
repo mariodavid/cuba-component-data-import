@@ -21,7 +21,7 @@ class TableWithImportAction extends BaseAction {
 
     @Override
     void actionPerform(Component component) {
-        withImportBean.openImportWizard(target.frame, targetMetaClass)
+        withImportBean.openImportWizard(target, targetMetaClass)
     }
 
     MetaClass getTargetMetaClass() {
