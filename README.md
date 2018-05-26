@@ -67,6 +67,13 @@ dependencies {
 ```
 
 
+### NOTE: Breaking change in 0.4.0
+
+When you update to v. 0.4.0 note that there is a breaking change in the way the import configurations are stored.
+Since the Import configuration couldn't be really re-used before 0.4.0 it is unlikely that you will facde any serious problems.
+But if you stored import configurations before, you will find information on how to resolve this change manually in the [CHANGELOG](https://github.com/mariodavid/cuba-component-data-import/blob/master/CHANGELOG.md).   
+
+
 ### NOTE: Dependency: declarative-controllers
 This application component requires `declarative-controllers` as another dependency you have to add to your application.
 
