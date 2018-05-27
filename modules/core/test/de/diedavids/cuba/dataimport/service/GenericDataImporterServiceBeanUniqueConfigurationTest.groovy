@@ -5,15 +5,16 @@ import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.State
-import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import org.junit.Before
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class GenericDataImporterServiceBeanTest extends AbstractImportIntegrationTest {
+class GenericDataImporterServiceBeanUniqueConfigurationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

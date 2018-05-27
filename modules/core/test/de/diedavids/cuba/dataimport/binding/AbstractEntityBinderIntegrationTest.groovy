@@ -9,8 +9,8 @@ import de.diedavids.cuba.dataimport.DdcdiTestContainer
 import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
-import de.diedavids.cuba.dataimport.entity.AttributeType
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import org.junit.Before

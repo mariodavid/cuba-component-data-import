@@ -24,6 +24,7 @@ import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import javax.persistence.Transient;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")

@@ -2,7 +2,7 @@ package de.diedavids.cuba.dataimport.service;
 
 
 import com.haulmont.chile.core.model.MetaClass;
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper;
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper;
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
 import de.diedavids.cuba.dataimport.entity.ImportLog;
 

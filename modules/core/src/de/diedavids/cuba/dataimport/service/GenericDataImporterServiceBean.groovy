@@ -16,6 +16,8 @@ import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 

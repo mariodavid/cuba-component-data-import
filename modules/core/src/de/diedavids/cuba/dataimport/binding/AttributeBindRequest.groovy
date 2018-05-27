@@ -7,8 +7,9 @@ import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
 import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributesUtils
 import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
-import de.diedavids.cuba.dataimport.entity.AttributeType
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeMapperMode
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 
 class AttributeBindRequest {
@@ -65,7 +66,7 @@ class AttributeBindRequest {
     }
 
     boolean isCustomScriptBindingRequest() {
-        importAttributeMapper.customAttributeBindScript
+        importAttributeMapper.customAttributeBindScript && importAttributeMapper.mapperMode == AttributeMapperMode.CUSTOM
     }
 
     boolean isAssociationBindingRequest() {

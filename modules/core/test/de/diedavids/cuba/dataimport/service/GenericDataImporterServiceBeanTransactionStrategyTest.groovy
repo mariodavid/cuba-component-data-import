@@ -4,13 +4,12 @@ import com.haulmont.cuba.core.global.AppBeans
 import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.entity.AttributeType
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
-import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import org.junit.Before
 import org.junit.Test
 

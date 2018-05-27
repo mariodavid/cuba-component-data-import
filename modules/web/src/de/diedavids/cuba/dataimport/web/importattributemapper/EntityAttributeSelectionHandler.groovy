@@ -8,8 +8,8 @@ import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.components.OptionsGroup
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
-import de.diedavids.cuba.dataimport.entity.AttributeType
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.web.util.MetadataSelector
 
 class EntityAttributeSelectionHandler {

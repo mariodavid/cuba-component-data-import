@@ -5,13 +5,6 @@ import com.haulmont.cuba.core.Persistence
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
-import de.diedavids.cuba.dataimport.binding.EntityBinder
-import de.diedavids.cuba.dataimport.dto.DataRowImpl
-import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.dto.ImportDataImpl
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
-import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.service.UniqueEntityFinderService
 import org.junit.Before
 import org.junit.ClassRule
 

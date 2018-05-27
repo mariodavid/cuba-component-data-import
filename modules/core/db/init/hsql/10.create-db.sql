@@ -81,6 +81,7 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     DELETED_BY varchar(50),
     --
     CONFIGURATION_ID varchar(36) not null,
+    MAPPER_MODE varchar(50) not null,
     ATTRIBUTE_TYPE varchar(50),
     ENTITY_ATTRIBUTE varchar(255),
     ASSOCIATION_LOOKUP_ATTRIBUTE varchar(255),

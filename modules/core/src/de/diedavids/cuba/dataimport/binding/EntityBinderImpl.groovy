@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributes
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Metadata
 import de.diedavids.cuba.dataimport.dto.DataRow
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Component

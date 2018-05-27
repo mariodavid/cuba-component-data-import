@@ -7,7 +7,7 @@
         messagesPack="de.diedavids.cuba.dataimport.web.importattributemapper">
     <dsContext>
         <datasource id="importAttributeMapperDs"
-                    class="de.diedavids.cuba.dataimport.entity.ImportAttributeMapper"
+                    class="de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper"
                     view="_local"/>
     </dsContext>
     <dialogMode height="400px"
@@ -23,24 +23,23 @@
                             datasource="importAttributeMapperDs"
                             fieldCaptionWidth="200px">
                     <column width="250px">
+
+                        <field property="mapperMode"/>
+
                         <field custom="true"
                                property="attributeType"/>
-                        <field custom="true"
-                               property="entityAttribute"
-                               contextHelpText="msg://entityAttributeHelpText"
-                        />
-                        <field custom="true"
-                               property="dynamicEntityAttribute"
-                               contextHelpText="msg://entityAttributeHelpText"
-                        />
-                        <field custom="true"
-                               property="associationEntityAttribute"
-                               contextHelpText="msg://entityAttributeHelpText"
-                        />
-                        <field custom="true"
-                               property="associationLookupAttribute"
-                               contextHelpText="msg://associationLookupAttributeHelpText"
-                        />
+                        <field contextHelpText="msg://entityAttributeHelpText"
+                               custom="true"
+                               property="entityAttribute"/>
+                        <field contextHelpText="msg://entityAttributeHelpText"
+                               custom="true"
+                               property="dynamicEntityAttribute"/>
+                        <field contextHelpText="msg://entityAttributeHelpText"
+                               custom="true"
+                               property="associationEntityAttribute"/>
+                        <field contextHelpText="msg://associationLookupAttributeHelpText"
+                               custom="true"
+                               property="associationLookupAttribute"/>
                         <field property="fileColumnNumber"/>
                         <field property="fileColumnAlias"/>
                     </column>
