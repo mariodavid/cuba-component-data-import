@@ -73,11 +73,8 @@
                  margin="true"
                  spacing="true">
                 <table id="importAttributeMappersTable"
-                       height="200px"
                        width="100%">
                     <actions>
-                        <action id="create"
-                                openType="DIALOG"/>
                         <action id="edit"
                                 openType="DIALOG"/>
                         <action id="remove"/>
@@ -91,7 +88,18 @@
                     </columns>
                     <rows datasource="importAttributeMappersDs"/>
                     <buttonsPanel>
-                        <button action="importAttributeMappersTable.create"/>
+                        <popupButton id="createPopupBtn"
+                                     caption="msg://createPopupBtnCaption"
+                                     icon="ADD_ACTION">
+                            <actions>
+                                <action id="createAutomatic"
+                                        caption="msg://createAutomaticAttributeMapper"
+                                        invoke="newAutomaticAttributeMapper"/>
+                                <action id="createCustom"
+                                        caption="msg://createCustomAttributeMapper"
+                                        invoke="newCustomAttributeMapper"/>
+                            </actions>
+                        </popupButton>
                         <button action="importAttributeMappersTable.edit"/>
                         <button action="importAttributeMappersTable.remove"/>
                     </buttonsPanel>
@@ -99,7 +107,6 @@
             </tab>
             <tab id="uniqueConfigurationsTab"
                  caption="msg://uniqueConfigurationsTab"
-                 expand="uniqueConfigurationsTable"
                  margin="true"
                  spacing="true">
                 <table id="uniqueConfigurationsTable"

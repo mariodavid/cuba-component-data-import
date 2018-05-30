@@ -7,6 +7,10 @@
             template="/de/diedavids/cuba/dataimport/web/importwizard/import-wizard.xml"/>
     <screen id="ddcdi$import-with-import-configuration-wizard"
             template="/de/diedavids/cuba/dataimport/web/importwizard/import-with-import-configuration-wizard.xml"/>
+    <screen id="ddcdi$ImportAttributeMapperCustom.frame"
+            template="de/diedavids/cuba/dataimport/web/importattributemapper/import-attribute-mapper-custom-frame.xml"/>
+    <screen id="ddcdi$ImportAttributeMapperAutomatic.frame"
+            template="de/diedavids/cuba/dataimport/web/importattributemapper/import-attribute-mapper-automatic-frame.xml"/>
     <screen id="ddcdi$ImportAttributeMapper.edit"
             template="de/diedavids/cuba/dataimport/web/importattributemapper/import-attribute-mapper-edit.xml"/>
     <screen id="ddcdi$ImportConfiguration.lookup"

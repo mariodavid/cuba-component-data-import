@@ -3,61 +3,19 @@
         caption="msg://editorCaption"
         class="de.diedavids.cuba.dataimport.web.importattributemapper.ImportAttributeMapperEdit"
         datasource="importAttributeMapperDs"
-        focusComponent="fieldGroup"
+        focusComponent="contentBox"
         messagesPack="de.diedavids.cuba.dataimport.web.importattributemapper">
     <dsContext>
         <datasource id="importAttributeMapperDs"
                     class="de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper"
                     view="_local"/>
     </dsContext>
-    <dialogMode height="400px"
-                width="600px"/>
-    <layout expand="contentTabSheet"
+    <dialogMode height="600px"
+                width="800px"/>
+    <layout expand="windowActions"
             spacing="true">
-        <tabSheet id="contentTabSheet">
-            <tab id="dataTab"
-                 caption="msg://dataTab"
-                 margin="true"
-                 spacing="true">
-                <fieldGroup id="fieldGroup"
-                            datasource="importAttributeMapperDs"
-                            fieldCaptionWidth="200px">
-                    <column width="250px">
+        <hbox id="contentBox" width="100%"/>
 
-                        <field property="mapperMode"/>
-
-                        <field custom="true"
-                               property="attributeType"/>
-                        <field contextHelpText="msg://entityAttributeHelpText"
-                               custom="true"
-                               property="entityAttribute"/>
-                        <field contextHelpText="msg://entityAttributeHelpText"
-                               custom="true"
-                               property="dynamicEntityAttribute"/>
-                        <field contextHelpText="msg://entityAttributeHelpText"
-                               custom="true"
-                               property="associationEntityAttribute"/>
-                        <field contextHelpText="msg://associationLookupAttributeHelpText"
-                               custom="true"
-                               property="associationLookupAttribute"/>
-                        <field property="fileColumnNumber"/>
-                        <field property="fileColumnAlias"/>
-                    </column>
-                </fieldGroup>
-            </tab>
-            <tab id="customBindingScriptTab"
-                 caption="msg://customBindingScriptTab"
-                 margin="true"
-                 spacing="true">
-                <sourceCodeEditor id="customAttributeBindScriptEditor"
-                                  contextHelpText="msg://customAttributeBindScriptHelp"
-                                  datasource="importAttributeMapperDs"
-                                  height="100%"
-                                  mode="Groovy"
-                                  property="customAttributeBindScript"
-                                  width="100%"/>
-            </tab>
-        </tabSheet>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>
