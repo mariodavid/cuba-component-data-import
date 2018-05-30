@@ -91,8 +91,6 @@
                        visible="false"
                        width="100%">
                     <actions>
-                        <action id="create"
-                                openType="DIALOG"/>
                         <action id="edit"
                                 openType="DIALOG"/>
                         <action id="remove"/>
@@ -106,8 +104,18 @@
                     </columns>
                     <buttonsPanel id="buttonsPanel"
                                   alwaysVisible="true">
-                        <button id="createBtn"
-                                action="mapAttributesTable.create"/>
+                        <popupButton id="createPopupBtn"
+                                     caption="msg://createPopupBtnCaption"
+                                     icon="ADD_ACTION">
+                            <actions>
+                                <action id="createAutomatic"
+                                        caption="msg://createAutomaticAttributeMapper"
+                                        invoke="newAutomaticAttributeMapper"/>
+                                <action id="createCustom"
+                                        caption="msg://createCustomAttributeMapper"
+                                        invoke="newCustomAttributeMapper"/>
+                            </actions>
+                        </popupButton>
                         <button id="editBtn"
                                 action="mapAttributesTable.edit"/>
                         <button id="removeBtn"
