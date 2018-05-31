@@ -3,6 +3,8 @@ package de.diedavids.cuba.dataimport.service
 import com.haulmont.cuba.core.global.AppBeans
 import de.diedavids.cuba.dataimport.AbstractDbIntegrationTest
 import de.diedavids.cuba.dataimport.entity.*
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import org.junit.Before
 import org.junit.Test

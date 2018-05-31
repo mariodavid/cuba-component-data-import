@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.entity;
+package de.diedavids.cuba.dataimport.entity.attributemapper;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 

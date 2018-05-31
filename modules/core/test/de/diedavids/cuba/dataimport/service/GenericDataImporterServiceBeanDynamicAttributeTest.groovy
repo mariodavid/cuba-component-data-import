@@ -11,17 +11,13 @@ import com.haulmont.cuba.core.global.LoadContext
 import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.entity.AttributeType
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
-import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.MlbTeam
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
-
-import java.text.SimpleDateFormat
 
 import static org.assertj.core.api.Assertions.assertThat
 

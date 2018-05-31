@@ -1,0 +1,3 @@
+alter table DDCDI_IMPORT_ATTRIBUTE_MAPPER add column MAPPER_MODE varchar(50) ^
+update DDCDI_IMPORT_ATTRIBUTE_MAPPER set MAPPER_MODE = 'AUTOMATIC' where MAPPER_MODE is null ;
+alter table DDCDI_IMPORT_ATTRIBUTE_MAPPER alter column MAPPER_MODE set not null ;

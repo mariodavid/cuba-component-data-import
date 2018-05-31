@@ -1,10 +1,16 @@
-package de.diedavids.cuba.dataimport.entity;
+package de.diedavids.cuba.dataimport.entity.attributemapper;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+
+import com.haulmont.chile.core.datatypes.FormatStrings;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
+import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy;
+
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,6 +26,10 @@ public class ImportAttributeMapper extends StandardEntity {
     @JoinColumn(name = "CONFIGURATION_ID")
     protected ImportConfiguration configuration;
 
+
+    @NotNull
+    @Column(name = "MAPPER_MODE", nullable = false)
+    protected String mapperMode;
 
     @Column(name = "ATTRIBUTE_TYPE")
     protected String attributeType;
@@ -45,6 +55,15 @@ public class ImportAttributeMapper extends StandardEntity {
     @Lob
     @Column(name = "CUSTOM_ATTRIBUTE_BIND_SCRIPT")
     protected String customAttributeBindScript;
+
+    public void setMapperMode(AttributeMapperMode mapperMode) {
+        this.mapperMode = mapperMode == null ? null : mapperMode.getId();
+    }
+
+    public AttributeMapperMode getMapperMode() {
+        return mapperMode == null ? null : AttributeMapperMode.fromId(mapperMode);
+    }
+
 
     public void setAssociationLookupAttribute(String associationLookupAttribute) {
         this.associationLookupAttribute = associationLookupAttribute;
@@ -116,4 +135,29 @@ public class ImportAttributeMapper extends StandardEntity {
     }
 
 
+    @PostConstruct
+    protected void initDefaultValues() {
+        initDefaultMapperMode();
+    }
+
+    private void initDefaultMapperMode() {
+        setMapperMode(AttributeMapperMode.AUTOMATIC);
+    }
+
+    public boolean isBindable() {
+        if (isCustom()) {
+            return entityAttribute != null;
+        }
+        else {
+            return entityAttribute != null && attributeType != null;
+        }
+    }
+
+    public boolean isCustom() {
+        return getMapperMode() == AttributeMapperMode.CUSTOM;
+    }
+
+    public boolean isAutomatic() {
+        return getMapperMode() == AttributeMapperMode.AUTOMATIC;
+    }
 }

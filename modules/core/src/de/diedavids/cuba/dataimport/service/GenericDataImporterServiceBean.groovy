@@ -16,6 +16,8 @@ import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 
@@ -197,7 +199,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             def entityAttribute = importAttributeMapper.entityAttribute - (importEntityClassName + '.')
             MetaPropertyPath path = metadata.getClass(importEntityClassName).getPropertyPath(entityAttribute)
 
-            if (isAssociationAttribute(importAttributeMapper)) {
+            if (isAutomaticAssociationAttribute(importAttributeMapper) || isCustomAttributeMapper(importAttributeMapper)) {
                 def associationMetaProperty = path.metaProperties[0]
                 def associationMetaPropertyName = associationMetaProperty.name
                 if (associationMetaProperty.type == MetaProperty.Type.ASSOCIATION && associationMetaProperty.range.cardinality == Range.Cardinality.MANY_TO_ONE) {
@@ -208,11 +210,16 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private List<ImportAttributeMapper> validImportAttributeMappers(ImportConfiguration importConfiguration) {
-        importConfiguration.importAttributeMappers.findAll {it.entityAttribute && it.attributeType}
+        importConfiguration.importAttributeMappers.findAll {it.bindable}
     }
 
-    private boolean isAssociationAttribute(ImportAttributeMapper importAttributeMapper) {
-        importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
+    boolean isCustomAttributeMapper(ImportAttributeMapper importAttributeMapper) {
+        importAttributeMapper.custom
+    }
+
+
+    boolean isAutomaticAssociationAttribute(ImportAttributeMapper importAttributeMapper) {
+        importAttributeMapper.automatic && importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
     Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {

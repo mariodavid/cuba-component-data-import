@@ -3,6 +3,7 @@ package de.diedavids.cuba.dataimport.web.importwizard
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.CollectionDatasource
 import com.haulmont.cuba.gui.data.Datasource
@@ -11,7 +12,8 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.converter.ImportAttributeMapperCreator
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeMapperMode
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
@@ -250,4 +252,25 @@ class ImportWizard extends AbstractWindow {
         //allow to return back: true
         previousTab.enabled = true
     }
+
+    void newCustomAttributeMapper() {
+        def importAttributeMapper = metadata.create(ImportAttributeMapper)
+        importAttributeMapper.mapperMode = AttributeMapperMode.CUSTOM
+        importAttributeMapper.configuration = importConfigurationDs.item
+        importAttributeMapper.attributeType = null
+        openAttributeMapperEditor(importAttributeMapper)
+    }
+
+
+    void newAutomaticAttributeMapper() {
+        def importAttributeMapper = metadata.create(ImportAttributeMapper)
+        importAttributeMapper.configuration = importConfigurationDs.item
+        openAttributeMapperEditor(importAttributeMapper)
+    }
+
+    private AbstractEditor openAttributeMapperEditor(ImportAttributeMapper importAttributeMapper) {
+        openEditor(importAttributeMapper, WindowManager.OpenType.DIALOG, [:], importAttributeMappersDatasource)
+    }
+
+
 }

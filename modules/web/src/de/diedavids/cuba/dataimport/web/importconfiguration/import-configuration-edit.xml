@@ -13,7 +13,8 @@
                                   property="importAttributeMappers"/>
             <collectionDatasource id="uniqueConfigurationsDs"
                                   property="uniqueConfigurations">
-                <collectionDatasource id="entityAttributesDs" property="entityAttributes" />
+                <collectionDatasource id="entityAttributesDs"
+                                      property="entityAttributes"/>
             </collectionDatasource>
         </datasource>
     </dsContext>
@@ -23,25 +24,28 @@
             spacing="true">
         <tabSheet id="contentTabSheet">
             <tab id="dataTab"
+                 caption="msg://dataTab"
                  margin="true"
-                 spacing="true"
-                 caption="msg://dataTab">
+                 spacing="true">
                 <fieldGroup id="dataFieldGroup"
                             datasource="importConfigurationDs">
                     <column width="250px">
                         <field property="name"/>
-                        <field property="entityClass" editable="false"/>
-                        <field property="template" editable="false"/>
-                        <field property="transactionStrategy" contextHelpText="msg://transactionStrategyHelp"/>
+                        <field editable="false"
+                               property="entityClass"/>
+                        <field editable="false"
+                               property="template"/>
+                        <field contextHelpText="msg://transactionStrategyHelp"
+                               property="transactionStrategy"/>
                         <field property="comment"
                                rows="5"/>
                     </column>
                 </fieldGroup>
             </tab>
             <tab id="formatTab"
+                 caption="msg://formatTab"
                  margin="true"
-                 spacing="true"
-                 caption="msg://formatTab">
+                 spacing="true">
                 <fieldGroup id="formatFieldGroup"
                             datasource="importConfigurationDs">
                     <column width="250px">
@@ -51,19 +55,17 @@
                     </column>
                 </fieldGroup>
             </tab>
-
             <tab id="preCommitScriptTab"
+                 caption="msg://preCommitScriptTab"
                  margin="true"
-                 spacing="true"
-                 caption="msg://preCommitScriptTab">
+                 spacing="true">
                 <sourceCodeEditor id="preCommitScriptEditor"
-                                  mode="Groovy"
-                                  datasource="importConfigurationDs"
-                                  property="preCommitScript"
-                                  width="100%"
-                                  height="100%"
                                   contextHelpText="msg://preCommitScriptHelp"
-                />
+                                  datasource="importConfigurationDs"
+                                  height="100%"
+                                  mode="Groovy"
+                                  property="preCommitScript"
+                                  width="100%"/>
             </tab>
             <tab id="attributeMappersTab"
                  caption="msg://importAttributeMappersTab"
@@ -71,14 +73,14 @@
                  margin="true"
                  spacing="true">
                 <table id="importAttributeMappersTable"
-                       height="200px"
                        width="100%">
                     <actions>
-                        <action id="create" openType="DIALOG"/>
-                        <action id="edit" openType="DIALOG"/>
+                        <action id="edit"
+                                openType="DIALOG"/>
                         <action id="remove"/>
                     </actions>
                     <columns>
+                        <column id="mapperMode"/>
                         <column id="fileColumnNumber"/>
                         <column id="fileColumnAlias"/>
                         <column id="attributeType"/>
@@ -86,7 +88,18 @@
                     </columns>
                     <rows datasource="importAttributeMappersDs"/>
                     <buttonsPanel>
-                        <button action="importAttributeMappersTable.create"/>
+                        <popupButton id="createPopupBtn"
+                                     caption="msg://createPopupBtnCaption"
+                                     icon="ADD_ACTION">
+                            <actions>
+                                <action id="createAutomatic"
+                                        caption="msg://createAutomaticAttributeMapper"
+                                        invoke="newAutomaticAttributeMapper"/>
+                                <action id="createCustom"
+                                        caption="msg://createCustomAttributeMapper"
+                                        invoke="newCustomAttributeMapper"/>
+                            </actions>
+                        </popupButton>
                         <button action="importAttributeMappersTable.edit"/>
                         <button action="importAttributeMappersTable.remove"/>
                     </buttonsPanel>
@@ -94,20 +107,21 @@
             </tab>
             <tab id="uniqueConfigurationsTab"
                  caption="msg://uniqueConfigurationsTab"
-                 expand="uniqueConfigurationsTable"
                  margin="true"
                  spacing="true">
                 <table id="uniqueConfigurationsTable"
                        height="200px"
                        width="100%">
                     <actions>
-                        <action id="create" openType="DIALOG"/>
-                        <action id="edit" openType="DIALOG"/>
+                        <action id="create"
+                                openType="DIALOG"/>
+                        <action id="edit"
+                                openType="DIALOG"/>
                         <action id="remove"/>
                     </actions>
                     <columns>
-                        <column id="policy" />
-                        <column id="entityAttributes" />
+                        <column id="policy"/>
+                        <column id="entityAttributes"/>
                     </columns>
                     <rows datasource="uniqueConfigurationsDs"/>
                     <buttonsPanel>

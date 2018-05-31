@@ -1,8 +1,8 @@
 package de.diedavids.cuba.dataimport.binding
 
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.entity.AttributeType
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.MlbPlayer

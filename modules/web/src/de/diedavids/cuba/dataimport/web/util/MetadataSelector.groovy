@@ -45,6 +45,11 @@ class MetadataSelector {
         options
     }
 
+
+    Map<String, Object> getAllAttributesLookupFieldOptions(MetaClass entityMetaClass) {
+        getLookupMetaProperties(entityMetaClass.properties)
+    }
+
     Map<String, Object> getDynamicAttributesLookupFieldOptions(MetaClass entityMetaClass) {
 
         Collection<CategoryAttribute> dynamicAttributesForImportConfiguration = dynamicAttributes.getAttributesForMetaClass(entityMetaClass)
@@ -94,4 +99,5 @@ class MetadataSelector {
     private MetadataTools getMetadataTools() {
         metadata.tools
     }
+
 }

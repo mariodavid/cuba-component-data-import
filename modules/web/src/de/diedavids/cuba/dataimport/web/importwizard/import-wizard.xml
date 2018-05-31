@@ -81,8 +81,8 @@
                                  property="entityClass"
                                  width="100%"/>
                     <lookupField id="configLookup"
-                                 visible="false"
                                  caption="Import Configuration"
+                                 visible="false"
                                  width="100%"/>
                 </vbox>
                 <table id="mapAttributesTable"
@@ -91,13 +91,12 @@
                        visible="false"
                        width="100%">
                     <actions>
-                        <action id="create"
-                                openType="DIALOG"/>
                         <action id="edit"
                                 openType="DIALOG"/>
                         <action id="remove"/>
                     </actions>
                     <columns>
+                        <column id="mapperMode"/>
                         <column id="fileColumnNumber"/>
                         <column id="fileColumnAlias"/>
                         <column id="attributeType"/>
@@ -105,8 +104,18 @@
                     </columns>
                     <buttonsPanel id="buttonsPanel"
                                   alwaysVisible="true">
-                        <button id="createBtn"
-                                action="mapAttributesTable.create"/>
+                        <popupButton id="createPopupBtn"
+                                     caption="msg://createPopupBtnCaption"
+                                     icon="ADD_ACTION">
+                            <actions>
+                                <action id="createAutomatic"
+                                        caption="msg://createAutomaticAttributeMapper"
+                                        invoke="newAutomaticAttributeMapper"/>
+                                <action id="createCustom"
+                                        caption="msg://createCustomAttributeMapper"
+                                        invoke="newCustomAttributeMapper"/>
+                            </actions>
+                        </popupButton>
                         <button id="editBtn"
                                 action="mapAttributesTable.edit"/>
                         <button id="removeBtn"
@@ -138,8 +147,7 @@
                                             border="visible"
                                             caption="msg://generalConfiguration"
                                             datasource="importConfigurationDs"
-                                            fieldCaptionWidth="200px"
-                                >
+                                            fieldCaptionWidth="200px">
                                     <field contextHelpText="msg://transactionStrategyHelp"
                                            property="transactionStrategy"/>
                                 </fieldGroup>
@@ -147,14 +155,12 @@
                                             border="visible"
                                             caption="msg://formatConfiguration"
                                             datasource="importConfigurationDs"
-                                            fieldCaptionWidth="200px"
-                                >
+                                            fieldCaptionWidth="200px">
                                     <field property="dateFormat"/>
                                     <field property="booleanTrueValue"/>
                                     <field property="booleanFalseValue"/>
                                 </fieldGroup>
                             </hbox>
-
                         </tab>
                         <tab id="preCommitScriptTab"
                              caption="msg://preCommitScriptTab"
@@ -243,18 +249,18 @@
                  spacing="true">
                 <fieldGroup id="importSummaryFieldGroup"
                             datasource="importLogDs">
-                    <field property="success"
-                           editable="false"/>
-                    <field property="entitiesProcessed"
-                           editable="false"/>
-                    <field property="entitiesImportSuccess"
-                           editable="false"/>
-                    <field property="entitiesImportValidationError"
-                           editable="false"/>
-                    <field property="entitiesPreCommitSkipped"
-                           editable="false"/>
-                    <field property="entitiesUniqueConstraintSkipped"
-                           editable="false"/>
+                    <field editable="false"
+                           property="success"/>
+                    <field editable="false"
+                           property="entitiesProcessed"/>
+                    <field editable="false"
+                           property="entitiesImportSuccess"/>
+                    <field editable="false"
+                           property="entitiesImportValidationError"/>
+                    <field editable="false"
+                           property="entitiesPreCommitSkipped"/>
+                    <field editable="false"
+                           property="entitiesUniqueConstraintSkipped"/>
                 </fieldGroup>
             </tab>
         </accordion>

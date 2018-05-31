@@ -5,7 +5,7 @@ import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
 import de.diedavids.cuba.dataimport.data.EntityAttributeValueFactory
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
-import de.diedavids.cuba.dataimport.entity.ImportAttributeMapper
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
 import org.springframework.stereotype.Service
