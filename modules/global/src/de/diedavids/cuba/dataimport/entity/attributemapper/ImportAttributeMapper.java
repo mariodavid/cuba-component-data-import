@@ -144,4 +144,20 @@ public class ImportAttributeMapper extends StandardEntity {
         setMapperMode(AttributeMapperMode.AUTOMATIC);
     }
 
+    public boolean isBindable() {
+        if (isCustom()) {
+            return entityAttribute != null;
+        }
+        else {
+            return entityAttribute != null && attributeType != null;
+        }
+    }
+
+    public boolean isCustom() {
+        return getMapperMode() == AttributeMapperMode.CUSTOM;
+    }
+
+    public boolean isAutomatic() {
+        return getMapperMode() == AttributeMapperMode.AUTOMATIC;
+    }
 }

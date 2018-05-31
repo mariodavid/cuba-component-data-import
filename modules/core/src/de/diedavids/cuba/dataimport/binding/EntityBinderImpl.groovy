@@ -37,12 +37,12 @@ class EntityBinderImpl implements EntityBinder {
 
     private void tryToBindAttribute(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, ImportAttributeMapper importAttributeMapper) {
 
-        if (importAttributeMapper.attributeType && importAttributeMapper.entityAttribute) {
+        if (importAttributeMapper.isBindable()) {
             AttributeBindRequest bindRequest = createAttributeBindRequest(importConfiguration, dataRow, importAttributeMapper)
             AttributeBinder binder = attributeBinderFactory.createAttributeBinderFromBindingRequest(bindRequest)
             binder?.bindAttribute(entity, bindRequest)
         } else {
-            log.warn("Import Attribute Mapper does not contain entity attribute: [$importAttributeMapper.fileColumnNumber, $importAttributeMapper.fileColumnAlias]. Will be ignored.")
+            log.warn("Import Attribute Mapper is not bindable: [$importAttributeMapper.fileColumnNumber, $importAttributeMapper.fileColumnAlias]. Will be ignored.")
         }
 
     }
