@@ -3,6 +3,10 @@
     <functionalitySettings>
         <functionality id="oneToOneIndex"
                        state="ENABLE"/>
+        <functionality id="joinedInheritanceDeleteCascade"
+                       state="ENABLE"/>
+        <functionality id="newFkConstraintNaming"
+                       state="ENABLE"/>
     </functionalitySettings>
     <dbScripts>
         <excludes>
