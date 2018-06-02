@@ -66,6 +66,27 @@ dependencies {
 }
 ```
 
+
+### NOTE: Breaking change in 0.4.0
+
+When you update to v. 0.4.0 note that there is a breaking change in the way the import configurations are stored.
+Since the Import configuration couldn't be really re-used before 0.4.0 it is unlikely that you will facde any serious problems.
+But if you stored import configurations before, you will find information on how to resolve this change manually in the [CHANGELOG](https://github.com/mariodavid/cuba-component-data-import/blob/master/CHANGELOG.md).   
+
+
+### NOTE: Dependency: declarative-controllers
+This application component requires `declarative-controllers` as another dependency you have to add to your application.
+
+The reason is, that you need to extend your screen from `AnnotatableAbstractLookup` instead of `AbstractLookup`.
+This superclass is part of the app-component: [cuba-component-declarative-controllers](https://github.com/balvi/cuba-component-declarative-controllers).
+
+Technically it is not strictly required to directly add the dependency to `declarative-controllers`, since `data-import` already has a dependency on it.
+
+However: since you directly depend on the app component (with extending your classes from `AnnotatableAbstractLookup`), 
+it is a best practice to explicitly declare the dependency to it.
+
+
+
 ## Supported DBMS
 
 The following databases are supported by this application component:
@@ -101,6 +122,11 @@ The second mode is, that the import configuration can be pre-defined by a develo
 The end-user of the system can reuse this configurations and just uploads the file that should get imported.
 
 
+
+### Example usage
+To see this application component in action, check out this example: [cuba-example-using-data-import](https://github.com/mariodavid/cuba-example-using-data-import).
+
+
 ## Import wizard
 
 The import wizard allows the user to interactively go through the import process and configure the above mentioned settings
@@ -130,6 +156,40 @@ will be triggered. Afterwards the user will see a summary of how many entities w
 
 #### Step 5: Import Summary
 ![import-wizard-step-5](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-5.png)
+
+## Integrate Import Wizard into your screens
+
+Instead of using the full import wizard, it is also possible to integrate the import process into your screens.
+This use case is for the second usage mode of this application component (as mentioned above). In this case, there is
+already an import configuration defined for a particular entity. With that, you as the developer want the user directly
+to start the import process from the browse screen of your entities.
+
+### @WithImport Annotation for browse screens
+
+To start import from your entity browse screen, you have to add the following annotation to your browse screen controller:
+
+```
+@WithImport(listComponent = "customersTable")
+public class CustomerBrowse extends AnnotatableAbstractLookup {
+}
+```
+
+For the `@WithImport` annotation you need to define the list component on which it should add the attachments button.
+Normally this is the `id` of the table you defined in your browse screen.
+
+This annotation will create a button in the buttonsPanel of the table and add the Import button after the default CUBA buttons.
+
+The `@WithImport` annotations can be customized through the following attributes:
+
+* `String listComponent` - the id of the list component / table where the button will be added - REQUIRED
+* `String buttonId` - the id of the newly created button that will be created ("importBtn" by default)
+* `String buttonsPanel` - the id of the buttons panel where the new button will be added ("buttonsPanel" by default)
+
+
+When the import button is clicked on the `CustomerBrowse`, it will check if there are import configuration available
+for this Entity. In case there are multiple configurations available for this entity, the user has to select a particular
+import configuration to proceed.
+
 
 ## Supported file types
 
@@ -294,7 +354,7 @@ An entity attribute mapping defines which column / attribute in the import file 
 An attribute mapping contains the following information:
 
 * column name in the import file
-* column number (only for CSV / Excel relevant)
+* column number (only relevant for CSV / Excel)
 * entity attribute
 
 #### auto detection of entity attribute mappings
