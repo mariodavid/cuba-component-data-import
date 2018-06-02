@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Deleted
 - ORACLE DBMS support (has not worked anyways)
+- DbHelper
 
 ## [0.3.0] - 09/05/2018
 
