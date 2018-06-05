@@ -12,11 +12,14 @@ import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
+import de.diedavids.cuba.dataimport.web.importfile.ImportDataImportConfigurationMatchException
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileHandler
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
+import groovy.util.logging.Slf4j
 
 import javax.inject.Inject
 
+@Slf4j
 class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfiguration> {
 
     public static final String WIZARD_STEP_1 = 'step1'
@@ -57,6 +60,9 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     Action closeWizardAction
 
     @Inject
+    Action startImport
+
+    @Inject
     DataManager dataManager
 
     @Inject
@@ -87,10 +93,16 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
                 fileUploadingAPI: fileUploadingAPI,
                 dataManager: dataManager
         )
-        importFileHandler.onUploadSuccess { toStep2() }
+        importFileHandler.onUploadSuccess { toStep2()}
         importFileHandler.onUploadError {
             showNotification(formatMessage('fileUploadError'), Frame.NotificationType.ERROR)
         }
+    }
+
+
+    void toStep1() {
+        switchTabs(WIZARD_STEP_2, WIZARD_STEP_1)
+        showDefaultStep1Title()
     }
 
     void toStep2() {
@@ -103,6 +115,11 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     private void showFilenameInStep1Title() {
         Accordion.Tab step1Tab = wizardAccordion.getTab(WIZARD_STEP_1)
         step1Tab.caption += " - ${importFileHandler.fileName}"
+    }
+
+    private void showDefaultStep1Title() {
+        Accordion.Tab step1Tab = wizardAccordion.getTab(WIZARD_STEP_1)
+        step1Tab.caption = formatMessage('stepUploadFile')
     }
 
     private DynamicTableCreator createDynamicTableCreator() {
@@ -127,10 +144,22 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     }
 
     void parseFileAndDisplay() {
-        importData = importFileParser.parseFile()
-        DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
-        dynamicTableCreator.createTable(importData, resultTableBox)
+        try {
+            importData = importFileParser.parseFile(item)
+            startImport.enabled = true
+            DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
+            dynamicTableCreator.createTable(importData, resultTableBox)
+        }
+        catch (ImportDataImportConfigurationMatchException e) {
+            log.error(e.message, e)
+
+            startImport.enabled = false
+            showNotification(formatMessage('uploadFileDoesNotMatchExpectedStructure'), Frame.NotificationType.ERROR)
+
+            toStep1()
+        }
     }
+
 
     void startImport() {
         ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
