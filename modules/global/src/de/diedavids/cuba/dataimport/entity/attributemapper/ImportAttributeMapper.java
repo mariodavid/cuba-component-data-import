@@ -40,9 +40,6 @@ public class ImportAttributeMapper extends StandardEntity {
     @Column(name = "ASSOCIATION_LOOKUP_ATTRIBUTE")
     protected String associationLookupAttribute;
 
-    @Column(name = "DYNAMIC_ATTRIBUTE")
-    protected Boolean dynamicAttribute;
-
     @NotNull
     @Column(name = "FILE_COLUMN_NUMBER", nullable = false)
     protected Integer fileColumnNumber;
@@ -82,14 +79,6 @@ public class ImportAttributeMapper extends StandardEntity {
         return attributeType == null ? null : AttributeType.fromId(attributeType);
     }
 
-
-    public void setDynamicAttribute(Boolean dynamicAttribute) {
-        this.dynamicAttribute = dynamicAttribute;
-    }
-
-    public Boolean getDynamicAttribute() {
-        return dynamicAttribute;
-    }
 
 
     public void setCustomAttributeBindScript(String customAttributeBindScript) {
