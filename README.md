@@ -49,7 +49,7 @@ Table of Contents
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.8.x            | 0.1.x - 0.3.x  |
+| 6.8.x            | 0.1.x - 0.4.x  |
 
 
 The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/cuba-component-data-import/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/cuba-component-data-import/_latestVersion)
@@ -94,7 +94,6 @@ The following databases are supported by this application component:
 * HSQLDB
 * PostgreSQL
 * MySQL
-* Oracle
 
 ## Using the application component
 
