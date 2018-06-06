@@ -274,7 +274,7 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
                 importAttributeMappers: [
                         new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE,entityAttribute: 'name', fileColumnAlias: 'name'),
                         new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE,entityAttribute: 'code', fileColumnAlias: 'code'),
-                        new ImportAttributeMapper(attributeType: AttributeType.DYNAMIC_ATTRIBUTE, entityAttribute: dynamicAttributeName, fileColumnAlias: fileColumnAlias, dynamicAttribute: true),
+                        new ImportAttributeMapper(attributeType: AttributeType.DYNAMIC_ATTRIBUTE, entityAttribute: dynamicAttributeName, fileColumnAlias: fileColumnAlias),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
