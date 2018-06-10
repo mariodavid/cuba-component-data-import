@@ -100,7 +100,7 @@ create table DDCDI_UNIQUE_CONFIGURATION_ATTRIBUTE (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     --
-    ENTITY_ATTRIBUTE varchar(255) not null,
+    ENTITY_ATTRIBUTE varchar(255),
     UNIQUE_CONFIGURATION_ID varchar(32) not null,
     --
     primary key (ID)
