@@ -8,7 +8,7 @@ class XmlImportDataConverter extends AbstractTextBasedImportDataConverter<GPathR
 
 
     @Override
-    protected doConvert(GPathResult entries, ImportData result) {
+    protected void doConvert(GPathResult entries, ImportData result) {
         entries.children().each { NodeChild nodeChild ->
             result.columns = getColumns(nodeChild)
             addToTableData(result, processNode(nodeChild))

@@ -7,7 +7,7 @@ class JsonImportDataConverter extends AbstractTextBasedImportDataConverter<Objec
 
 
     @Override
-    protected doConvert(Object entries, ImportData result) {
+    protected void doConvert(Object entries, ImportData result) {
         entries.each {
             result.columns = getColumns(it)
             addToTableData(result, it as Map<String, Object>)

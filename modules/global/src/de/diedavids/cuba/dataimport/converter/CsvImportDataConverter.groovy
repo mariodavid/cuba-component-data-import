@@ -9,7 +9,7 @@ class CsvImportDataConverter extends AbstractTextBasedImportDataConverter<Iterat
 
 
     @Override
-    protected doConvert(Iterator entries, ImportData result) {
+    protected void doConvert(Iterator entries, ImportData result) {
         entries.each { PropertyMapper row ->
 
             DataRow dataRow = addToTableData(result, row.toMap())
