@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 21/06/2018
+
+### Added
+- empty rows will be excluded from import (#106)
+- check if the uploaded file in the in import wizard matches structure of the pre-defined import configuration (#78)
+
+### Changed
+- correct SQL update scripts for MySQL & PostgreSQL (#103)
+
+### Deleted
+- `ImportAttributeMapper.dynamicAttribute` was removed. Was replaced with `AttributeMapperMode` in 0.4.0
+
+
+### Dependencies
+- CUBA 6.9.x
+
+
 ## [0.4.0] - 26/05/2018
 
 ### Added
