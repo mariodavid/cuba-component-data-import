@@ -1,43 +1,27 @@
 package de.diedavids.cuba.dataimport.converter
 
-import de.diedavids.cuba.dataimport.dto.DataRow
-import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import groovy.json.JsonSlurper
 
-class JsonImportDataConverter implements ImportDataConverter {
+class JsonImportDataConverter extends AbstractTextBasedImportDataConverter<Object> {
+
+
     @Override
-    ImportData convert(String content) {
-        def result = new ImportDataImpl()
-
-        def json = parseJson(content)
-
-        json.each {
+    protected void doConvert(Object entries, ImportData result) {
+        entries.each {
             result.columns = getColumns(it)
-            addToTableData(result, it)
+            addToTableData(result, it as Map<String, Object>)
         }
-
-        result
     }
 
-    private Object parseJson(String content) {
+    @Override
+    protected Object parse(String content) {
         new JsonSlurper().parseText(content)
     }
 
+
     private List<String> getColumns(it) {
         new ArrayList(it.keySet())
-    }
-
-    private DataRow addToTableData(ImportDataImpl importData, Map row) {
-        def dataRow = DataRowImpl.ofMap(row)
-        importData.rows << dataRow
-        dataRow
-    }
-
-    @Override
-    ImportData convert(File file) {
-        convert(file.text)
     }
 
 }

@@ -30,6 +30,14 @@ class DataRowImpl implements DataRow {
         result
     }
 
+    @Override
+    boolean isEmpty() {
+
+        def valueMap = toMap()
+
+        valueMap.isEmpty() || valueMap.every {k,v -> !v}
+    }
+
     def propertyMissing(String name) {
         def index = columns[name]
         if (index != null) {

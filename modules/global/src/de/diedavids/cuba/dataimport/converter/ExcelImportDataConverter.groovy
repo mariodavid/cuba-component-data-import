@@ -23,8 +23,7 @@ class ExcelImportDataConverter implements ImportDataConverter {
         result
     }
 
-    private void parse(File file, ImportDataImpl result) {
-
+    private void parse(File file, ImportData result) {
 
         def reader = new ExcelReader(file)
 
@@ -39,13 +38,16 @@ class ExcelImportDataConverter implements ImportDataConverter {
             row.cellIterator().each { Cell cell ->
                 rowResult[labels[cell.columnIndex]] = dataFormatter.formatCellValue(cell)
             }
+
             result.columns = labels
-            result.rows << DataRowImpl.ofMap(rowResult)
+            def dataRow = DataRowImpl.ofMap(rowResult)
+            if (!dataRow.empty) {
+                result.rows << dataRow
+            }
         }
 
 
     }
-
 
 
 }

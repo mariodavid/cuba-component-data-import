@@ -28,7 +28,7 @@ class DataRowImplSpec extends Specification {
         given:
         def sut = new DataRowImpl(
                 columns: [
-                        "name": 0,
+                        "name"     : 0,
                         "firstName": 1,
                 ],
                 values: ["meier", "mario"]
@@ -47,12 +47,29 @@ class DataRowImplSpec extends Specification {
 
         when:
         DataRow sut = DataRowImpl.ofMap([
-                "name": "meier",
+                "name"     : "meier",
                 "firstName": "mario",
         ])
 
         then:
         sut.name == "meier"
         sut.firstName == "mario"
+    }
+
+    def "isEmpty is true if there are no keys in it"() {
+
+        given:
+        DataRow sut = DataRowImpl.ofMap(input)
+
+        expect:
+        isEmpty == sut.isEmpty()
+
+        where:
+        input                     || isEmpty
+        [:]                       || true
+        [empty: '']               || true
+        [empty: '', empty2: null] || true
+        [foo: 'bar']              || false
+        [empty: '', foo: 'bar']   || false
     }
 }
