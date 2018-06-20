@@ -4,7 +4,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NodeChild
 
-class XmlImportDataConverter extends AbstractImportDataConverter<GPathResult> {
+class XmlImportDataConverter extends AbstractTextBasedImportDataConverter<GPathResult> {
 
 
     @Override

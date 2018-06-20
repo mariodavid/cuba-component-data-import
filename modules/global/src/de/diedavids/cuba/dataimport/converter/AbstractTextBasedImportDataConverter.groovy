@@ -5,7 +5,7 @@ import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 
-abstract class AbstractImportDataConverter<T> implements ImportDataConverter {
+abstract class AbstractTextBasedImportDataConverter<T> implements ImportDataConverter {
 
     @Override
     ImportData convert(File file) {
@@ -23,13 +23,23 @@ abstract class AbstractImportDataConverter<T> implements ImportDataConverter {
         result
     }
 
-    abstract protected doConvert(T entries, ImportData result)
-
+    /**
+     * parses the file content as a String and returns a parse result (T)
+     * @param content the file content as a String
+     * @return the parse result (T)
+     */
     abstract protected T parse(String content)
 
-    protected List<String> getColumns(it) {
-        new ArrayList(it.keySet())
-    }
+
+
+
+    /**
+     * hook method for execution the conversion after the file has parsed via AbstractTextBasedImportDataConverter.parse
+     * @param entries the parsed entries
+     * @param result the ImportData result
+     */
+    abstract protected void doConvert(T entries, ImportData result)
+
 
     protected DataRow addToTableData(ImportData importData, Map<String, Object> row) {
         def dataRow = DataRowImpl.ofMap(row)

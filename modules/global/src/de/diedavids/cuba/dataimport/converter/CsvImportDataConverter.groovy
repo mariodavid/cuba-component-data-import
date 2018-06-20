@@ -5,7 +5,7 @@ import com.xlson.groovycsv.PropertyMapper
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.dto.ImportData
 
-class CsvImportDataConverter extends AbstractImportDataConverter<Iterator> {
+class CsvImportDataConverter extends AbstractTextBasedImportDataConverter<Iterator> {
 
 
     @Override

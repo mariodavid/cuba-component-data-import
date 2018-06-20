@@ -3,7 +3,7 @@ package de.diedavids.cuba.dataimport.converter
 import de.diedavids.cuba.dataimport.dto.ImportData
 import groovy.json.JsonSlurper
 
-class JsonImportDataConverter extends AbstractImportDataConverter<Object> {
+class JsonImportDataConverter extends AbstractTextBasedImportDataConverter<Object> {
 
 
     @Override
@@ -17,6 +17,11 @@ class JsonImportDataConverter extends AbstractImportDataConverter<Object> {
     @Override
     protected Object parse(String content) {
         new JsonSlurper().parseText(content)
+    }
+
+
+    private List<String> getColumns(it) {
+        new ArrayList(it.keySet())
     }
 
 }
