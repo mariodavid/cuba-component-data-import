@@ -10,5 +10,6 @@ public interface DataRow extends Serializable {
     java.util.Map toMap();
     KeyValueEntity toKevValueEntity();
 
-    //static de.diedavids.cuba.dataimport.dto.DataRowImpl ofMap(java.util.Map<java.lang.String, java.lang.Object> data);
+    boolean isEmpty();
+
 }

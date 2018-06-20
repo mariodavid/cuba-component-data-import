@@ -1,52 +1,34 @@
 package de.diedavids.cuba.dataimport.converter
 
-import de.diedavids.cuba.dataimport.dto.DataRow
-import de.diedavids.cuba.dataimport.dto.DataRowImpl
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NodeChild
 
-class XmlImportDataConverter implements ImportDataConverter {
+class XmlImportDataConverter extends AbstractImportDataConverter<GPathResult> {
+
 
     @Override
-    ImportData convert(String content) {
-        def result = new ImportDataImpl()
-
-        GPathResult root = parseXML(content)
-
-        root.children().each { NodeChild nodeChild ->
+    protected doConvert(GPathResult entries, ImportData result) {
+        entries.children().each { NodeChild nodeChild ->
             result.columns = getColumns(nodeChild)
             addToTableData(result, processNode(nodeChild))
         }
+    }
 
-        result
+    @Override
+    protected GPathResult parse(String content) {
+        new XmlSlurper().parseText(content)
     }
 
     private List<String> getColumns(NodeChild nodeChild) {
         nodeChild.children()*.name()
     }
 
-    private GPathResult parseXML(String content) {
-        new XmlSlurper().parseText(content)
-    }
 
-    @Override
-    ImportData convert(File file) {
-        convert(file.text)
-    }
-
-    private DataRow addToTableData(ImportDataImpl importData, Map row) {
-        def dataRow = DataRowImpl.ofMap(row)
-        importData.rows << dataRow
-        dataRow
-    }
-
-
-    def processNode(node, Map<String, ?> map = [:]) {
+    Map<String, Object> processNode(node, Map<String, ?> map = [:]) {
         map[node.name()] = map[node.name()] ?: map.getClass().newInstance()
 
-        Map<String, ?> nodeMap = map[node.name()]
+        Map<String, Object> nodeMap = map[node.name()]
 
         node.children().each { it ->
             if (it.children().size() == 0) {
