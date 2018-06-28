@@ -5,11 +5,11 @@ import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
-import de.diedavids.cuba.dataimport.entity.example.Customer
-import de.diedavids.cuba.dataimport.entity.example.CustomerPriority
-import de.diedavids.cuba.dataimport.entity.example.MlbPlayer
-import de.diedavids.cuba.dataimport.entity.example.MlbTeam
-import de.diedavids.cuba.dataimport.entity.example.State
+import de.diedavids.cuba.dataimport.entity.example.sales.Customer
+import de.diedavids.cuba.dataimport.entity.example.sales.CustomerPriority
+import de.diedavids.cuba.dataimport.entity.example.mlb.MlbPlayer
+import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
+import de.diedavids.cuba.dataimport.entity.example.mlb.State
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -7,7 +7,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
-import de.diedavids.cuba.dataimport.entity.example.MlbTeam
+import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import org.junit.Before
 import org.junit.Test
 

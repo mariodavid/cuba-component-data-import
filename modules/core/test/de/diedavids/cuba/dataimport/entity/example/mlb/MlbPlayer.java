@@ -1,24 +1,18 @@
-package de.diedavids.cuba.dataimport.entity.example;
+package de.diedavids.cuba.dataimport.entity.example.mlb;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import java.util.List;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_MLB_PLAYER")
 @Entity(name = "ddcdi$MlbPlayer")
 public class MlbPlayer extends StandardEntity {
-    private static final long serialVersionUID = -28922919610355807L;
+    private static final long serialVersionUID = -4518611612657008151L;
 
     @Column(name = "NAME")
     protected String name;
@@ -46,6 +40,21 @@ public class MlbPlayer extends StandardEntity {
     @Column(name = "ANNUAL_SALARY")
     protected BigDecimal annualSalary;
 
+    @JoinTable(name = "DDCDI_MLB_PLAYER_BASEBALL_STRENGTH_LINK",
+        joinColumns = @JoinColumn(name = "MLB_PLAYER_ID"),
+        inverseJoinColumns = @JoinColumn(name = "BASEBALL_STRENGTH_ID"))
+    @ManyToMany
+    protected List<BaseballStrength> strengths;
+
+    public void setStrengths(List<BaseballStrength> strengths) {
+        this.strengths = strengths;
+    }
+
+    public List<BaseballStrength> getStrengths() {
+        return strengths;
+    }
+
+
     public void setAnnualSalary(BigDecimal annualSalary) {
         this.annualSalary = annualSalary;
     }
@@ -55,30 +64,12 @@ public class MlbPlayer extends StandardEntity {
     }
 
 
-    public void setLeftHanded(Boolean leftHanded) {
-        this.leftHanded = leftHanded;
-    }
-
-    public Boolean getLeftHanded() {
-        return leftHanded;
-    }
-
-
-    public MlbTeam getTeam() {
-        return team;
-    }
-
     public void setTeam(MlbTeam team) {
         this.team = team;
     }
 
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public Date getBirthday() {
-        return birthday;
+    public MlbTeam getTeam() {
+        return team;
     }
 
 
@@ -112,6 +103,22 @@ public class MlbPlayer extends StandardEntity {
 
     public Double getAge() {
         return age;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setLeftHanded(Boolean leftHanded) {
+        this.leftHanded = leftHanded;
+    }
+
+    public Boolean getLeftHanded() {
+        return leftHanded;
     }
 
 

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <view class="de.diedavids.cuba.dataimport.entity.example.MlbPlayer"
+    <view class="de.diedavids.cuba.dataimport.entity.example.mlb.MlbPlayer"
           extends="_local"
           name="mlbPlayer-view">
         <property name="team"
                   view="_minimal"/>
+        <property name="strengths"
+                  view="_local" />
     </view>
 </views>
