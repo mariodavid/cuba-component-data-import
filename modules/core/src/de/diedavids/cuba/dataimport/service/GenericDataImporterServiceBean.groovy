@@ -189,6 +189,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 .addLocalProperties()
         addAssociationPropertiesToImportView(importConfiguration, importView)
 
+
         importView
     }
 

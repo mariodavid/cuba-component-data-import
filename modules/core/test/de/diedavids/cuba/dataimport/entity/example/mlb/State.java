@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.entity.example;
+package de.diedavids.cuba.dataimport.entity.example.mlb;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
@@ -58,6 +58,7 @@ public enum State implements EnumClass<String> {
     WI("WI"),
     WV("WV"),
     WY("WY");
+
 
     private String id;
 

@@ -1,22 +1,26 @@
-package de.diedavids.cuba.dataimport.entity.example;
+package de.diedavids.cuba.dataimport.entity.example.sales;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.Lob;
-import javax.validation.constraints.NotNull;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_CUSTOMER")
 @Entity(name = "ddcdi$Customer")
 public class Customer extends StandardEntity {
-    private static final long serialVersionUID = -827945146383788428L;
+    private static final long serialVersionUID = -2456246245187489154L;
 
     @NotNull
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @Column(name = "PRIORITY")
+    protected Integer priority;
 
     @Column(name = "FIRST_NAME")
     protected String firstName;
@@ -28,9 +32,6 @@ public class Customer extends StandardEntity {
     @Lob
     @Column(name = "DESCRIPTION")
     protected String description;
-
-    @Column(name = "PRIORITY")
-    protected Integer priority;
 
     public void setPriority(CustomerPriority priority) {
         this.priority = priority == null ? null : priority.getId();

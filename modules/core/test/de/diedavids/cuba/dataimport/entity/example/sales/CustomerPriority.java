@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.entity.example;
+package de.diedavids.cuba.dataimport.entity.example.sales;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
