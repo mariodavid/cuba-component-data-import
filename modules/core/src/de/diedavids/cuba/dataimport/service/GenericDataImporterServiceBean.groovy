@@ -119,7 +119,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     private void doImportSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
-        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration)
+        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration, importView)
 
         if (entityShouldBeImported) {
             if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
@@ -146,18 +146,19 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    private Binding createPreCommitBinding(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration) {
+    private Binding createPreCommitBinding(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration, EntityImportView importView) {
         new Binding(
                 entity: importEntityRequest.entity,
                 dataRow: importEntityRequest.dataRow,
                 dataManager: dataManager,
                 importConfiguration: importConfiguration,
+                importView: importView
         )
     }
 
 
-    private boolean executePreCommitScriptIfNecessary(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration) {
-        Binding preCommitBinding = createPreCommitBinding(importEntityRequest, importConfiguration)
+    private boolean executePreCommitScriptIfNecessary(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration, EntityImportView importView) {
+        Binding preCommitBinding = createPreCommitBinding(importEntityRequest, importConfiguration, importView)
         def preCommitScript = importConfiguration.preCommitScript
         try {
             if (preCommitScript) {
