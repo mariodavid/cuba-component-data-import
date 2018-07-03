@@ -81,7 +81,7 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     DELETED_BY varchar(50),
     --
     CONFIGURATION_ID uuid not null,
-    ENTITY_ATTRIBUTE varchar(255)l,
+    ENTITY_ATTRIBUTE varchar(255),
     FILE_COLUMN_NUMBER integer not null,
     FILE_COLUMN_ALIAS varchar(255),
     CUSTOM_ATTRIBUTE_BIND_SCRIPT text,
