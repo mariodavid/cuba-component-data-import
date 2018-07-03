@@ -46,7 +46,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
-        version = "0.5.1"
+        version = "0.5.2"
         isSnapshot = false
     }
     tomcat {
