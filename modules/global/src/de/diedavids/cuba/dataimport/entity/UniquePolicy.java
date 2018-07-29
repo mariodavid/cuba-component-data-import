@@ -8,7 +8,8 @@ import javax.annotation.Nullable;
 public enum UniquePolicy implements EnumClass<String> {
 
     SKIP("SKIP"),
-    UPDATE("UPDATE");
+    UPDATE("UPDATE"),
+    ABORT("ABORT");
 
     private String id;
 
