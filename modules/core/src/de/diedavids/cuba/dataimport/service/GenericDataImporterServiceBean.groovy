@@ -100,18 +100,21 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             }
             catch (EntityValidationException e) {
                 log.warn('Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.', e)
-                importLog.entitiesProcessed = 0
-                importLog.success = false
+                resetImportLog(importLog)
             }
         }
 
         catch (ImportUniqueAbortException e) {
             log.warn("Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.SINGLE_TRANSACTION: no entities written.",e)
-            importLog.entitiesProcessed = 0
-            importLog.success = false
+            resetImportLog(importLog)
         }
 
 
+    }
+
+    protected void resetImportLog(ImportLog importLog) {
+        importLog.entitiesProcessed = 0
+        importLog.success = false
     }
 
     private void importSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
