@@ -13,6 +13,7 @@ import org.junit.Before
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
+import static org.assertj.core.api.Assertions.assertThatThrownBy
 
 class GenericDataImporterServiceBeanUniqueConfigurationTest extends AbstractImportIntegrationTest {
 
@@ -110,6 +111,97 @@ class GenericDataImporterServiceBeanUniqueConfigurationTest extends AbstractImpo
         assertThat(storedExistingBalTeam.state).isEqualTo(State.AL)
 
         cont.deleteRecord(existingBalTeam)
+    }
+
+
+    @Test
+    void "doDataImport aborts the existing entity if there is a unique match with policy ABORT"() {
+
+
+        // given
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
+                ],
+                uniqueConfigurations: [new UniqueConfiguration(
+                        entityAttributes: [
+                                new UniqueConfigurationAttribute(entityAttribute: 'code'),
+                                new UniqueConfigurationAttribute(entityAttribute: 'name'),
+                        ],
+                        policy: UniquePolicy.ABORT
+                )],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+
+
+        // and
+        MlbTeam existingBaltimoreOrioles = createAndStoreMlbTeam('Baltimore Orioles', 'BAL', State.AL)
+
+        // when
+        ImportData importData = createData([
+                [name: 'Baltimore Orioles', code: 'BAL', state: State.CA],
+                [name: 'Boston Braves', code: 'BSN', state: State.CA],
+        ])
+
+        sut.doDataImport(importConfiguration, importData)
+
+        // then
+        def baltimoreOrioles = dataManager.reload(existingBaltimoreOrioles, '_local')
+        assertThat(baltimoreOrioles.state).isEqualTo(State.AL)
+
+
+        // and
+        assertThat(simpleDataLoader.loadAll(MlbTeam).size()).isEqualTo(1)
+
+
+        cont.deleteRecord(existingBaltimoreOrioles)
+    }
+
+
+    @Test
+    void "doDataImport imports all data if there is no unique match with policy ABORT"() {
+
+
+        // given
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 2),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'state', fileColumnAlias: 'state', fileColumnNumber: 2),
+                ],
+                uniqueConfigurations: [new UniqueConfiguration(
+                        entityAttributes: [
+                                new UniqueConfigurationAttribute(entityAttribute: 'code'),
+                                new UniqueConfigurationAttribute(entityAttribute: 'name'),
+                        ],
+                        policy: UniquePolicy.ABORT
+                )],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+
+
+        // when
+        ImportData importData = createData([
+                [name: 'Baltimore Orioles', code: 'BAL', state: State.CA],
+                [name: 'Boston Braves', code: 'BSN', state: State.CA],
+        ])
+
+        sut.doDataImport(importConfiguration, importData)
+
+        // then
+        def allMlbTeams = simpleDataLoader.loadAll(MlbTeam)
+        assertThat(allMlbTeams.size()).isEqualTo(2)
+
+
+        allMlbTeams.each {
+            cont.deleteRecord(it)
+        }
     }
 
 
