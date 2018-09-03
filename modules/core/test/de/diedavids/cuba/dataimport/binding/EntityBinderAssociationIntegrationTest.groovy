@@ -103,7 +103,6 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
         cont.deleteRecord(balTeam)
     }
 
-    @Ignore
     @Test
     void "bindAttributes creates an Entity with a association value of type Enum"() {
 

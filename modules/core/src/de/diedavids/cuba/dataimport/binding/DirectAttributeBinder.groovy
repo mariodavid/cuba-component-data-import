@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.entity.Entity
 import groovy.util.logging.Slf4j
 
 @Slf4j
-class DatatypeAttributeBinder implements AttributeBinder {
+class DirectAttributeBinder implements AttributeBinder {
 
     DatatypeFactory datatypeFactory
 

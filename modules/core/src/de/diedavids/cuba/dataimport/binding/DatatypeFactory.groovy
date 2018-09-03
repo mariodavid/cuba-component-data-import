@@ -22,6 +22,7 @@ class DatatypeFactory {
             case Boolean: return getBooleanValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
             case BigDecimal: return getBigDecimalValue(bindRequest.rawValue, bindRequest.dataRow)
             case String: return getStringValue(bindRequest.rawValue)
+            case Enum: return getEnumValue(bindRequest)
         }
     }
 
@@ -81,6 +82,20 @@ class DatatypeFactory {
         }
         catch (NumberFormatException e) {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
+    }
+
+    private getEnumValue(AttributeBindRequest bindRequest) {
+        Class<Enum> enumType = bindRequest.javaType as Class<Enum>
+        def value = bindRequest.rawValue.toUpperCase()
+        if (enumType.isEnum() && value) {
+            try {
+                enumType.valueOf(enumType, value)
+            }
+            catch (IllegalArgumentException e) {
+                log.info("Enum value could not be found: $value for Enum: ${enumType.simpleName}. Will be ignored")
+                log.debug('Details: ', e)
+            }
         }
     }
 
