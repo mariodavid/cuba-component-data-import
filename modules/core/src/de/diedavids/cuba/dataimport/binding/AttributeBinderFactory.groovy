@@ -12,6 +12,8 @@ import javax.inject.Inject
 @Component('ddcdi_AttributeBinderFactory')
 class AttributeBinderFactory {
 
+    @Inject
+    DatatypeFactory datatypeFactory
 
     @Inject
     SimpleDataLoader simpleDataLoader
@@ -31,13 +33,13 @@ class AttributeBinderFactory {
             binder = new CustomScriptAttributeBinder(scripting: scripting, dataManager: dataManager)
         }
         else if (bindRequest.isDynamicAttributeBindingRequest()) {
-            binder = new DatatypeAttributeBinder()
+            binder = createDatatypeAttributeBinder()
         }
         else if (bindRequest.isAssociationBindingRequest()) {
-            binder = new AssociationAttributeBinder(simpleDataLoader: simpleDataLoader)
+            binder = new AssociationAttributeBinder(simpleDataLoader: simpleDataLoader, datatypeFactory: datatypeFactory)
         }
         else if (bindRequest.isDatatypeBindingRequest()) {
-            binder = new DatatypeAttributeBinder()
+            binder = createDatatypeAttributeBinder()
         }
         else if (bindRequest.isEnumBindingRequest()) {
             binder = new EnumAttributeBinder()
@@ -47,6 +49,10 @@ class AttributeBinderFactory {
         }
 
         binder
+    }
+
+    protected DatatypeAttributeBinder createDatatypeAttributeBinder() {
+        new DatatypeAttributeBinder(datatypeFactory: datatypeFactory)
     }
 
 }

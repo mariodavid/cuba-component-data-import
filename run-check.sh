@@ -4,3 +4,4 @@
 ./gradlew createTestDb
 ./gradlew check
 ./gradlew assemble
+./gradlew stopDb
