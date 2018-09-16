@@ -1,22 +1,20 @@
 package de.diedavids.cuba.dataimport.binding
 
-import com.haulmont.cuba.core.entity.Entity
+
 import de.diedavids.cuba.dataimport.dto.DataRow
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import groovy.util.logging.Slf4j
+import org.springframework.stereotype.Component
 
 import java.text.SimpleDateFormat
 
 @Slf4j
-class DatatypeAttributeBinder implements AttributeBinder {
+@Component('ddcdi_DatatypeFactory')
+class DatatypeFactory {
 
+    public static final String NAME = 'ddcdi_DatatypeFactory'
 
-    @Override
-    void bindAttribute(Entity entity, AttributeBindRequest bindRequest) {
-        entity.setValueEx(bindRequest.entityAttributePath, getValue(bindRequest))
-    }
-
-    private getValue(AttributeBindRequest bindRequest) {
+    Object getValue(AttributeBindRequest bindRequest) {
         switch (bindRequest.javaType) {
             case Integer: return getIntegerValue(bindRequest.rawValue, bindRequest.dataRow)
             case Double: return getDoubleValue(bindRequest.rawValue, bindRequest.dataRow)
@@ -24,6 +22,7 @@ class DatatypeAttributeBinder implements AttributeBinder {
             case Boolean: return getBooleanValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
             case BigDecimal: return getBigDecimalValue(bindRequest.rawValue, bindRequest.dataRow)
             case String: return getStringValue(bindRequest.rawValue)
+            case Enum: return getEnumValue(bindRequest)
         }
     }
 
@@ -83,6 +82,20 @@ class DatatypeAttributeBinder implements AttributeBinder {
         }
         catch (NumberFormatException e) {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
+    }
+
+    private getEnumValue(AttributeBindRequest bindRequest) {
+        Class<Enum> enumType = bindRequest.javaType as Class<Enum>
+        def value = bindRequest.rawValue.toUpperCase()
+        if (enumType.isEnum() && value) {
+            try {
+                enumType.valueOf(enumType, value)
+            }
+            catch (IllegalArgumentException e) {
+                log.info("Enum value could not be found: $value for Enum: ${enumType.simpleName}. Will be ignored")
+                log.debug('Details: ', e)
+            }
         }
     }
 

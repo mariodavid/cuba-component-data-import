@@ -11,6 +11,8 @@ class AssociationAttributeBinder implements AttributeBinder {
 
     SimpleDataLoader simpleDataLoader
 
+    DatatypeFactory datatypeFactory
+
     @Override
     void bindAttribute(Entity entity, AttributeBindRequest bindRequest) {
 
@@ -30,10 +32,11 @@ class AssociationAttributeBinder implements AttributeBinder {
 
             def propertyPathFromAssociation = bindRequest.importEntityPropertyPath.path.drop(1)
             def propertyPath = propertyPathFromAssociation.join('.')
-            def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].javaType
+            def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].javaType as Class<? extends Entity>
             def associationProperty = bindRequest.importEntityPropertyPath.metaProperties[0].name
 
-            def associationValue = loadAssociationValue(bindRequest, associationJavaType, propertyPath, bindRequest.rawValue)
+            def searchValue = datatypeFactory.getValue(bindRequest)
+            def associationValue = loadAssociationValue(bindRequest, associationJavaType, propertyPath, searchValue)
             entity.setValueEx(associationProperty, associationValue)
         }
         else {
@@ -42,7 +45,7 @@ class AssociationAttributeBinder implements AttributeBinder {
 
     }
 
-    private loadAssociationValue(AttributeBindRequest bindRequest, Class<?> associationJavaType, String propertyPath, String rawValue) {
+    private loadAssociationValue(AttributeBindRequest bindRequest, Class<? extends Entity> associationJavaType, String propertyPath, Object rawValue) {
         def allResults = simpleDataLoader.loadAllByProperty(associationJavaType, propertyPath, rawValue)
 
         if (allResults.size() > 1) {

@@ -87,7 +87,12 @@ class AttributeBindRequest {
     }
 
     Class getJavaType() {
-        metaProperty.javaType
+        if (datatypeBindingRequest || enumBindingRequest || dynamicAttributeBindingRequest) {
+            metaProperty.javaType
+        }
+        else if (associationBindingRequest) {
+            importEntityPropertyPath.metaProperty.javaType
+        }
     }
 
     boolean isValidAssociationBindingRequest() {

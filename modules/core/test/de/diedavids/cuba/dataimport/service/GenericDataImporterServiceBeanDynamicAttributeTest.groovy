@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.LoadContext
 import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
+import de.diedavids.cuba.dataimport.binding.DatatypeFactory
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
@@ -34,6 +35,8 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
 
     protected DynamicAttributesManagerAPI dynamicAttributesManagerAPI
 
+    protected DatatypeFactory datatypeFactory
+
 
     @Before
     void setUp() throws Exception {
@@ -43,8 +46,9 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         simpleDataLoader = AppBeans.get(SimpleDataLoader.NAME)
 
         dynamicAttributes = AppBeans.get(DynamicAttributes.NAME)
-
+        datatypeFactory = AppBeans.get(DatatypeFactory.NAME)
         dynamicAttributesManagerAPI = AppBeans.get(DynamicAttributesManagerAPI.NAME)
+
 
         clearTable("DDCDI_MLB_TEAM")
         clearTable("SYS_ATTR_VALUE")

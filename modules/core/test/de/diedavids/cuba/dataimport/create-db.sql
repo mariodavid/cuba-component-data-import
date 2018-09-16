@@ -79,6 +79,7 @@ create table DDCDI_MLB_TEAM (
     NAME varchar(255) not null,
     STATE varchar(50),
     CODE varchar(255) not null,
+    TELEPHONE integer,
     --
     primary key (ID)
 )^

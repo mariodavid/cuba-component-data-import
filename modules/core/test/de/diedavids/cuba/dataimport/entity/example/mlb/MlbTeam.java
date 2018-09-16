@@ -30,6 +30,21 @@ public class MlbTeam extends StandardEntity {
     @Column(name = "CODE", nullable = false)
     protected String code;
 
+
+    @Column(name = "TELEPHONE")
+    protected Integer telephone;
+
+
+    public void setTelephone(Integer telephone) {
+        this.telephone = telephone;
+    }
+
+    public Integer getTelephone() {
+        return telephone;
+    }
+
+
+
     public void setState(State state) {
         this.state = state == null ? null : state.getId();
     }

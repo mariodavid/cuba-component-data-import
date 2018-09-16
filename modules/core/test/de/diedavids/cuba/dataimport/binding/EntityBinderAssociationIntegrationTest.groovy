@@ -9,6 +9,7 @@ import de.diedavids.cuba.dataimport.entity.example.mlb.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.mlb.State
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +27,7 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
     }
 
     @Test
-    void "bindAttributes creates an Entity with a association value"() {
+    void "bindAttributes creates an Entity with a association value of type String"() {
 
 
         ImportData importData = createData([
@@ -57,6 +58,83 @@ class EntityBinderAssociationIntegrationTest extends AbstractEntityBinderIntegra
 
         MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
+
+        assertThat(entity.getTeam()).isEqualTo(balTeam)
+
+        cont.deleteRecord(balTeam)
+    }
+
+    @Test
+    void "bindAttributes creates an Entity with a association value of type Integer"() {
+
+
+        ImportData importData = createData([
+                [team: 6578897]
+        ])
+
+
+        MlbTeam balTeam = metadata.create(MlbTeam)
+        balTeam.name = 'Baltimore Orioles'
+        balTeam.code = 'BAL'
+        balTeam.state = State.MA
+        balTeam.telephone = 6578897
+
+
+        dataManager.commit(balTeam)
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(
+                                attributeType: AttributeType.ASSOCIATION_ATTRIBUTE,
+                                entityAttribute: 'team',
+                                associationLookupAttribute: 'telephone',
+                                fileColumnAlias: 'team'
+                        )
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
+
+        assertThat(entity.getTeam()).isEqualTo(balTeam)
+
+        cont.deleteRecord(balTeam)
+    }
+
+    @Test
+    void "bindAttributes creates an Entity with a association value of type Enum"() {
+
+
+        ImportData importData = createData([
+                [team: State.MA]
+        ])
+
+
+        MlbTeam balTeam = metadata.create(MlbTeam)
+        balTeam.name = 'Baltimore Orioles'
+        balTeam.code = 'BAL'
+        balTeam.state = State.MA
+
+
+        dataManager.commit(balTeam)
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(
+                                attributeType: AttributeType.ASSOCIATION_ATTRIBUTE,
+                                entityAttribute: 'team',
+                                associationLookupAttribute: 'state',
+                                fileColumnAlias: 'team'
+                        )
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+
+        MlbPlayer entity = sut.bindAttributesToEntity(importConfiguration, importData.rows[0], new MlbPlayer()) as MlbPlayer
 
         assertThat(entity.getTeam()).isEqualTo(balTeam)
 

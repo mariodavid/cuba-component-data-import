@@ -12,6 +12,8 @@ import javax.inject.Inject
 @Component('ddcdi_AttributeBinderFactory')
 class AttributeBinderFactory {
 
+    @Inject
+    DatatypeFactory datatypeFactory
 
     @Inject
     SimpleDataLoader simpleDataLoader
@@ -30,23 +32,21 @@ class AttributeBinderFactory {
         if (bindRequest.customScriptBindingRequest) {
             binder = new CustomScriptAttributeBinder(scripting: scripting, dataManager: dataManager)
         }
-        else if (bindRequest.isDynamicAttributeBindingRequest()) {
-            binder = new DatatypeAttributeBinder()
+        else if (bindRequest.dynamicAttributeBindingRequest || bindRequest.enumBindingRequest || bindRequest.datatypeBindingRequest) {
+            binder = createDirectAttributeBinder()
         }
         else if (bindRequest.isAssociationBindingRequest()) {
-            binder = new AssociationAttributeBinder(simpleDataLoader: simpleDataLoader)
-        }
-        else if (bindRequest.isDatatypeBindingRequest()) {
-            binder = new DatatypeAttributeBinder()
-        }
-        else if (bindRequest.isEnumBindingRequest()) {
-            binder = new EnumAttributeBinder()
+            binder = new AssociationAttributeBinder(simpleDataLoader: simpleDataLoader, datatypeFactory: datatypeFactory)
         }
         else {
             log.warn("No valid Attribute binder for AttributeBindRequest: $bindRequest found. Will be ignored")
         }
 
         binder
+    }
+
+    protected AttributeBinder createDirectAttributeBinder() {
+        new DirectAttributeBinder(datatypeFactory: datatypeFactory)
     }
 
 }
