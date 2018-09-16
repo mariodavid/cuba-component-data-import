@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.6.0] - Unreleased
 
 ### Added
-- new UniquePolicy option: Abort. Will abort the complete import process immediately. 
+- new UniquePolicy option: Abort. Will abort the complete import process immediately (#122)
+- allowed different lookup column types for association types (Enum & all simple types) (#129)
 
 ## [0.5.3] - 21/07/2018
 
