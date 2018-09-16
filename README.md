@@ -386,6 +386,7 @@ find an entity that match the criteria of the data row, the corresponding unique
 
 * `Skip if exists` - the data row will not get imported and skipped
 * `Update existing entity` - the values of the data row will update the found entity instance
+* `Abort import` - the import process will be aborted immediately. Depending on the [transaction strategy](https://github.com/mariodavid/cuba-component-data-import#transaction-strategy) either the entities up until this point will be written (transaction per entity), or no entity at all (single transaction).
 
 #### Unique Configuration example
 
