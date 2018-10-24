@@ -1,7 +1,8 @@
 buildscript {
-    ext.cubaVersion = '6.9.5'
+    ext.cubaVersion = '6.10.2'
     repositories {
 
+        mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -46,7 +47,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
-        version = "0.6.1"
+        version = "0.7.0"
         isSnapshot = true
     }
     tomcat {
@@ -99,7 +100,7 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.6.0")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.7.0")
 
 }
 
@@ -204,7 +205,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 }
 
 configure(globalModule) {
-    task enhance(type: CubaEnhancing)
+    entitiesEnhancing {
+        main { enabled = true }
+    }
 
     dependencies {
         compile('org.apache.poi:poi-ooxml:3.17')
