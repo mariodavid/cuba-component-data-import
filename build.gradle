@@ -207,7 +207,13 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 configure(globalModule) {
     entitiesEnhancing {
         main { enabled = true }
+        test {
+            enabled = true
+            persistenceConfig = 'dataimport-test-persistence.xml'
+        }
+
     }
+
 
     dependencies {
         compile('org.apache.poi:poi-ooxml:3.17')
@@ -226,7 +232,14 @@ configure(globalModule) {
 
 configure(coreModule) {
 
-    task enhanceTestModel(type: CubaTestEnhancing)
+    entitiesEnhancing {
+        main { enabled = true }
+        test {
+            enabled = true
+            persistenceConfig = 'dataimport-test-persistence.xml'
+        }
+
+    }
 
     configurations {
         jdbc
