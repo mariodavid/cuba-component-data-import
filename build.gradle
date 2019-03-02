@@ -1,5 +1,5 @@
 buildscript {
-    ext.cubaVersion = '6.10.2'
+    ext.cubaVersion = '7.0.0.BETA3'
     repositories {
 
         mavenLocal()
@@ -40,7 +40,6 @@ def webModule = project(":${modulePrefix}-web")
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 
@@ -141,15 +140,15 @@ test.finalizedBy(project.tasks.coberturaCheck)
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
 
     dependencies {
+        compile('org.codehaus.groovy:groovy-all:2.5.2')
         testCompile('junit:junit:4.12')
         testCompile 'org.assertj:assertj-core:2.9.0'
 
 
-        testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
+        testCompile('org.spockframework:spock-core:1.2-groovy-2.5')
         testCompile('org.springframework:spring-test:4.3.1.RELEASE')
         testRuntime "cglib:cglib-nodep:3.2.4"
     }
@@ -248,7 +247,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
         compile('org.apache.poi:poi-ooxml:3.17')
@@ -341,7 +340,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(guiModule)
 
     }
@@ -405,9 +404,6 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
-}
 
 apply from: 'extra.gradle'
 

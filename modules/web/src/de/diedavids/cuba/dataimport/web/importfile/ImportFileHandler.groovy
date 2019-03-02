@@ -6,6 +6,8 @@ import com.haulmont.cuba.gui.components.FileUploadField
 import com.haulmont.cuba.gui.components.UploadField
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
 
+import java.util.function.Consumer
+
 class ImportFileHandler {
 
 
@@ -22,9 +24,9 @@ class ImportFileHandler {
     DataManager dataManager
 
     void onUploadSuccess(Closure onSuccessClosure) {
-        importFileUploadBtn.addFileUploadSucceedListener(new FileUploadField.FileUploadSucceedListener() {
+        importFileUploadBtn.addFileUploadSucceedListener(new Consumer<FileUploadField.FileUploadSucceedEvent>() {
             @Override
-            void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent e) {
+            void accept(FileUploadField.FileUploadSucceedEvent fileUploadSucceedEvent) {
                 File file = fileUploadingAPI.getFile(importFileUploadBtn.fileId)
                 uploadedFileDescriptor = importFileUploadBtn.fileDescriptor
                 uploadedFile = file
@@ -35,9 +37,9 @@ class ImportFileHandler {
 
 
     void onUploadError(Closure onErrorClosure) {
-        importFileUploadBtn.addFileUploadErrorListener(new UploadField.FileUploadErrorListener() {
+        importFileUploadBtn.addFileUploadErrorListener(new Consumer<UploadField.FileUploadErrorEvent>() {
             @Override
-            void fileUploadError(UploadField.FileUploadErrorEvent e) {
+            void accept(UploadField.FileUploadErrorEvent fileUploadErrorEvent) {
                 onErrorClosure.call()
             }
         })
