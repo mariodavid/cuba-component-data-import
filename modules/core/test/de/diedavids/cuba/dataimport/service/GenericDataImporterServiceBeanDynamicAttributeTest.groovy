@@ -20,6 +20,8 @@ import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import org.junit.Before
 import org.junit.Test
 
+import java.time.LocalDate
+
 import static org.assertj.core.api.Assertions.assertThat
 
 class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportIntegrationTest {
@@ -141,7 +143,8 @@ class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportI
         //then:
         def baltimoreTeam = loadMlbTeamWithDynamicAttributes()
 
-        assertThat(baltimoreTeam.getValue("+builtAt")).isEqualTo(Date.parse("dd.MM.yyyy", "03.04.2010"))
+
+        assertThat(baltimoreTeam.getValue("+builtAt")).isEqualTo(LocalDate.of(2010,4,3).toDate())
 
     }
 
