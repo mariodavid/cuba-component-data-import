@@ -11,11 +11,6 @@ buildscript {
             }
         }
 
-
-        maven {
-            url  "https://dl.bintray.com/balvi/cuba-components"
-        }
-
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -25,6 +20,11 @@ buildscript {
         classpath 'net.saliman:gradle-cobertura-plugin:2.5.0'
         classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
     }
+}
+
+
+plugins {
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 apply plugin: "com.github.kt3k.coveralls"
@@ -46,8 +46,8 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
-        version = "0.7.0"
-        isSnapshot = false
+version = project.properties['version'].replaceAll('-SNAPSHOT', '')
+        isSnapshot = project.properties['version'].contains('-SNAPSHOT')
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
@@ -61,9 +61,9 @@ subprojects {
     apply plugin: 'com.jfrog.bintray'
 
     bintray {
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('UPLOAD_REPOSITORY_USERNAME')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('UPLOAD_REPOSITORY_PASSWORD')
-
+        user = System.getenv('BINTRAY_USERNAME')
+        key = System.getenv('BINTRAY_PASSWORD')
+        
         configurations = ['archives']
 
         publish = true
@@ -169,10 +169,10 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply plugin: 'codenarc'
 
     codenarc {
-        toolVersion = "0.24"
+        toolVersion = "1.3"
         ignoreFailures = false
         reportFormat = 'html'
-        reportsDir = new File("./build/reports/codenarc")
+        reportsDir = project.file("build/reports/codenarc")
     }
 
     codenarcMain {
