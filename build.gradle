@@ -63,7 +63,7 @@ subprojects {
     bintray {
         user = System.getenv('BINTRAY_USERNAME')
         key = System.getenv('BINTRAY_PASSWORD')
-        
+
         configurations = ['archives']
 
         publish = true
@@ -207,7 +207,7 @@ configure(globalModule) {
     entitiesEnhancing {
         main { enabled = true }
         test {
-            enabled = true
+            enabled = false
             persistenceConfig = 'dataimport-test-persistence.xml'
         }
 
