@@ -645,6 +645,23 @@ The following examples will lead to a non-unique result and therefore will not w
 In case such a situation occurs, the corresponding data row with all non-unique results are logged. Nothing will be bound in this case.
 
 
+#### 1:N / M:N entity association
+
+Currently binding of 1:N / M:N entity associations are not supported automatically. Instead the [custom attribute binding script](#custom-attribute-binding-script) can be used for this purpose.
+
+An example use case can be found in the example project [cuba-example-using-data-import](https://github.com/mariodavid/cuba-example-using-data-import).
+
+There the following example shows the behavior of M:N association binding: `MlbPlayer -- M:N --> BaseballStrength`.
+
+In particular there are the following example configuration within the directory [example-data/mlb/mlb-players-with-strengths](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths):
+
+* [MlbPlayer Import Configuration with custom strengths binding (ImportConfiguration-mlb-player-with-strengths.json)](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths/import-configurations/ImportConfiguration-mlb-player-with-strengths.json)
+* [MlbPlayer Import Attribute Mapper with custom strengths binding (ImportAttributeMapper-mlb-player-with-strengths.json)](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths/import-configurations/ImportAttributeMapper-mlb-player-with-strengths.json)
+* [MlbPlayer CSV Import file (mlb_players-with-strengths.csv)](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths/mlb_players-with-strengths.csv)
+
+Note: The Baseball Strengths master data file has to be imported first.
+
+
 ### Dynamic attribute binding
 
 [Dynamic attributes](https://doc.cuba-platform.com/manual-6.8/dynamic_attributes.html) are supported as a binding target. Currently the following dynamic attribute datatypes are supported:

@@ -239,6 +239,7 @@
                       width="100%"/>
                 <buttonsPanel align="BOTTOM_RIGHT">
                     <button id="startImportBtn"
+                            disableOnClick="true"
                             action="startImport"/>
                 </buttonsPanel>
             </tab>

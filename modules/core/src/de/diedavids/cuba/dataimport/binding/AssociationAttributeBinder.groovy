@@ -32,12 +32,20 @@ class AssociationAttributeBinder implements AttributeBinder {
 
             def propertyPathFromAssociation = bindRequest.importEntityPropertyPath.path.drop(1)
             def propertyPath = propertyPathFromAssociation.join('.')
-            def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].javaType as Class<? extends Entity>
+            def associationJavaType = bindRequest.importEntityPropertyPath.metaProperties[0].range.asClass().javaClass as Class<? extends Entity>
+
             def associationProperty = bindRequest.importEntityPropertyPath.metaProperties[0].name
 
             def searchValue = datatypeFactory.getValue(bindRequest)
             def associationValue = loadAssociationValue(bindRequest, associationJavaType, propertyPath, searchValue)
-            entity.setValueEx(associationProperty, associationValue)
+
+            try {
+                entity.setValueEx(associationProperty, associationValue)
+            }
+            catch (IllegalArgumentException e) {
+                log.warn("Association bind request could not be executed. Trying to set $associationValue to $associationProperty. Will be ignored.")
+                log.debug("Detailed exception", e)
+            }
         }
         else {
             log.warn('Invalid Association bind request. Will be ignored.')
