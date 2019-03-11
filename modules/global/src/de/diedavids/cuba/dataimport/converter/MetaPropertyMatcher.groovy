@@ -3,7 +3,7 @@ package de.diedavids.cuba.dataimport.converter
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Component
 
 @Component('ddcdi_MetaPropertyMatcher')

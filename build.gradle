@@ -1,5 +1,5 @@
 buildscript {
-    ext.cubaVersion = '6.10.2'
+    ext.cubaVersion = '7.0.1'
     repositories {
 
         mavenLocal()
@@ -11,11 +11,6 @@ buildscript {
             }
         }
 
-
-        maven {
-            url  "https://dl.bintray.com/balvi/cuba-components"
-        }
-
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -25,6 +20,11 @@ buildscript {
         classpath 'net.saliman:gradle-cobertura-plugin:2.5.0'
         classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
     }
+}
+
+
+plugins {
+    id 'net.researchgate.release' version '2.6.0'
 }
 
 apply plugin: "com.github.kt3k.coveralls"
@@ -40,15 +40,14 @@ def webModule = project(":${modulePrefix}-web")
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
-        version = "0.7.0"
-        isSnapshot = false
+version = project.properties['version'].replaceAll('-SNAPSHOT', '')
+        isSnapshot = project.properties['version'].contains('-SNAPSHOT')
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
@@ -62,8 +61,8 @@ subprojects {
     apply plugin: 'com.jfrog.bintray'
 
     bintray {
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('UPLOAD_REPOSITORY_USERNAME')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('UPLOAD_REPOSITORY_PASSWORD')
+        user = System.getenv('BINTRAY_USERNAME')
+        key = System.getenv('BINTRAY_PASSWORD')
 
         configurations = ['archives']
 
@@ -100,7 +99,7 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.7.0")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.8.0")
 
 }
 
@@ -141,15 +140,15 @@ test.finalizedBy(project.tasks.coberturaCheck)
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
 
     dependencies {
+        compile('org.codehaus.groovy:groovy-all:2.5.2')
         testCompile('junit:junit:4.12')
         testCompile 'org.assertj:assertj-core:2.9.0'
 
 
-        testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
+        testCompile('org.spockframework:spock-core:1.2-groovy-2.5')
         testCompile('org.springframework:spring-test:4.3.1.RELEASE')
         testRuntime "cglib:cglib-nodep:3.2.4"
     }
@@ -170,10 +169,10 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply plugin: 'codenarc'
 
     codenarc {
-        toolVersion = "0.24"
+        toolVersion = "1.3"
         ignoreFailures = false
         reportFormat = 'html'
-        reportsDir = new File("./build/reports/codenarc")
+        reportsDir = project.file("build/reports/codenarc")
     }
 
     codenarcMain {
@@ -208,7 +207,7 @@ configure(globalModule) {
     entitiesEnhancing {
         main { enabled = true }
         test {
-            enabled = true
+            enabled = false
             persistenceConfig = 'dataimport-test-persistence.xml'
         }
 
@@ -248,7 +247,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
         compile('org.apache.poi:poi-ooxml:3.17')
@@ -341,7 +340,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(guiModule)
 
     }
@@ -405,9 +404,6 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
-}
 
 apply from: 'extra.gradle'
 

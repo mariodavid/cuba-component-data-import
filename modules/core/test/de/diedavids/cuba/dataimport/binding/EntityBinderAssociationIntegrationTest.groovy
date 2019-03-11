@@ -9,7 +9,6 @@ import de.diedavids.cuba.dataimport.entity.example.mlb.MlbPlayer
 import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.mlb.State
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat;
