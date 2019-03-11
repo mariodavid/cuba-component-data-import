@@ -56,6 +56,15 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         importEntities(entities, importConfiguration, importLog)
     }
+    @Override
+    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues) {
+
+        def entities = createEntities(importConfiguration, importData, defaultValues)
+
+        ImportLog importLog = createImportLog(importConfiguration)
+
+        importEntities(entities, importConfiguration, importLog)
+    }
 
     private ImportLog importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration, ImportLog importLog) {
 
@@ -249,23 +258,23 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importAttributeMapper.automatic && importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
-    Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData) {
+    Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues = [:]) {
         importData.rows.collect {
-            createImportEntityRequestFromRow(importConfiguration, it)
+            createImportEntityRequestFromRow(importConfiguration, it, defaultValues)
         }
     }
 
-    ImportEntityRequest createImportEntityRequestFromRow(ImportConfiguration importConfiguration, DataRow dataRow) {
+    ImportEntityRequest createImportEntityRequestFromRow(ImportConfiguration importConfiguration, DataRow dataRow, Map<String, Object> defaultValues) {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
         new ImportEntityRequest(
-                entity: bindAttributesToEntity(importConfiguration, dataRow, entityInstance),
+                entity: bindAttributesToEntity(importConfiguration, dataRow, entityInstance, defaultValues),
                 dataRow: dataRow
         )
     }
 
-    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
-        dataImportEntityBinder.bindAttributesToEntity(importConfiguration, dataRow, entity)
+    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, Map<String, Object> defaultValues) {
+        dataImportEntityBinder.bindAttributesToEntity(importConfiguration, dataRow, entity, defaultValues)
     }
 
     private Entity createEntityInstance(ImportConfiguration importConfiguration) {

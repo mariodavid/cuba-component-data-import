@@ -74,10 +74,14 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     @Inject
     ComponentsFactory componentsFactory
 
+    Map<String, Object> defaultValues
+
     @Override
     void init(Map<String, Object> params) {
         initImportFileHandler()
         initImportFileParser()
+
+        defaultValues = params.get("defaultValues") as Map<String, Object>
     }
 
     void initImportFileParser() {
@@ -162,7 +166,7 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
 
 
     void startImport() {
-        ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
+        ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData, defaultValues)
         importLogDs.item = importLog
         toStep3()
     }

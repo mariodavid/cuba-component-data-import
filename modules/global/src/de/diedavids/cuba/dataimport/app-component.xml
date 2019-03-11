@@ -5,6 +5,7 @@
             name="global">
         <artifact appJar="true"
                   name="dataimport-global"/>
+        <artifact name="dataimport-core" classifier="db" ext="zip" configuration="dbscripts"/>
         <property name="cuba.persistenceConfig"
                   value="+de/diedavids/cuba/dataimport/persistence.xml"/>
         <property name="cuba.metadataConfig"

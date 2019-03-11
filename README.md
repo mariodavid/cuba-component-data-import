@@ -25,7 +25,7 @@ Table of Contents
      * [Enum binding](#enum-binding)
      * [Entity association binding](#entity-association-binding)
      * [Dynamic attribute binding](#dynamic-attribute-binding)
-
+  * [Import Limitations](#import-limitations)
 
 
 ## Installation
@@ -680,3 +680,16 @@ In order to configure a dynamic attribute the Entity attribute mapper has to be 
 Let's assume the Entity `MlbTeam` as a dynamic attribute category `Stadium Information`. Within this category, there is one
 dynamic attribute defined with the name `stadiumName`. In this case the Entity attribute in the 
 Entity attribute mapper would be: `+stadiumName`
+
+
+## Import limitations
+
+Integrations between systems is oftentimes highly dependent on the system / process to integrate with. Therefore the
+source and destination datasources oftentimes differ to a high degree. This application component solves some of the
+problems that arise during this transformation from the source to the target datasource.
+
+However, there are a lot of cases, that exceeds the limits of the capabilities of this application component.
+
+Therefore there is the possibility to create custom scripts that act as a last escape for the programmer to solve the
+integration challenge. But still it is possible that those extensions sometimes are not enough.
+

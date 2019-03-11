@@ -6,5 +6,6 @@
         <item screen="ddcdi$ImportConfiguration.browse"/>
         <item openType="DIALOG"
               screen="ddcdi$import-wizard"/>
+        <item screen="ddcdi_Game.browse"/>
     </menu>
 </menu-config>

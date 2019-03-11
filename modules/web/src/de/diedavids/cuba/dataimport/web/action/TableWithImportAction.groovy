@@ -10,7 +10,7 @@ class TableWithImportAction extends BaseAction {
 
 
     WithImportBean withImportBean = AppBeans.<WithImportBean> get(WithImportBean)
-    private final ListComponent target
+    private ListComponent target
 
     @SuppressWarnings('ThisReferenceEscapesConstructor')
     TableWithImportAction(ListComponent target) {
