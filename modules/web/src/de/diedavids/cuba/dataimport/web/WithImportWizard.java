@@ -13,44 +13,76 @@ import de.diedavids.cuba.dataimport.web.action.TableWithImportWizardAction;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public interface WithImportWizard {
 
-    CollectionContainer getCollectionContainer();
+    /**
+     * defines the table component that will be used as a basis for the import wizard
+     * @return the table
+     */
     ListComponent getListComponent();
 
+    /**
+     * defines the collection container of the table that will be used as a basis for the import wizard
+     * @return the collection container of the table
+     */
+    CollectionContainer getCollectionContainer();
+
+
+    /**
+     * the button id of the destination button
+     *
+     * It will either picked up from existing XML definitions or created on the fly with this identifier
+     * @return the button identifier
+     */
     default String getButtonId() {
-        return "buttonId";
+        return "importWizardButton";
     }
 
+
+    /**
+     * defines the button panel that will be used for inserting the import button
+     * @return the destination buttonPanel
+     */
     default ButtonsPanel getButtonsPanel() {
         return null;
     }
 
+
+    /**
+     * defines default values for the entity that will be imported
+     * @return Map of default values (keys are the attribute names of the entity)
+     */
     default Map<String, Object> getDefaultValues() {
         return Collections.emptyMap();
     }
 
-
     @Subscribe
-    default void initImportWizard(Screen.InitEvent event) {
-
+    default void initImportWizardButton(Screen.InitEvent event) {
 
         Screen screen = event.getSource();
 
-        ScreenData screenData = UiControllerUtils.getScreenData(screen);
+        Button button = createOrGetButton(screen);
 
+        initButtonWithImportWizardAction(screen, button);
+
+    }
+
+    default Button createOrGetButton(Screen screen) {
         BeanLocator beanLocator = Extensions.getBeanLocator(screen);
         ButtonsPanelHelper buttonsPanelHelper = beanLocator.get(ButtonsPanelHelper.NAME);
 
-        Button button = buttonsPanelHelper.createButton(getButtonId(), getButtonsPanel(), Collections.emptyList());
+        return buttonsPanelHelper.createButton(getButtonId(), getButtonsPanel(), Collections.emptyList());
+    }
 
-        Supplier<Map<String, Object>> defaultValuesSupplier = this::getDefaultValues;
-
-        Action action = new TableWithImportWizardAction(getListComponent(), getCollectionContainer(), screenData, defaultValuesSupplier);
+    default void initButtonWithImportWizardAction(Screen screen, Button button) {
+        Action action = new TableWithImportWizardAction(
+                getListComponent(),
+                getCollectionContainer(),
+                UiControllerUtils.getScreenData(screen),
+                this::getDefaultValues
+        );
 
         button.setAction(action);
-
     }
 }
