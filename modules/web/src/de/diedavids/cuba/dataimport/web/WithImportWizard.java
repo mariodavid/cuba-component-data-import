@@ -6,7 +6,6 @@ import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.ButtonsPanel;
 import com.haulmont.cuba.gui.components.ListComponent;
 import com.haulmont.cuba.gui.model.CollectionContainer;
-import com.haulmont.cuba.gui.model.ScreenData;
 import com.haulmont.cuba.gui.screen.*;
 import de.balvi.cuba.declarativecontrollers.web.helper.ButtonsPanelHelper;
 import de.diedavids.cuba.dataimport.web.action.TableWithImportWizardAction;
@@ -32,7 +31,7 @@ public interface WithImportWizard {
     /**
      * the button id of the destination button
      *
-     * It will either picked up from existing XML definitions or created on the fly with this identifier
+     * It will either picked up from existing XML definitions or created with this identifier
      * @return the button identifier
      */
     default String getButtonId() {

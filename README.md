@@ -142,14 +142,17 @@ will be triggered. Afterwards the user will see a summary of how many entities w
 #### Step 5: Import Summary
 ![import-wizard-step-5](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-5.png)
 
-## Integrate Import Wizard into your screens
+## Integrate Import Wizard into screens
 
-Instead of using the full import wizard, it is also possible to integrate the import process into your screens.
+Instead of using the full import wizard, it is also possible to integrate the import process directly into screens.
 This use case is for the second usage mode of this application component (as mentioned above). In this case, there is
 already an import configuration defined for a particular entity. With that, you as the developer want the user directly
 to start the import process from the browse screen of your entities.
 
-### @WithImport Annotation for browse screens
+### @WithImport Annotation for browse screens (legacy Screens of CUBA 6 `AbstractLookup`)
+
+NOTE: The `@WithImport` annotation should only be used for CUBA 6 based legacy screens that extend `AbstractLookup`. For
+CUBA 7 based Screens extenting `StandardLookup<T>` should use the interface based approch `implement WithImportWizard`.
 
 To start import from your entity browse screen, you have to add the following annotation to your browse screen controller:
 
@@ -169,6 +172,63 @@ The `@WithImport` annotations can be customized through the following attributes
 * `String listComponent` - the id of the list component / table where the button will be added - REQUIRED
 * `String buttonId` - the id of the newly created button that will be created ("importBtn" by default)
 * `String buttonsPanel` - the id of the buttons panel where the new button will be added ("buttonsPanel" by default)
+
+
+When the import button is clicked on the `CustomerBrowse`, it will check if there are import configuration available
+for this Entity. In case there are multiple configurations available for this entity, the user has to select a particular
+import configuration to proceed.
+
+
+### `WithImportWizard` interface for browse screens (CUBA 7 `StandardLookup<T>`)
+
+To start import from your entity browse screen, the screen controller has to implement the following interface:
+
+```
+public class CustomerBrowse extends StandardLookup<Customer> implements WithImportWizard {
+}
+```
+
+The `WithImportWizard` interface is a replacement for the previous existing `@WithImport` annotation.
+It will create a button in the buttonsPanel of the table and add the Import button after the default CUBA buttons.
+
+`WithImportWizard` requires to implement certain methods in order to configure the way the import wizard works:
+
+
+```
+public class CustomerBrowse extends StandardLookup<Customer> implements WithImportWizard {
+
+    @Inject
+    protected GroupTable<Customer> customerTable;
+
+    @Inject
+    protected CollectionContainer<Customer> customerDc;
+
+    @Inject
+    protected ButtonsPanel buttonsPanel;
+
+
+    @Override
+    public ListComponent getListComponent() {
+        return customerTable;
+    }
+
+    @Override
+    public CollectionContainer getCollectionContainer() {
+        return customerDc;
+    }
+
+    @Override
+    public ButtonsPanel getButtonsPanel() {
+        return buttonsPanel;
+    }
+
+}
+```
+
+Furthermore it has the following optional methods to implement to configure the behavior of the import wizard further:
+
+* `Map<String, Object> getDefaultValues()` - defines default values for the entity that will be imported
+* `String getButtonId` - the button id of the destination button. Will picked up from existing XML or created with this identifier
 
 
 When the import button is clicked on the `CustomerBrowse`, it will check if there are import configuration available
