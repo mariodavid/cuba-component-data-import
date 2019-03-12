@@ -9,6 +9,5 @@
         <class>de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper</class>
         <class>de.diedavids.cuba.dataimport.entity.UniqueConfigurationAttribute</class>
         <class>de.diedavids.cuba.dataimport.entity.UniqueConfiguration</class>
-        <class>de.diedavids.cuba.dataimport.entity.example.Game</class>
     </persistence-unit>
 </persistence>
