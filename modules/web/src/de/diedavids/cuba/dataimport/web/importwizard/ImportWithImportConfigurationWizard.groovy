@@ -81,7 +81,7 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
         initImportFileHandler()
         initImportFileParser()
 
-        defaultValues = params.get("defaultValues") as Map<String, Object>
+        defaultValues = params.get('defaultValues') as Map<String, Object>
     }
 
     void initImportFileParser() {

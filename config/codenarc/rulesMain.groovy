@@ -25,7 +25,7 @@ ruleset {
         priority = 1
     }
     MethodCount {
-        maxMethods = 20
+        maxMethods = 25
         priority = 1
     }
     CatchError { priority = 1 }
@@ -276,5 +276,5 @@ ruleset {
     RemoveAllOnSelf { priority = 1 }
     UnnecessaryBigDecimalInstantiation { priority = 1 }
 
-    ClassSize { maxLines = 250 }
+    ClassSize { maxLines = 300 }
 }

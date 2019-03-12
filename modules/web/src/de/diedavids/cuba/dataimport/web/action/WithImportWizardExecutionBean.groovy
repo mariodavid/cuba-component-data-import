@@ -43,7 +43,7 @@ class WithImportWizardExecutionBean implements WithImportWizardExecution {
 
     void openImportWizard(ListComponent target, CollectionContainer targetContainer, ScreenData screenData, Supplier<Map<String, Object>> defaultValuesSupplier) {
         def frame = target.frame
-        def entityMetaClass = targetContainer.getEntityMetaClass()
+        def entityMetaClass = targetContainer.entityMetaClass
         def importConfigurations = importWizardService.getImportConfigurations(entityMetaClass)
 
         if (!importConfigurations) {
@@ -80,10 +80,10 @@ class WithImportWizardExecutionBean implements WithImportWizardExecution {
     }
 
     private void openImportWizardForImportConfiguration(ListComponent target, ScreenData screenData, ImportConfiguration importConfiguration, Supplier<Map<String, Object>> defaultValuesSupplier) {
-        Window.Editor importScreen = target.frame.openEditor('ddcdi$import-with-import-configuration-wizard', importConfiguration, WindowManager.OpenType.DIALOG, ParamsMap.of("defaultValues",defaultValuesSupplier.get()))
+        Window.Editor importScreen = target.frame.openEditor('ddcdi$import-with-import-configuration-wizard', importConfiguration, WindowManager.OpenType.DIALOG, ParamsMap.of('defaultValues',defaultValuesSupplier.get()))
 
         importScreen.addCloseWithCommitListener {
-            screenData.loadAll();
+            screenData.loadAll()
         }
 
     }

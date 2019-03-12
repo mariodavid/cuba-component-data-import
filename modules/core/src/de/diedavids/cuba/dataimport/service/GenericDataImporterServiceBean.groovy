@@ -136,7 +136,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 if (!alreadyExistingEntity) {
                     doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
                 } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
-                    importEntityRequest.entity = bindAttributesToEntity(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity)
+                    importEntityRequest.entity = bindAttributesToEntity(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity, importEntityRequest.defaultValues)
 
                     doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
                 } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.ABORT) {
@@ -268,6 +268,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
         new ImportEntityRequest(
+                defaultValues: defaultValues,
                 entity: bindAttributesToEntity(importConfiguration, dataRow, entityInstance, defaultValues),
                 dataRow: dataRow
         )
@@ -285,6 +286,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 }
 
 class ImportEntityRequest {
+    Map<String, Object> defaultValues
     Entity entity
     DataRow dataRow
     Set<ConstraintViolation> constraintViolations = []
