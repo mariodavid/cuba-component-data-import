@@ -26,6 +26,7 @@ Table of Contents
      * [Entity association binding](#entity-association-binding)
      * [Dynamic attribute binding](#dynamic-attribute-binding)
   * [Import Limitations](#import-limitations)
+     * [Entity staging area](#entity-staging-area)
 
 
 ## Installation
@@ -744,12 +745,92 @@ Entity attribute mapper would be: `+stadiumName`
 
 ## Import limitations
 
-Integrations between systems is oftentimes highly dependent on the system / process to integrate with. Therefore the
-source and destination datasources oftentimes differ to a high degree. This application component solves some of the
-problems that arise during this transformation from the source to the target datasource.
+Integrations between systems is oftentimes highly dependent on the system / process to integrate with. Oftentimes the
+source and destination data sources oftentimes differ to a high degree.
 
-However, there are a lot of cases, that exceeds the limits of the capabilities of this application component.
+This application component solves some of the problems that arise during this transformation from the source to the target data source
+either automatically or via configuration mappings. However, there are a lot of cases, where this kind of configuration
+ is not enough.
 
-Therefore there is the possibility to create custom scripts that act as a last escape for the programmer to solve the
-integration challenge. But still it is possible that those extensions sometimes are not enough.
+Due to this, there is the possibility to create custom scripts like the `preCommitScript` which enables further customizations.
 
+However, sometimes the mapping exceeds this limits either because of particular limitations of the configuration or because of
+the scripts are not able to handle every use case.
+
+A few examples of those limitations for the data-import application component are:
+
+* dealing with composite keys
+* automatic handling of M:N associations
+* interacting with highly complex excel sheets that are far away from a BCNF database schema
+
+### Entity staging area
+
+In those situations you should try to follow the following general advice:
+
+Instead of rely on the data-import application component to do all the heavy lifting, take the data-import
+application component only as a first step in your data integration step.
+
+Consider the following complex excel sheet:
+
+![excel-sheet-limitations](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/excel-sheet-limitations.png)
+
+This oftentimes is a common pattern for the usage of an excel sheet. Furthermore it is quite hard to automatically convert,
+since there are so many violations to a normalized data model etc.
+
+Imagine there is the following destination data model:
+
+```
+public class Customer extends StandardEntity {
+  private String name;
+  private String customerId;
+  private List<Order> orders;
+  private CustomerType customerType;
+}
+
+public class Order extends StandardEntity {
+  private LocalDate orderDate;
+  private Customer customer;
+  private BigDecimal totalAmount;
+}
+
+public enum CustomerType {
+  REGULAR,
+  PREMIUM;
+}
+```
+
+Transforming the original excel sheet into the destination data model is perhaps possible, but not the most straight
+forward thing to do.
+
+Instead create a staging area as an entity that mirrors exactly the structure of the source excel sheet:
+
+
+```
+public class CustomerOrderRow extends StandardEntity {
+  private String customerName;
+
+  private BigDecimal salesNorth;
+  private String salesNorthNotes;
+  private BigDecimal salesWest;
+  private String salesWestNotes;
+
+  // ...
+
+  private String orderIdsInformation;
+  private String customerContactTelefonnumber;
+  private String customerTypeChanged;
+}
+```
+
+This way you can still leverage the data-import component without hitting its limits. On the other hand,
+the logic to transform the source data model to the destination data model can be expressed as regular Java / groovy code
+as part of the application.
+
+But since you have now a persistent entity acting as a stage area, you can apply the following additional functionality:
+
+* allow users to do data clean up directly in the staging area
+* use entity listeners & services
+* test transformations with unit tests
+
+This way, you can leverage the app component for still doing the file import. The logic to transform you just treat
+as a regular part of the application.
