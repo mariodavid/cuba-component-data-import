@@ -30,7 +30,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
 
         metadata.create('ddcdi$MlbPlayer') >> new MlbPlayer()
 
-        dataImportEntityBinder.bindAttributesToEntity(_,_,_) >> { ImportConfiguration importConfiguration, DataRow dataRow, Entity entity -> return entity }
+        dataImportEntityBinder.bindAttributesToEntity(_,_,_,_) >> { ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, Map<String, Object> defaultValues -> return entity }
     }
 
     def "createEntities creates an entity for every row in the import data"() {
@@ -92,7 +92,7 @@ class GenericDataImporterServiceBeanSpec extends Specification {
         sut.createEntities(importConfiguration, importData)[0].entity as MlbPlayer
 
         then:
-        1 * dataImportEntityBinder.bindAttributesToEntity(importConfiguration, importData.rows[0], _)
+        1 * dataImportEntityBinder.bindAttributesToEntity(importConfiguration, importData.rows[0], _, _)
     }
 
     private ImportData createData(List<Map<String, Object>> data) {

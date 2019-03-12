@@ -66,7 +66,7 @@ class GenericDataImporterServiceBeanUniqueConfigurationTest extends AbstractImpo
         ])
 
 
-        sut.doDataImport(importConfiguration, importData)
+        sut.doDataImport(importConfiguration, importData, [:])
 
         def storedExistingBalTeam = dataManager.reload(existingBalTeam, '_local')
         assertThat(storedExistingBalTeam.state).isEqualTo(State.CA)

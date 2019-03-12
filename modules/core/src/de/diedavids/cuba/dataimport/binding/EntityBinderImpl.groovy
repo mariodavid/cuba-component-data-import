@@ -26,7 +26,11 @@ class EntityBinderImpl implements EntityBinder {
 
 
     @Override
-    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity) {
+    Entity bindAttributesToEntity(ImportConfiguration importConfiguration, DataRow dataRow, Entity entity, Map<String, Object> defaultValues = [:]) {
+
+        defaultValues.each { k, v ->
+            entity.setValue(k,v)
+        }
 
         importConfiguration.importAttributeMappers.each { ImportAttributeMapper importAttributeMapper ->
             tryToBindAttribute(importConfiguration, dataRow, entity, importAttributeMapper)
