@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.8.0] - 2019-03-12
 
 ### Added
-- Support for CUBA 7 based Lookup screens via `WithImportWizard` interface (see README for more details)
+- Support for CUBA 7 based Lookup screens via `WithImportWizard` interface (see README for more details) (#135)
+- dynamic default values support (#123)
 
 ### Dependencies
 - CUBA 7.0.x
