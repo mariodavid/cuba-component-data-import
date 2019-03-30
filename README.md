@@ -36,6 +36,7 @@ Table of Contents
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
+| 7.0.x            | 0.8.x          |
 | 6.10.x           | 0.7.x          |
 | 6.9.x            | 0.5.x - 0.6.x  |
 | 6.8.x            | 0.1.x - 0.4.x  |
