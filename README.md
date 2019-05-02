@@ -26,6 +26,7 @@ Table of Contents
      * [Entity association binding](#entity-association-binding)
      * [Dynamic attribute binding](#dynamic-attribute-binding)
   * [Import Limitations](#import-limitations)
+     * [Custom file parsing logic](#custom-file-parsing-logic)
      * [Entity staging area](#entity-staging-area)
 
 
@@ -763,6 +764,12 @@ A few examples of those limitations for the data-import application component ar
 * dealing with composite keys
 * automatic handling of M:N associations
 * interacting with highly complex excel sheets that are far away from a BCNF database schema
+
+### Custom file parsing logic
+
+In case custom parsing behavior of the original file is needed, that cannot be configured via the import configuration UI, it is oftentimes still possible to do it programmatically.
+
+There is an example project: [cuba-example-data-import-custom-parsing-logic](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic) that shows how to switch the separator character in the CSV import case to `;`. More information can be found in the corresponding [README](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic/blob/master/README.md).
 
 ### Entity staging area
 
