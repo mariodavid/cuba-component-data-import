@@ -19,7 +19,7 @@ class ExcelImportDataConverterSpec extends Specification {
     def "convert contains the correct amount of columns"() {
 
         when:
-        ImportData result = sut.convert(customerList)
+        ImportData result = sut.convert(customerList, "UTF-8")
         then:
         result.columns.size() == 8
     }
@@ -27,14 +27,14 @@ class ExcelImportDataConverterSpec extends Specification {
 
     def "convert contains two DataRows"() {
         when:
-        ImportData result = sut.convert(customerList)
+        ImportData result = sut.convert(customerList, "UTF-8")
         then:
         result.rows.size() == 2
     }
 
     def "convert removes empty DataRows"() {
         when:
-        ImportData result = sut.convert(customerListWithEmptyRows)
+        ImportData result = sut.convert(customerListWithEmptyRows, "UTF-8")
 
         then: 'the file contains 11 rows but only 9 contain content'
         result.rows.size() == 9
@@ -42,7 +42,7 @@ class ExcelImportDataConverterSpec extends Specification {
 
     def "convert contains the correct values for the DataRows"() {
         when:
-        ImportData result = sut.convert(customerList)
+        ImportData result = sut.convert(customerList, "UTF-8")
         then:
         result.rows[0]['customer id'] == 'CG-12520'
         result.rows[0]['customer name'] == 'Claire Gute'

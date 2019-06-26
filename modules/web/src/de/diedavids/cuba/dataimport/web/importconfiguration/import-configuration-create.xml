@@ -17,14 +17,32 @@
     <layout expand="windowActions"
             spacing="true">
 
-                <fieldGroup id="fieldGroup"
-                            datasource="importConfigurationDs">
-                    <column width="250px">
-                        <field property="name"/>
-                        <field property="entityClass" custom="true"/>
-                        <field property="template"/>
-                    </column>
-                </fieldGroup>
+        <fieldGroup id="fieldGroup"
+                    fieldCaptionWidth="100px"
+                    datasource="importConfigurationDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="entityClass" custom="true"/>
+                s
+                <field property="template"/>
+            </column>
+        </fieldGroup>
+        <groupBox
+                caption="msg://extendedSettings"
+                collapsable="true"
+                collapsed="true"
+                stylename="light"
+        >
+            <fieldGroup id="extendedFieldGroup"
+
+                        fieldCaptionWidth="100px"
+                        datasource="importConfigurationDs">
+                <column width="250px">
+                    <field property="fileCharset" custom="true"/>
+                </column>
+            </fieldGroup>
+        </groupBox>
+
 
         <frame id="windowActions"
                screen="editWindowActions"/>

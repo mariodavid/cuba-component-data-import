@@ -12,15 +12,15 @@ class ImportFileParser {
 
     DataConverterFactory dataConverterFactory
 
-    ImportData parseFile() {
+    ImportData parseFile(String fileCharset) {
         FileDescriptor fileDescriptor = importFileHandler.uploadedFileDescriptor
         File file = importFileHandler.uploadedFile
 
-        parseFile(fileDescriptor, file)
+        parseFile(fileDescriptor, file, fileCharset)
     }
 
     ImportData parseFile(ImportConfiguration importConfiguration) {
-        def importData = parseFile()
+        def importData = parseFile(importConfiguration.fileCharset)
 
         if (!importDataMatchesImportConfiguration(importData, importConfiguration)) {
             throw new ImportDataImportConfigurationMatchException()
@@ -35,9 +35,9 @@ class ImportFileParser {
         importData.isCompatibleWith(importConfiguration.importAttributeMappers)
     }
 
-    ImportData parseFile(FileDescriptor fileDescriptor, File file) {
+    ImportData parseFile(FileDescriptor fileDescriptor, File file, String fileCharset) {
         ImportDataConverter converter = dataConverterFactory.createTableDataConverter(fileDescriptor)
-        converter.convert(file)
+        converter.convert(file, fileCharset)
     }
 
 

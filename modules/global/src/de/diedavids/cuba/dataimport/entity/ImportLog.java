@@ -42,22 +42,22 @@ public class ImportLog extends StandardEntity {
     protected Date finishedAt;
 
     @Column(name = "ENTITIES_PROCESSED")
-    protected Integer entitiesProcessed;
+    protected Integer entitiesProcessed = 0;
 
 
 
 
     @Column(name = "ENTITIES_IMPORT_SUCCESS")
-    protected Integer entitiesImportSuccess;
+    protected Integer entitiesImportSuccess = 0;
 
     @Column(name = "ENTITIES_IMPORT_VAL_ERROR")
-    protected Integer entitiesImportValidationError;
+    protected Integer entitiesImportValidationError = 0;
 
     @Column(name = "ENTITIES_PRE_COMMIT_SKIPPED")
-    protected Integer entitiesPreCommitSkipped;
+    protected Integer entitiesPreCommitSkipped = 0;
 
     @Column(name = "ENTITIES_UNIQUE_CONSTRAINT_SKIPPED")
-    protected Integer entitiesUniqueConstraintSkipped;
+    protected Integer entitiesUniqueConstraintSkipped = 0;
 
     @NotNull
     @Column(name = "SUCCESS", nullable = false)

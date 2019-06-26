@@ -15,7 +15,7 @@ class ExcelImportDataConverter implements ImportDataConverter {
     }
 
     @Override
-    ImportData convert(File file) {
+    ImportData convert(File file, String fileCharset) {
         def result = new ImportDataImpl()
 
         parse(file, result)
