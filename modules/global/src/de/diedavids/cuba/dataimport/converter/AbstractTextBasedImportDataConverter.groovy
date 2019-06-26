@@ -8,8 +8,8 @@ import de.diedavids.cuba.dataimport.dto.ImportDataImpl
 abstract class AbstractTextBasedImportDataConverter<T> implements ImportDataConverter {
 
     @Override
-    ImportData convert(File file) {
-        convert(file.text)
+    ImportData convert(File file, String fileCharset) {
+        convert(file.getText(fileCharset))
     }
 
     @Override

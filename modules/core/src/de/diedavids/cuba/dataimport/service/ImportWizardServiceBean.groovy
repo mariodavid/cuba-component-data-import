@@ -43,8 +43,6 @@ class ImportWizardServiceBean implements ImportWizardService {
 
         commitContext.addInstanceToCommit(importLog)
 
-        importConfiguration.importerBeanName = GenericDataImporterService.NAME
-
         dataManager.commit(commitContext)
     }
 

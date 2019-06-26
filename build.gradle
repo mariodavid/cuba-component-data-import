@@ -1,5 +1,5 @@
 buildscript {
-    ext.cubaVersion = '7.0.1'
+    ext.cubaVersion = '7.0.7'
     repositories {
 
         mavenLocal()
@@ -103,7 +103,7 @@ dependencies {
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 
 allprojects {
@@ -201,6 +201,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
         main { groovy { srcDirs = ["src"] } }
         test { groovy { srcDirs = ["test"] } }
     }
+
+    sourceSets.main.output.classesDir = new File(project.buildDir, "classes/main")
+    sourceSets.test.output.classesDir = new File(project.buildDir, "classes/test")
 }
 
 configure(globalModule) {

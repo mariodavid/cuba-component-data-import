@@ -1,30 +1,24 @@
 package de.diedavids.cuba.dataimport.entity;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
+import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.chile.core.datatypes.FormatStrings;
 import com.haulmont.chile.core.datatypes.FormatStringsRegistry;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.chile.core.annotations.NamePattern;
-import java.util.List;
-import javax.persistence.OneToMany;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import com.haulmont.chile.core.annotations.Composition;
-import com.haulmont.chile.core.annotations.MetaProperty;
-import javax.persistence.Transient;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @NamePattern("%s|name")
 @Table(name = "DDCDI_IMPORT_CONFIGURATION")
@@ -62,9 +56,6 @@ public class ImportConfiguration extends StandardEntity {
     @Column(name = "COMMENT_")
     protected String comment;
 
-    @Column(name = "IMPORTER_BEAN_NAME")
-    protected String importerBeanName;
-
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "configuration")
@@ -87,6 +78,17 @@ public class ImportConfiguration extends StandardEntity {
     @Lob
     @Column(name = "PRE_COMMIT_SCRIPT")
     protected String preCommitScript;
+
+    @Column(name = "FILE_CHARSET")
+    protected String fileCharset = StandardCharsets.UTF_8.name();
+
+    public String getFileCharset() {
+        return fileCharset;
+    }
+
+    public void setFileCharset(String fileCharset) {
+        this.fileCharset = fileCharset;
+    }
 
     public void setTransactionStrategy(ImportTransactionStrategy transactionStrategy) {
         this.transactionStrategy = transactionStrategy == null ? null : transactionStrategy.getId();
@@ -207,14 +209,6 @@ public class ImportConfiguration extends StandardEntity {
 
     public String getComment() {
         return comment;
-    }
-
-    public void setImporterBeanName(String importerBeanName) {
-        this.importerBeanName = importerBeanName;
-    }
-
-    public String getImporterBeanName() {
-        return importerBeanName;
     }
 
 

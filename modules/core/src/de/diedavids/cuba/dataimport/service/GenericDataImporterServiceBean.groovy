@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service
 
 import javax.inject.Inject
 import javax.validation.ConstraintViolation
+import java.util.function.Consumer
 
 @Slf4j
 @Service(GenericDataImporterService.NAME)
@@ -48,29 +49,29 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
 
     @Override
-    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData) {
+    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues = [:]) {
 
-        def entities = createEntities(importConfiguration, importData)
-
-        ImportLog importLog = createImportLog(importConfiguration)
-
-        importEntities(entities, importConfiguration, importLog)
+        doDataImport(importConfiguration, importData, defaultValues, null)
     }
-    @Override
-    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues) {
 
+    @Override
+    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues, Consumer<EntityImportView> importViewCustomization) {
         def entities = createEntities(importConfiguration, importData, defaultValues)
 
         ImportLog importLog = createImportLog(importConfiguration)
 
-        importEntities(entities, importConfiguration, importLog)
+        importEntities(entities, importConfiguration, importLog, importViewCustomization)
     }
 
-    private ImportLog importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration, ImportLog importLog) {
+    private ImportLog importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration, ImportLog importLog, Consumer<EntityImportView> importViewCustomization) {
 
         def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
         def importEntityClass = importEntityMetaClass.javaClass
         EntityImportView importView = createEntityImportView(importEntityClass, importConfiguration)
+
+
+        importViewCustomization?.accept(importView)
+
         Collection<ImportEntityRequest> importedEntities = []
 
         if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
@@ -223,7 +224,6 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         EntityImportView importView = new EntityImportView(importEntityClass)
                 .addLocalProperties()
         addAssociationPropertiesToImportView(importConfiguration, importView)
-
 
         importView
     }

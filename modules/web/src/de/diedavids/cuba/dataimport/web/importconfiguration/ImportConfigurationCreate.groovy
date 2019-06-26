@@ -3,18 +3,19 @@ package de.diedavids.cuba.dataimport.web.importconfiguration
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.app.FileStorageService
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.AbstractEditor
 import com.haulmont.cuba.gui.components.FieldGroup
 import com.haulmont.cuba.gui.components.LookupField
 import com.haulmont.cuba.gui.data.CollectionDatasource
 import com.haulmont.cuba.gui.data.Datasource
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.converter.ImportAttributeMapperCreator
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
+import de.diedavids.cuba.dataimport.web.util.CharsetSelector
 import de.diedavids.cuba.dataimport.web.util.MetadataSelector
 import org.apache.commons.io.FileUtils
 
@@ -24,6 +25,7 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
 
 
     private static final String ENTITY_CLASS_FIELD_NAME = 'entityClass'
+    private static final String FILE_CHARSET_FIELD_NAME = 'fileCharset'
 
     @Inject
     private Datasource<ImportConfiguration> importConfigurationDs
@@ -35,10 +37,16 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
     private FieldGroup fieldGroup
 
     @Inject
-    private ComponentsFactory componentsFactory
+    private FieldGroup extendedFieldGroup
+
+    @Inject
+    private UiComponents uiComponents
 
     @Inject
     MetadataSelector entityClassSelector
+
+    @Inject
+    CharsetSelector charsetSelector
 
     @Inject
     ImportAttributeMapperCreator importAttributeMapperCreator
@@ -53,12 +61,24 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
     FileStorageService fileStorageService
 
 
+
     ImportFileParser importFileParser
 
     @Override
     void init(Map<String, Object> params) {
         initEntityClassField()
         initImportFileParser()
+        initFileCharsetField()
+    }
+
+    void initFileCharsetField() {
+        FieldGroup.FieldConfig fileCharsetFieldConfig = extendedFieldGroup.getField(FILE_CHARSET_FIELD_NAME)
+
+        LookupField lookupField = uiComponents.create(LookupField)
+        lookupField.setDatasource(importConfigurationDs, FILE_CHARSET_FIELD_NAME)
+        lookupField.setOptionsMap(charsetSelector.charsetFieldOptions)
+
+        fileCharsetFieldConfig.setComponent(lookupField)
     }
 
     void initImportFileParser() {
@@ -67,11 +87,10 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
         )
     }
 
-
     private void initEntityClassField() {
         FieldGroup.FieldConfig entityClassFieldConfig = fieldGroup.getField(ENTITY_CLASS_FIELD_NAME)
 
-        LookupField lookupField = componentsFactory.createComponent(LookupField)
+        LookupField lookupField = uiComponents.create(LookupField)
 
         lookupField.setDatasource(importConfigurationDs, ENTITY_CLASS_FIELD_NAME)
         lookupField.setOptionsMap(entityClassSelector.entitiesLookupFieldOptions)
@@ -111,6 +130,6 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
         def tmpFile = File.createTempFile("importfile-${item.name}", null)
         FileUtils.writeByteArrayToFile(tmpFile, fileBytes)
 
-        importFileParser.parseFile(item.template, tmpFile)
+        importFileParser.parseFile(item.template, tmpFile, item.fileCharset)
     }
 }

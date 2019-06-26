@@ -34,6 +34,8 @@
                         <field editable="false"
                                property="entityClass"/>
                         <field editable="false"
+                               property="fileCharset"/>
+                        <field editable="false"
                                property="template"/>
                         <field contextHelpText="msg://transactionStrategyHelp"
                                property="transactionStrategy"/>
