@@ -34,7 +34,6 @@
                 stylename="light"
         >
             <fieldGroup id="extendedFieldGroup"
-
                         fieldCaptionWidth="100px"
                         datasource="importConfigurationDs">
                 <column width="250px">

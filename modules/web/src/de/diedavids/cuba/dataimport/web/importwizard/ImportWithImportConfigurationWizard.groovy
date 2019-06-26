@@ -1,10 +1,10 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
 import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
@@ -72,7 +72,7 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     ImportWizardService importWizardService
 
     @Inject
-    ComponentsFactory componentsFactory
+    UiComponents uiComponents
 
     Map<String, Object> defaultValues
 
@@ -127,12 +127,11 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     }
 
     private DynamicTableCreator createDynamicTableCreator() {
-        def dynamicTableCreator = new DynamicTableCreator(
+        new DynamicTableCreator(
                 dsContext: dsContext,
                 frame: frame,
-                componentsFactory: componentsFactory
+                uiComponents: uiComponents
         )
-        dynamicTableCreator
     }
 
     protected String getCheck() {

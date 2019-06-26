@@ -5,9 +5,10 @@ import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
 import de.diedavids.cuba.dataimport.data.EntityAttributeValueFactory
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
-import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.UniqueConfiguration
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import org.springframework.stereotype.Service
 
 import javax.inject.Inject
@@ -26,17 +27,20 @@ class ImportWizardServiceBean implements ImportWizardService {
     EntityAttributeValueFactory entityAttributeValueFactory
 
     @Override
-    void saveImportConfiguration(ImportConfiguration importConfiguration, Collection<ImportAttributeMapper> importAttributeMapper, ImportLog importLog) {
+    void saveImportConfiguration(
+            ImportConfiguration importConfiguration,
+            Collection<ImportAttributeMapper> importAttributeMapper,
+            Collection<UniqueConfiguration> uniqueConfigurations,
+            ImportLog importLog
+    ) {
 
         CommitContext commitContext = new CommitContext()
         commitContext.addInstanceToCommit(importConfiguration)
         importConfiguration.importAttributeMappers = []
 
-        importAttributeMapper.each {
-            it.configuration = importConfiguration
-            importConfiguration.importAttributeMappers << it
-            commitContext.addInstanceToCommit(it)
-        }
+        addImportAttributeMapper(importAttributeMapper, importConfiguration, commitContext)
+
+        addUniqueConfiguration(uniqueConfigurations, importConfiguration, commitContext)
 
         importConfiguration.logs = [importLog]
         importLog.configuration = importConfiguration
@@ -44,6 +48,25 @@ class ImportWizardServiceBean implements ImportWizardService {
         commitContext.addInstanceToCommit(importLog)
 
         dataManager.commit(commitContext)
+    }
+
+    private void addUniqueConfiguration(Collection<UniqueConfiguration> uniqueConfigurations, ImportConfiguration importConfiguration, commitContext) {
+        uniqueConfigurations.each {
+            it.importConfiguration = importConfiguration
+            importConfiguration.uniqueConfigurations << it
+            commitContext.addInstanceToCommit(it)
+            it.entityAttributes.each { entityAttribute ->
+                commitContext.addInstanceToCommit(entityAttribute)
+            }
+        }
+    }
+
+    private void addImportAttributeMapper(Collection<ImportAttributeMapper> importAttributeMapper, ImportConfiguration importConfiguration, commitContext) {
+        importAttributeMapper.each {
+            it.configuration = importConfiguration
+            importConfiguration.importAttributeMappers << it
+            commitContext.addInstanceToCommit(it)
+        }
     }
 
     @Override

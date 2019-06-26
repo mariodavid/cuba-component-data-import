@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.web.importwizard
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
+import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.BoxLayout
 import com.haulmont.cuba.gui.components.Frame
 import com.haulmont.cuba.gui.components.Table
@@ -21,9 +22,9 @@ class DynamicTableCreatorSpec extends Specification {
     def "createTable will add a column for every meta properties in the datasource"() {
 
         given:
-        def componentsFactory = Mock(WebComponentsFactory)
+        def uiComponents = Mock(UiComponents)
         def mockTable = Mock(Table)
-        componentsFactory.createComponent(Table) >> mockTable
+        uiComponents.create(Table) >> mockTable
 
         and:
         def mockDatasource = Mock(ValueCollectionDatasourceImpl)
@@ -38,7 +39,7 @@ class DynamicTableCreatorSpec extends Specification {
 
         and:
         def sut = new MockableDynamicTableCreator(
-                componentsFactory: componentsFactory,
+                uiComponents: uiComponents,
                 dsContext: Mock(DsContext),
                 frame: Mock(Frame),
                 mockDatasource: mockDatasource

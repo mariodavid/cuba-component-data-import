@@ -2,18 +2,18 @@ package de.diedavids.cuba.dataimport.web.datapreview
 
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.chile.core.model.MetaProperty
+import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.BoxLayout
 import com.haulmont.cuba.gui.components.Frame
 import com.haulmont.cuba.gui.components.Table
 import com.haulmont.cuba.gui.data.DsBuilder
 import com.haulmont.cuba.gui.data.DsContext
 import com.haulmont.cuba.gui.data.impl.ValueCollectionDatasourceImpl
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.dto.ImportData
 
 class DynamicTableCreator {
 
-    ComponentsFactory componentsFactory
+    UiComponents uiComponents
 
     Frame frame
 
@@ -47,7 +47,7 @@ class DynamicTableCreator {
     private Table createDynamicTable(ValueCollectionDatasourceImpl tableDs, BoxLayout tableWrapper) {
         tableWrapper.removeAll()
 
-        Table table = componentsFactory.createComponent(Table)
+        Table table = uiComponents.create(Table)
         table.frame = frame
 
         addTableColumns(tableDs, table)
