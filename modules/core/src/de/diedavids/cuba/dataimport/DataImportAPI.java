@@ -22,7 +22,7 @@ public interface DataImportAPI {
      * @param importConfiguration the import configuration which defines how to to import the data
      * @param fileToImport a reference to a persisted file descriptor, that is already stored in the DB before
      * @return the import log containing information about the import process
-     * @throws FileStorageException in case an error occured during reading the file
+     * @throws FileStorageException in case an error occurred during reading the file
      */
     ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport) throws FileStorageException;
 
@@ -34,7 +34,20 @@ public interface DataImportAPI {
      * @param fileToImport a reference to a persisted file descriptor, that is already stored in the DB before
      * @param defaultValues the default values that should be populated to the created entities
      * @return the import log containing information about the import process
-     * @throws FileStorageException in case an error occured during reading the file
+     * @throws FileStorageException in case an error occurred during reading the file
+     */
+    ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues) throws FileStorageException;
+
+    /**
+     * imports data from a file descriptor configured by the import configuration with default values
+     *
+     * @param importConfiguration the import configuration which defines how to to import the data
+     * @param fileToImport a reference to a persisted file descriptor, that is already stored in the DB before
+     * @param defaultValues the default values that should be populated to the created entities
+     * @param importViewCustomization consumer which receives the EntityImportView instance for adjusting the attributes
+     *                                that are part of the import process
+     * @return the import log containing information about the import process
+     * @throws FileStorageException in case an error occurred during reading the file
      */
     ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues, Consumer<EntityImportView> importViewCustomization) throws FileStorageException;
 }

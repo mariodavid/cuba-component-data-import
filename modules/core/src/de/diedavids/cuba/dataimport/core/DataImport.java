@@ -38,11 +38,21 @@ public class DataImport implements DataImportAPI {
 
     @Override
     public ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport) throws FileStorageException {
-        return importFromFile(importConfiguration, fileToImport, Collections.emptyMap(), null);
+        return importFromFile(importConfiguration, fileToImport, Collections.emptyMap());
     }
 
     @Override
-    public ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues, Consumer<EntityImportView> importViewCustomization) throws FileStorageException {
+    public ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues) throws FileStorageException {
+        return importFromFile(importConfiguration, fileToImport, Collections.emptyMap(),null);
+    }
+
+    @Override
+    public ImportLog importFromFile(
+            ImportConfiguration importConfiguration,
+            FileDescriptor fileToImport,
+            Map<String, Object> defaultValues,
+            Consumer<EntityImportView> importViewCustomization
+    ) throws FileStorageException {
 
         boolean fileExists = fileStorageAPI.fileExists(fileToImport);
 
