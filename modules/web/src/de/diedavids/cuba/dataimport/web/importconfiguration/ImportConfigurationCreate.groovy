@@ -38,6 +38,8 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
 
     @Inject
     private FieldGroup extendedFieldGroup
+    @Inject
+    CharsetSelector charsetSelector
 
     @Inject
     private UiComponents uiComponents
@@ -45,8 +47,6 @@ class ImportConfigurationCreate extends AbstractEditor<ImportConfiguration> {
     @Inject
     MetadataSelector entityClassSelector
 
-    @Inject
-    CharsetSelector charsetSelector
 
     @Inject
     ImportAttributeMapperCreator importAttributeMapperCreator

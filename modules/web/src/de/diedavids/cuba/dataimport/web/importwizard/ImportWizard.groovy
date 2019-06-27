@@ -3,24 +3,26 @@ package de.diedavids.cuba.dataimport.web.importwizard
 import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.data.CollectionDatasource
 import com.haulmont.cuba.gui.data.Datasource
 import com.haulmont.cuba.gui.upload.FileUploadingAPI
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.converter.ImportAttributeMapperCreator
 import de.diedavids.cuba.dataimport.dto.ImportData
-import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeMapperMode
-import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.UniqueConfiguration
+import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeMapperMode
+import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileHandler
 import de.diedavids.cuba.dataimport.web.importfile.ImportFileParser
+import de.diedavids.cuba.dataimport.web.util.CharsetSelector
 import de.diedavids.cuba.dataimport.web.util.MetadataSelector
 import groovy.util.logging.Slf4j
 
@@ -36,6 +38,7 @@ class ImportWizard extends AbstractWindow {
     public static final String WIZARD_STEP_4 = 'step4'
     public static final String WIZARD_STEP_5 = 'step5'
 
+    private static final String FILE_CHARSET_FIELD_NAME = 'fileCharset'
     @Inject
     Accordion wizardAccordion
 
@@ -51,10 +54,11 @@ class ImportWizard extends AbstractWindow {
     FileUploadingAPI fileUploadingAPI
 
     ImportFileHandler importFileHandler
+
     ImportFileParser importFileParser
 
     @Inject
-    ComponentsFactory componentsFactory
+    UiComponents uiComponents
 
     @Inject
     BoxLayout resultTableBox
@@ -93,6 +97,12 @@ class ImportWizard extends AbstractWindow {
     @Named('reuseFieldGroup.comment')
     TextArea commentField
 
+
+    @Inject
+    private FieldGroup extendedFieldGroup
+    @Inject
+    CharsetSelector charsetSelector
+
     @Inject
     ImportWizardService importWizardService
 
@@ -107,6 +117,11 @@ class ImportWizard extends AbstractWindow {
     @Inject
     Button toStep3
 
+    LookupField fileCharsetLookupField
+
+    @Inject
+    protected CollectionDatasource<UniqueConfiguration, UUID> uniqueConfigurationDs
+
     @Override
     void init(Map<String, Object> params) {
         entityLookup.setOptionsMap(metadataSelector.entitiesLookupFieldOptions)
@@ -115,6 +130,17 @@ class ImportWizard extends AbstractWindow {
         initReusePropertyChangeListener()
         initImportFileHandler()
         initImportFileParser()
+        initFileCharsetField()
+    }
+
+    void initFileCharsetField() {
+        FieldGroup.FieldConfig fileCharsetFieldConfig = extendedFieldGroup.getField(FILE_CHARSET_FIELD_NAME)
+
+        fileCharsetLookupField = uiComponents.create(LookupField)
+        fileCharsetLookupField.setDatasource(importConfigurationDs, FILE_CHARSET_FIELD_NAME)
+        fileCharsetLookupField.setOptionsMap(charsetSelector.charsetFieldOptions)
+
+        fileCharsetFieldConfig.setComponent(fileCharsetLookupField)
     }
 
     void initImportFileParser() {
@@ -132,7 +158,7 @@ class ImportWizard extends AbstractWindow {
         )
         importFileHandler.onUploadSuccess { toStep2() }
         importFileHandler.onUploadError {
-            showNotification(formatMessage('fileUploadError'), Frame.NotificationType.ERROR)
+            showNotification(formatMessage('fileUploadError'), NotificationType.ERROR)
         }
     }
 
@@ -154,7 +180,7 @@ class ImportWizard extends AbstractWindow {
             void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
                 if (e.property == 'entityClass') {
                     MetaClass selectedEntity = metadata.getClass(e.value.toString())
-                    importData = importFileParser.parseFile()
+                    importData = parseFile()
                     def mappers = importAttributeMapperCreator.createMappers(importData, selectedEntity)
                     mappers.each {
                         it.setConfiguration(importConfigurationDs.item)
@@ -165,9 +191,14 @@ class ImportWizard extends AbstractWindow {
                     toStep3.enabled = true
                 }
             }
+
         })
     }
 
+    private ImportData parseFile() {
+        importFileParser.parseFile(fileCharsetLookupField.value as String)
+    }
+    
     void toStep2() {
         switchTabs(WIZARD_STEP_1, WIZARD_STEP_2)
         showFilenameInStep1Title()
@@ -184,12 +215,11 @@ class ImportWizard extends AbstractWindow {
     }
 
     private DynamicTableCreator createDynamicTableCreator() {
-        def dynamicTableCreator = new DynamicTableCreator(
+        new DynamicTableCreator(
                 dsContext: dsContext,
                 frame: frame,
-                componentsFactory: componentsFactory
+                uiComponents: uiComponents
         )
-        dynamicTableCreator
     }
 
     protected String getCheck() {
@@ -207,6 +237,7 @@ class ImportWizard extends AbstractWindow {
             importWizardService.saveImportConfiguration(
                     importConfigurationDs.item,
                     importAttributeMappersDatasource.items,
+                    uniqueConfigurationDs.items,
                     importLogDs.item
             )
         }
@@ -219,7 +250,7 @@ class ImportWizard extends AbstractWindow {
     }
 
     void parseFileAndDisplay() {
-        importData = importFileParser.parseFile()
+        importData = parseFile()
         DynamicTableCreator dynamicTableCreator = createDynamicTableCreator()
         dynamicTableCreator.createTable(importData, resultTableBox)
     }
@@ -231,7 +262,7 @@ class ImportWizard extends AbstractWindow {
             toStep5()
         } catch (Exception e) {
             log.error('An Error occurred during import', e)
-            showNotification('An Error occurred during import. See logs for more information', Frame.NotificationType.ERROR)
+            showNotification('An Error occurred during import. See logs for more information', NotificationType.ERROR)
         }
     }
 

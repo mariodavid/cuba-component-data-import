@@ -50,7 +50,6 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     @Override
     ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues = [:]) {
-
         doDataImport(importConfiguration, importData, defaultValues, null)
     }
 

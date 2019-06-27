@@ -67,6 +67,20 @@
                            stylename="cuba-upload-dropzone-description"
                            value="Drop file here..."/>
                 </vbox>
+                <groupBox
+                        caption="msg://extendedSettings"
+                        collapsable="true"
+                        collapsed="true"
+                        stylename="light"
+                >
+                    <fieldGroup id="extendedFieldGroup"
+                                fieldCaptionWidth="100px"
+                                datasource="importConfigurationDs">
+                        <column width="250px">
+                            <field property="fileCharset" custom="true"/>
+                        </column>
+                    </fieldGroup>
+                </groupBox>
             </tab>
             <tab id="step2"
                  caption="msg://stepEntityMapping"
