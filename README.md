@@ -37,7 +37,7 @@ Table of Contents
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 7.0.x            | 0.8.x          |
+| 7.0.x            | 0.8.x - 0.9.x  |
 | 6.10.x           | 0.7.x          |
 | 6.9.x            | 0.5.x - 0.6.x  |
 | 6.8.x            | 0.1.x - 0.4.x  |
@@ -63,19 +63,6 @@ dependencies {
 Information on changes that happen through the different versions of the application component can be found in the [CHANGELOG](https://github.com/mariodavid/cuba-component-data-import/blob/master/CHANGELOG.md).
 The Changelog also contains information about breaking changes and tips on how to resolve them.
 
-### NOTE: Dependency: declarative-controllers
-This application component requires `declarative-controllers` as another dependency you have to add to your application.
-
-The reason is, that you need to extend your screen from `AnnotatableAbstractLookup` instead of `AbstractLookup`.
-This superclass is part of the app-component: [cuba-component-declarative-controllers](https://github.com/balvi/cuba-component-declarative-controllers).
-
-Technically it is not strictly required to directly add the dependency to `declarative-controllers`, since `data-import` already has a dependency on it.
-
-However: since you directly depend on the app component (with extending your classes from `AnnotatableAbstractLookup`), 
-it is a best practice to explicitly declare the dependency to it.
-
-
-
 ## Supported DBMS
 
 The following databases are supported by this application component:
@@ -86,7 +73,7 @@ The following databases are supported by this application component:
 
 ## Using the application component
 
-The `data-import` application component helps you import data into your system from different files.
+The `data-import` application component helps you import data into your application from different files.
 
 Currently the following file-types are supported: 
 
@@ -112,19 +99,19 @@ The end-user of the system can reuse this configurations and just uploads the fi
 
 
 ### Example usage
+
 To see this application component in action, check out this example: [cuba-example-using-data-import](https://github.com/mariodavid/cuba-example-using-data-import).
 
-
-## Import wizard
+## Import Wizard
 
 The import wizard allows the user to interactively go through the import process and configure the above mentioned settings
 for the import execution. It can be found in the main menu: `Administration > Data Import > Import Wizard`
 
-#### Step 1: Upload file
+#### Step 1: Upload File
 ![import-wizard-step-1](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-1.png)
 
 
-#### Step 2: Configure entity mapping
+#### Step 2: Configure Entity Mapping
 ![import-wizard-step-2](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-2.png)
 
 The second step in the wizard allows the user to configure which columns of the import file will be mapped to which entity
@@ -144,6 +131,17 @@ will be triggered. Afterwards the user will see a summary of how many entities w
 
 #### Step 5: Import Summary
 ![import-wizard-step-5](https://github.com/mariodavid/cuba-component-data-import/blob/master/img/import-wizard-step-5.png)
+
+
+## DataImportAPI
+
+In the core module, there is an API available for programmatic interacting with the data import facilities.
+
+`DataImportAPI` takes a `FileDescriptor` together with a `ImportConfiguration` and imports the content of the file according
+to the given configuration.
+
+An example usage can be found in the [MlbTeamImportService](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/modules/global/src/de/diedavids/ddcdit/service/MlbTeamImportService.java) in the example application.
+
 
 ## Integrate Import Wizard into screens
 
@@ -241,7 +239,7 @@ import configuration to proceed.
 
 ## Supported file types
 
-Multiple filetypes are supported by this application component. Information and requirements
+Multiple file types are supported by this application component. Information and requirements
 for certain file types will be described below. 
 
 Example files can be found in the [example-data](https://github.com/mariodavid/cuba-component-data-import/blob/master/example-data) subdirectory. 
@@ -291,7 +289,6 @@ Example JSON file:
   }
 ]
 ```
-
 
 
 ##### programmatic access to nested JSON structures
@@ -405,14 +402,14 @@ An attribute mapping contains the following information:
 * column number (only relevant for CSV / Excel)
 * entity attribute
 
-#### auto detection of entity attribute mappings
+#### Auto Detection of Entity Attribute Mappings
 
 When creating an import configuration (directly or via the import wizard), the application component will try to parse
 the import file and depending on the column names / attribute names, it will try to suggest the most appropriate entity attribute
 that is available. Since this auto-detection feature has limitations, is it suggested to before executing the import validate
 that the suggested entity attributes for the mappings are correct. 
 
-#### Custom attribute binding script
+#### Custom Attribute Binding Script
 
 Additionally it is possible to configure a custom binding script, that let's the user implement certain parsing logic / default values in case this is
 not handled by the default binding behavior.
@@ -512,10 +509,10 @@ it defines how the system should behave in case one of the entries cannot be sto
 
 the following options are available:
 
-##### Single transaction
+##### Single Transaction
 All entities will be imported in one transaction. if an error occurs in any of the entities, no entity will be imported
 
-##### Transaction per entity
+##### Transaction per Entity
 Every entity will be imported in an own transaction. if an error occurs in any of the entities, all other entities will be imported
 
 ### Pre-Commit Script
@@ -533,7 +530,7 @@ The following variables are injected and available for usage:
 * `importConfiguration`: the current import configuration
 
 
-#### veto right of pre-commit script
+#### Veto Right of Pre-commit Script
 
 It is also possible to prevent the import for this entity instance.
 
@@ -568,12 +565,12 @@ as false in groovy. *Therefore this entity will not be imported.*
 
 > NOTE: always use explicit return statements in the pre-commit script
 
-## Default binding behavior
+## Default Binding Behavior
 
 During the import process the values of the import file have to be bound to the entity attributes.
 By default the following attribute types are supported in the default binding:
 
-### Datatype binding
+### Datatype Binding
 
 * String
 * Integer
@@ -621,12 +618,12 @@ The following binding values would lead to the result:
 | `"VERY_HIGH"`          | `null`                  |
 
 
-### Entity association binding
+### Entity Association Binding
 
 A very important case is to import values from entity references. Entity associations are supported to some degree.
 For all not supported cases, the [custom attribute binding script](#custom-attribute-binding-script) can be used.
                                  
-#### N:1 entity association
+#### N:1 Entity Association
 
 Many-to-one associations are supported by the default binding. In order to use this behavior, it is required that the
 entity instance that should get referenced is already in the database.
@@ -708,7 +705,7 @@ The following examples will lead to a non-unique result and therefore will not w
 In case such a situation occurs, the corresponding data row with all non-unique results are logged. Nothing will be bound in this case.
 
 
-#### 1:N / M:N entity association
+#### 1:N / M:N Entity Association
 
 Currently binding of 1:N / M:N entity associations are not supported automatically. Instead the [custom attribute binding script](#custom-attribute-binding-script) can be used for this purpose.
 
@@ -725,7 +722,7 @@ In particular there are the following example configuration within the directory
 Note: The Baseball Strengths master data file has to be imported first.
 
 
-### Dynamic attribute binding
+### Dynamic Attribute Binding
 
 [Dynamic attributes](https://doc.cuba-platform.com/manual-6.8/dynamic_attributes.html) are supported as a binding target. Currently the following dynamic attribute datatypes are supported:
 
@@ -745,7 +742,7 @@ dynamic attribute defined with the name `stadiumName`. In this case the Entity a
 Entity attribute mapper would be: `+stadiumName`
 
 
-## Import limitations
+## Import Limitations
 
 Integrations between systems is oftentimes highly dependent on the system / process to integrate with. Oftentimes the
 source and destination data sources oftentimes differ to a high degree.
@@ -765,13 +762,13 @@ A few examples of those limitations for the data-import application component ar
 * automatic handling of M:N associations
 * interacting with highly complex excel sheets that are far away from a BCNF database schema
 
-### Custom file parsing logic
+### Custom File Parsing Logic
 
 In case custom parsing behavior of the original file is needed, that cannot be configured via the import configuration UI, it is oftentimes still possible to do it programmatically.
 
 There is an example project: [cuba-example-data-import-custom-parsing-logic](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic) that shows how to switch the separator character in the CSV import case to `;`. More information can be found in the corresponding [README](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic/blob/master/README.md).
 
-### Entity staging area
+### Entity Staging Area
 
 In those situations you should try to follow the following general advice:
 
