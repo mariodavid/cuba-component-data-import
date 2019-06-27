@@ -1,20 +1,23 @@
 language: groovy
 jdk:
-  - openjdk8
+- openjdk8
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
 before_install:
-  - chmod +x ./gradlew
-  - ./gradlew --no-daemon startDb
-
+- chmod +x ./gradlew
+- "./gradlew --no-daemon startDb"
 install:
-  - ./gradlew --no-daemon createTestDb
-
+- "./gradlew --no-daemon createTestDb"
 script:
-  - ./gradlew --no-daemon assemble
-
-script:
-  - ./gradlew --no-daemon check
+- "./gradlew --no-daemon check"
+deploy:
+  provider: script
+  script: "./gradlew clean assemble bintrayUpload --debug"
+  on:
+    tags: true
+env:
+  global:
+  - secure: CJOH3pF/yaXQtzotjmIwS564tQDX/f0b8r7LO9NgIj7Y2F6DvfBUlDi3TjOBmYSm/cAJ6WvdVvuS94vKMg63bggC7ZcoCJ0WtF2qLW9nNvyIsg9KM+NDk2ukbxQoniuKIsnQz1xPwRdUW6mPGmMKseBB4fnIQr1qBi1f55i1BZ9HElnRfOSutJ83Id3WBoDEgeD4s3rEeFhGWTLrdWDlwwHhDTWERk1NT/+/kuvVqjtxpqE2unv7FPbfdwpE3HWtgBNe511cKc8jF4PH/hPjJ+fMTR3j9pN7WEqrJR31e2O5wWIaKG/aY3zVA1MPbFHISQIXlRMmW6oNeL6dZ/4pDECelwTq0BVnOn/nexmU8ve+av5pgjBKOi8siWseXCsaUvW4hQ30wqEWOfuE4ML8GzWaUfb73jqAIbhw/AHrB/XiaBiEplz5aBg8IjWaEmIGKysOBGgXgtxh9BiZMx2u17+yBEa7WSlpG+umg97Rv2IT8LU3rLkzZ7U3wC9ddzM98P+PCSKe7/AcYAKCPlaYqST9PALkP7fnjTDkL6Dx942ZjdZATb2u2DVorDee2pmdtGhPk4rSXWHqT9Ot3sJjiF5l2rPgothlMWvU0jdBUaMexvy3NcOydqmqveXXoBKP193OnoevjrBXAszRJKEj/STh488lgqX8wZxlmNJxWj4=
+  - secure: QicIiSIUex+UDwdZl5y43yr96IdmsFz8VlnOr0I0dPwxX0R9cA7gBuKIVxqhnoM42LR0cD8PVhM3LC/RCCJwbCyzmSpzdx1T3C7CjUJXAVSpXSSU8Eyqc4gtrwRJvg06o0v1cV5M9z1heWDIrce/RZeZWTFsUbqErW8KPn0nPSA4O924BKHJaKADILKHNZvW7ST0g3TA2GVMk2Qhv/9vVjJxyQGZfXArIIQ0M/FPkfq3+JbDXRxAUsz4H0K44enbSmK8NzdHGjwz8BqX2RckRH2DCJvHpW4Fmg/qiT3DZMtmxNxKp8yUBMpr6XiMpffYwHD189gJ7j1h20BwFSIEUmoq433fvcw7kWAvwNdTgu4HULhX5GADm1WRH4ID8dKGNH4WdJg5sgtvETioURCRp3qlJs6QF6436l2Irs25YGZFoc0BC9XYv/yv9iafDOs09ViaPlHQcFAq3o+6MF0mdWdaT4ij+J9J9T/HAgXwJWfucOMMoosDsXu8O+yAvR+CdglRGb44mrnWusvdJqVD8+sJ5uOlcUTxoSGOD3o8DY17/z8qhsvSiAlgRyxt+Imr1WW1B2o7nlh8wk7xGfe5WXNGu/oyoD+pSYyi2QKB1Cl8V2Z55e0CIDQiDz5XRD9NtuanA8Y6iXi2ufwUcbsC8DqOPYpTbmpuqYx7IrMhQqA=
