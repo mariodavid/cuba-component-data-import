@@ -60,11 +60,11 @@ create table DDCDI_IMPORT_CONFIGURATION (
     AD_HOC boolean,
     TEMPLATE_ID varchar(32),
     COMMENT_ longtext,
-    IMPORTER_BEAN_NAME varchar(255),
     DATE_FORMAT varchar(255),
     BOOLEAN_TRUE_VALUE varchar(255),
     BOOLEAN_FALSE_VALUE varchar(255),
     PRE_COMMIT_SCRIPT longtext,
+    FILE_CHARSET varchar(255),
     --
     primary key (ID)
 )^
