@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
 import com.haulmont.cuba.core.global.Scripting
+import com.haulmont.cuba.core.global.TimeSource
 import com.haulmont.cuba.core.global.validation.EntityValidationException
 import de.diedavids.cuba.dataimport.binding.EntityBinder
 import de.diedavids.cuba.dataimport.dto.DataRow
@@ -22,6 +23,7 @@ import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 
 import javax.inject.Inject
+import javax.persistence.PersistenceException
 import javax.validation.ConstraintViolation
 import java.util.function.Consumer
 
@@ -46,6 +48,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     @Inject
     UniqueEntityFinderService uniqueEntityFinderService
+
+    @Inject
+    TimeSource timeSource
 
 
     @Override
@@ -79,6 +84,8 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importAllEntitiesInOneTransaction(entities, importView, importedEntities, importConfiguration, importLog)
         }
 
+        importLog.finishedAt = timeSource.currentTimestamp()
+
         importLog
 
     }
@@ -105,20 +112,72 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 entityImportExportAPI.importEntities(importedEntities*.entity, importView, true)
                 importLog.entitiesProcessed = entities.size()
                 importLog.entitiesImportSuccess = importedEntities.size()
-
             }
             catch (EntityValidationException e) {
-                log.warn('Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.', e)
+                def message = 'Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
+                logError(importLog, message, e)
+                resetImportLog(importLog)
+            }
+            catch(PersistenceException e) {
+                def message = 'Error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
+                logError(importLog, message, e)
                 resetImportLog(importLog)
             }
         }
 
         catch (ImportUniqueAbortException e) {
-            log.warn("Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.SINGLE_TRANSACTION: no entities written.",e)
+            def message = "Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.SINGLE_TRANSACTION: no entities written."
+            logError(importLog, message, e)
             resetImportLog(importLog)
         }
+    }
 
+    void logError(ImportLog importLog, String message, Exception exception) {
+        exception ? log.error(message, exception) : log.error(message)
+        logMessage(importLog, message, LogRecordLevel.ERROR, exception)
+    }
 
+    void logWarning(ImportLog importLog, String message, Exception exception) {
+        exception ? log.warn(message, exception) : log.warn(message)
+        logMessage(importLog, message, LogRecordLevel.WARN, exception)
+    }
+
+    void logDebug(ImportLog importLog, String message, Exception exception) {
+        exception ? log.debug(message, exception) : log.debug(message)
+        logMessage(importLog, message, LogRecordLevel.DEBUG, exception)
+    }
+
+    void logInfo(ImportLog importLog, String message, Exception exception = null) {
+        exception ? log.info(message, exception) : log.info(message)
+        logMessage(importLog, message, LogRecordLevel.INFO, exception)
+    }
+
+    private void logMessage(ImportLog importLog, String message, LogRecordLevel level, Exception exception) {
+        def importLogRecord = dataManager.create(ImportLogRecord)
+        importLogRecord.importLog = importLog
+
+        if (message.length() > 4000) {
+            importLogRecord.message = message.substring(0,3997) + "..."
+            String stacktraceMessage = message + "\n\n" + stacktraceForException(exception)
+            importLogRecord.stacktrace = stacktraceMessage
+        }
+        else {
+            importLogRecord.message = message
+            importLogRecord.stacktrace = stacktraceForException(exception)
+        }
+
+        importLogRecord.time = timeSource.currentTimestamp()
+        importLogRecord.level = level
+
+        importLog.records << importLogRecord
+    }
+
+    private String stacktraceForException(Exception exception) {
+        if (exception) {
+            StringWriter stacktrace = new StringWriter()
+            exception.printStackTrace(new PrintWriter(stacktrace))
+            return stacktrace.toString()
+        }
     }
 
     protected void resetImportLog(ImportLog importLog) {
@@ -151,9 +210,15 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    private void doImportSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
+    private void doImportSingleEntity(
+            ImportEntityRequest importEntityRequest,
+            EntityImportView importView,
+            Collection<ImportEntityRequest> importedEntities,
+            ImportConfiguration importConfiguration,
+            ImportLog importLog
+    ) {
 
-        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration, importView)
+        boolean entityShouldBeImported = executePreCommitScriptIfNecessary(importEntityRequest, importConfiguration, importView, importLog)
 
         if (entityShouldBeImported) {
             if (importConfiguration.transactionStrategy == ImportTransactionStrategy.TRANSACTION_PER_ENTITY) {
@@ -176,6 +241,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         catch (EntityValidationException e) {
             importEntityRequest.constraintViolations = e.constraintViolations
             importLog.entitiesImportValidationError++
+            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, e)
+            importLog.success = false
+        }
+        catch(PersistenceException e) {
+            def message = 'Error while importing entity: ' + e.message
+            logWarning(importLog, message, e)
             importLog.success = false
         }
     }
@@ -191,7 +262,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
 
-    private boolean executePreCommitScriptIfNecessary(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration, EntityImportView importView) {
+    private boolean executePreCommitScriptIfNecessary(
+            ImportEntityRequest importEntityRequest,
+            ImportConfiguration importConfiguration,
+            EntityImportView importView,
+            ImportLog importLog
+    ) {
         Binding preCommitBinding = createPreCommitBinding(importEntityRequest, importConfiguration, importView)
         def preCommitScript = importConfiguration.preCommitScript
         try {
@@ -201,7 +277,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             return true
         }
         catch (Exception e) {
-            log.error("Error while executing pre commit script: ${e.getClass()}", e)
+            logError(importLog, "Pre commit script execution failed with: " + e.message, e)
             return false
         }
     }
@@ -209,6 +285,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     private ImportLog createImportLog(ImportConfiguration importConfiguration) {
         ImportLog importLog = metadata.create(ImportLog)
+        importLog.startedAt = timeSource.currentTimestamp()
         importLog.entitiesProcessed = 0
         importLog.entitiesImportSuccess = 0
         importLog.entitiesImportValidationError = 0
@@ -216,6 +293,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importLog.entitiesUniqueConstraintSkipped = 0
         importLog.success = true
         importLog.configuration = importConfiguration
+        importLog.records = []
         importLog
     }
 

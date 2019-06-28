@@ -1,17 +1,10 @@
 package de.diedavids.cuba.dataimport.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Lob;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Table(name = "DDCDI_IMPORT_LOG_RECORD")
 @Entity(name = "ddcdi$ImportLogRecord")
@@ -19,7 +12,7 @@ public class ImportLogRecord extends StandardEntity {
     private static final long serialVersionUID = -8403007601995115328L;
 
     @NotNull
-    @Column(name = "MESSAGE", nullable = false)
+    @Column(name = "MESSAGE", nullable = false, length = 4000)
     protected String message;
 
     @NotNull

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="de.diedavids.cuba.dataimport.web.importlog">
+    <data>
+        <instance id="importLogDc"
+                  class="de.diedavids.cuba.dataimport.entity.ImportLog"
+                  view="importLog-with-records-view">
+            <loader/>
+            <collection id="recordsDc" property="records"/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="recordsBox" spacing="true">
+        <form id="form" editable="false" dataContainer="importLogDc">
+            <column width="200px">
+                <checkBox id="successField" property="success"/>
+
+                <dateField id="startedAtField" property="startedAt"/>
+                <dateField id="finishedAtField" property="finishedAt"/>
+
+            </column>
+            <column width="200px">
+                <pickerField id="configurationField" property="configuration">
+                    <actions>
+                        <action id="open" type="picker_open"/>
+                    </actions>
+                </pickerField>
+                <textField id="entitiesProcessedField" property="entitiesProcessed"/>
+                <textField id="entitiesImportSuccessField" property="entitiesImportSuccess"/>
+                <textField id="entitiesImportValidationErrorField" property="entitiesImportValidationError"/>
+            </column>
+            <column width="200px">
+                <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
+                <textField id="entitiesPreCommitSkippedField" property="entitiesPreCommitSkipped"/>
+                <textField id="entitiesUniqueConstraintSkippedField" property="entitiesUniqueConstraintSkipped"/>
+            </column>
+        </form>
+        <groupBox id="recordsBox" caption="msg://de.diedavids.cuba.dataimport.entity/ImportLog.records">
+            <table id="recordsTable" dataContainer="recordsDc" width="100%" height="100%">
+                <actions>
+                    <action id="edit" type="edit"/>
+                </actions>
+                <columns>
+                    <column id="time"/>
+                    <column id="level"/>
+                    <column id="message" maxTextLength="100"/>
+                </columns>
+                <buttonsPanel>
+                    <button action="recordsTable.edit"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

@@ -100,7 +100,7 @@ dependencies {
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.4.1'
+def postgres = 'org.postgresql:postgresql:42.2.5'
 
 
 allprojects {
@@ -248,8 +248,8 @@ configure(coreModule) {
     dependencies {
         compile(globalModule)
         compileOnly(servletApi)
-        jdbc(hsql)
-        testRuntime(hsql)
+        jdbc(postgres)
+        testRuntime(postgres)
         compile('org.apache.poi:poi-ooxml:3.17')
 
     }
@@ -293,19 +293,19 @@ configure(coreModule) {
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
-        dbName = 'ddcdi4'
-        dbms = 'hsql'
+        dbName = 'dataimport'
+        dbms = 'postgres'
         host = 'localhost'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbUser = 'postgres'
+        dbPassword = 'postgres'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
-        dbName = 'ddcdi4'
-        dbms = 'hsql'
+        dbName = 'dataimport'
+        dbms = 'postgres'
         host = 'localhost'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbUser = 'postgres'
+        dbPassword = 'postgres'
     }
 
 

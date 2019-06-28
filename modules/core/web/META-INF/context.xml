@@ -1,14 +1,14 @@
 <Context>
     <!-- Database connection -->
-    <Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
+    <Resource driverClassName="org.postgresql.Driver"
               maxIdle="2"
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/CubaDS"
-              password=""
+              password="postgres"
               type="javax.sql.DataSource"
-              url="jdbc:hsqldb:hsql://localhost/ddcdi4"
-              username="sa"/>
+              url="jdbc:postgresql://localhost/dataimport"
+              username="postgres"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
     <!--<Resource driverClassName="oracle.jdbc.OracleDriver"
@@ -29,13 +29,13 @@
           type="javax.sql.DataSource"
           url="jdbc:mysql://localhost/cuba?useSSL=false&amp;allowMultiQueries=true"
           username="root"/>-->
-    <!--<Resource driverClassName="org.postgresql.Driver"
+    <!--<Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
           maxIdle="2"
           maxTotal="20"
           maxWaitMillis="5000"
           name="jdbc/CubaDS"
-          password="postgres"
+          password=""
           type="javax.sql.DataSource"
-          url="jdbc:postgresql://localhost/dataimport"
-          username="postgres"/>-->
+          url="jdbc:hsqldb:hsql://localhost/ddcdi4"
+          username="sa"/>-->
 </Context>

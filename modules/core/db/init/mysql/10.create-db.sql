@@ -34,7 +34,7 @@ create table DDCDI_IMPORT_LOG_RECORD (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     --
-    MESSAGE varchar(255) not null,
+    MESSAGE varchar(4000) not null,
     LEVEL_ varchar(50) not null,
     TIME_ datetime(3) not null,
     STACKTRACE longtext,

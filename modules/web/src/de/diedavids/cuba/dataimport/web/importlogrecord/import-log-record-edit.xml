@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="de.diedavids.cuba.dataimport.web.importlogrecord">
+    <data>
+        <instance id="importLogRecordDc"
+                  class="de.diedavids.cuba.dataimport.entity.ImportLogRecord"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                forceDialog="true"
+                width="800"/>
+    <layout expand="stacktraceField" spacing="true">
+        <form id="form" dataContainer="importLogRecordDc" editable="false" childrenCaptionWidth="100px">
+            <column width="250px">
+                <lookupField id="levelField" property="level"/>
+            </column>
+            <column width="250px">
+                <dateField id="timeField" property="time"/>
+            </column>
+        </form>
+        <form id="form2" dataContainer="importLogRecordDc" editable="false" childrenCaptionWidth="100px">
+            <column width="615px">
+                <textArea id="messageField" property="message" rows="5"/>
+            </column>
+        </form>
+        <textArea
+                caption="msg://de.diedavids.cuba.dataimport.entity.ImportLogRecord/ImportLogRecord.stacktrace"
+                editable="false"
+            id="stacktraceField"
+            dataContainer="importLogRecordDc"
+            property="stacktrace"
+            width="100%"
+        />
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
