@@ -14,10 +14,8 @@ import javax.inject.Inject;
 @LoadDataBeforeShow
 public class ImportLogEdit extends StandardEditor<ImportLog> {
 
-
     @Inject
     protected CollectionLoader<ImportLogRecord> importLogRecordsDl;
-
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -26,7 +24,4 @@ public class ImportLogEdit extends StandardEditor<ImportLog> {
         importLogRecordsDl.load();
     }
 
-
-    
-    
 }

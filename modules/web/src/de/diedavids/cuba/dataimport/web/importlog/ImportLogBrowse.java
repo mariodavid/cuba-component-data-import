@@ -13,7 +13,6 @@ import javax.inject.Inject;
 @LoadDataBeforeShow
 public class ImportLogBrowse extends StandardLookup<ImportLog> {
 
-
     @Inject
     protected ExportDisplay exportDisplay;
 
