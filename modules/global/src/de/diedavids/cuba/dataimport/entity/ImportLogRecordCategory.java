@@ -10,7 +10,8 @@ public enum ImportLogRecordCategory implements EnumClass<String> {
     UNIQUE_VIOLATION("UNIQUE_VIOLATION"),
     VALIDATION_ERROR("VALIDATION_ERROR"),
     PERSISTENCE_ERROR("PERSISTENCE_ERROR"),
-    GENERAL("GENERAL");
+    GENERAL("GENERAL"),
+    SCRIPTING_ERROR("SCRIPTING_ERROR");
 
     private String id;
 

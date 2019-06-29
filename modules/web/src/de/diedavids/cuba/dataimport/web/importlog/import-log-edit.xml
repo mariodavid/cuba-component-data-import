@@ -46,7 +46,8 @@
                 <columns>
                     <column id="time"/>
                     <column id="level"/>
-                    <column id="message" maxTextLength="100"/>
+                    <column id="category"/>
+                    <column id="dataRowIndex"/>
                 </columns>
                 <buttonsPanel>
                     <button action="recordsTable.edit"/>

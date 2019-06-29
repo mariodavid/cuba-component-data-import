@@ -19,6 +19,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
+import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 
@@ -118,7 +119,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
         catch (ImportUniqueAbortException e) {
             def message = "Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.TRANSACTION_PER_ENTITY: Entities up until this point were written."
-            logWarning(importLog, message, e)
+            logWarning(importLog, message,ImportLogRecordCategory.UNIQUE_VIOLATION, e)
             importLog.success = false
         }
     }
@@ -142,19 +143,19 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             }
             catch (EntityValidationException e) {
                 def message = 'Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
-                logError(importLog, message, e)
+                logError(importLog, message,ImportLogRecordCategory.VALIDATION_ERROR, e)
                 resetImportLog(importLog)
             }
             catch(PersistenceException e) {
                 def message = 'Error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
-                logError(importLog, message, e)
+                logError(importLog, message,ImportLogRecordCategory.PERSISTENCE_ERROR, e)
                 resetImportLog(importLog)
             }
         }
 
         catch (ImportUniqueAbortException e) {
             def message = "Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.SINGLE_TRANSACTION: no entities written."
-            logError(importLog, message, e)
+            logError(importLog, message,ImportLogRecordCategory.UNIQUE_VIOLATION, e)
             resetImportLog(importLog)
         }
     }
@@ -162,71 +163,94 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     void logError(
             ImportLog importLog,
             String message,
+            ImportLogRecordCategory category,
             ImportEntityRequest importEntityRequest,
             Exception exception = null
     ) {
         exception ? log.error(message, exception) : log.error(message)
-        logMessage(importLog, message, LogRecordLevel.ERROR, importEntityRequest, exception)
+        logMessage(importLog, message, LogRecordLevel.ERROR, category, importEntityRequest, exception)
     }
 
     void logWarning(
             ImportLog importLog,
             String message,
+            ImportLogRecordCategory category,
             ImportEntityRequest importEntityRequest,
             Exception exception = null
     ) {
         exception ? log.warn(message, exception) : log.warn(message)
-        logMessage(importLog, message, LogRecordLevel.WARN, importEntityRequest, exception)
+        logMessage(importLog, message, LogRecordLevel.WARN, category, importEntityRequest, exception)
     }
 
     void logDebug(
             ImportLog importLog,
             String message,
+            ImportLogRecordCategory category,
             ImportEntityRequest importEntityRequest,
             Exception exception = null
     ) {
         exception ? log.debug(message, exception) : log.debug(message)
-        logMessage(importLog, message, LogRecordLevel.DEBUG, importEntityRequest, exception)
+        logMessage(importLog, message, LogRecordLevel.DEBUG, category, importEntityRequest, exception)
     }
 
     void logInfo(
             ImportLog importLog,
             String message,
+            ImportLogRecordCategory category,
             ImportEntityRequest importEntityRequest,
             Exception exception = null
     ) {
         exception ? log.info(message, exception) : log.info(message)
-        logMessage(importLog, message, LogRecordLevel.INFO, importEntityRequest, exception)
+        logMessage(importLog, message, LogRecordLevel.INFO, category, importEntityRequest, exception)
     }
 
     void logError(
             ImportLog importLog,
             String message,
+            ImportLogRecordCategory category,
             Exception exception = null
     ) {
         exception ? log.error(message, exception) : log.error(message)
-        logMessage(importLog, message, LogRecordLevel.ERROR, exception)
+        logMessage(importLog, message, LogRecordLevel.ERROR, category, exception)
     }
 
-    void logWarning(ImportLog importLog, String message, Exception exception = null) {
+    void logWarning(
+            ImportLog importLog,
+            String message,
+            ImportLogRecordCategory category,
+            Exception exception = null
+    ) {
         exception ? log.warn(message, exception) : log.warn(message)
-        logMessage(importLog, message, LogRecordLevel.WARN, exception)
+        logMessage(importLog, message, LogRecordLevel.WARN, category, exception)
     }
 
-    void logDebug(ImportLog importLog, String message, Exception exception = null) {
+    void logDebug(
+            ImportLog importLog,
+            String message,
+            ImportLogRecordCategory category,
+            Exception exception = null
+    ) {
         exception ? log.debug(message, exception) : log.debug(message)
-        logMessage(importLog, message, LogRecordLevel.DEBUG, exception)
+        logMessage(importLog, message, LogRecordLevel.DEBUG, category, exception)
     }
 
-    void logInfo(ImportLog importLog, String message, Exception exception = null) {
+    void logInfo(
+            ImportLog importLog,
+            String message,
+            ImportLogRecordCategory category,
+            Exception exception = null
+    ) {
         exception ? log.info(message, exception) : log.info(message)
-        logMessage(importLog, message, LogRecordLevel.INFO, exception)
+        logMessage(importLog, message, LogRecordLevel.INFO, category, exception)
     }
 
-    private void logMessage(ImportLog importLog, String message, LogRecordLevel level, ImportEntityRequest importEntityRequest, Exception exception) {
+    private void logMessage(ImportLog importLog, String message, LogRecordLevel level, ImportLogRecordCategory category, ImportEntityRequest importEntityRequest, Exception exception) {
         def importLogRecord = dataManager.create(ImportLogRecord)
         importLogRecord.importLog = importLog
-
+        importLogRecord.dataRowIndex = importEntityRequest.dataRowIndex
+        importLogRecord.dataRow = importEntityRequest.dataRow
+        importLogRecord.entityInstance = entityInstance(importEntityRequest)
+        importLogRecord.category = category
 
         if (message.length() > 4000) {
             importLogRecord.message = message.substring(0,3997) + "..."
@@ -244,9 +268,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importLog.records << importLogRecord
     }
 
-    private void logMessage(ImportLog importLog, String message, LogRecordLevel level, Exception exception) {
+    private String entityInstance(ImportEntityRequest importEntityRequest) {
+        entityImportExportAPI.exportEntitiesToJSON([importEntityRequest.entity])
+    }
+
+    private void logMessage(ImportLog importLog, String message, LogRecordLevel level, ImportLogRecordCategory category,  Exception exception) {
         def importLogRecord = dataManager.create(ImportLogRecord)
         importLogRecord.importLog = importLog
+        importLogRecord.category = category
 
 
         if (message.length() > 4000) {
@@ -306,6 +335,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
                 } else {
                     importLog.entitiesUniqueConstraintSkipped++
+                    logInfo(importLog, "Entity not imported since it is already existing and Unique policy is set to SKIP", ImportLogRecordCategory.UNIQUE_VIOLATION, importEntityRequest)
                 }
             }
         } else {
@@ -330,7 +360,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importedEntities << importEntityRequest
         } else {
             importLog.entitiesPreCommitSkipped++
-            logDebug(importLog, "Entity not imported due to Pre-Commit script returned false", importEntityRequest, null)
+            logInfo(importLog, "Entity not imported due to Pre-Commit script returned false", ImportLogRecordCategory.VALIDATION_ERROR, importEntityRequest)
         }
 
         importLog.entitiesProcessed++
@@ -349,12 +379,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         catch (EntityValidationException e) {
             importEntityRequest.constraintViolations = e.constraintViolations
             importLog.entitiesImportValidationError++
-            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, importEntityRequest, e)
+            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, ImportLogRecordCategory.VALIDATION_ERROR, importEntityRequest, e)
             importLog.success = false
         }
         catch(PersistenceException e) {
             def message = 'Error while importing entity: ' + e.message
-            logWarning(importLog, message, importEntityRequest, e)
+            logWarning(importLog, message, ImportLogRecordCategory.PERSISTENCE_ERROR, importEntityRequest, e)
             importLog.success = false
         }
     }
@@ -389,7 +419,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             return true
         }
         catch (Exception e) {
-            logError(importLog, "Pre commit script execution failed with: " + e.message, e)
+            logError(importLog, "Pre commit script execution failed with: " + e.message, ImportLogRecordCategory.SCRIPTING_ERROR, e)
             return false
         }
     }
@@ -457,7 +487,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    ImportEntityRequest createImportEntityRequestFromRow(ImportConfiguration importConfiguration, DataRow dataRow, int dataRowIndex, Map<String, Object> defaultValues) {
+    ImportEntityRequest createImportEntityRequestFromRow(
+            ImportConfiguration importConfiguration,
+            DataRow dataRow,
+            int dataRowIndex,
+            Map<String, Object> defaultValues
+    ) {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
         new ImportEntityRequest(

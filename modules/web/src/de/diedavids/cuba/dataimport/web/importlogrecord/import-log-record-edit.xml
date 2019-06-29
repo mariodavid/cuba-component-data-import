@@ -13,28 +13,68 @@
     <dialogMode height="600"
                 forceDialog="true"
                 width="800"/>
-    <layout expand="stacktraceField" spacing="true">
+    <layout expand="detailsTabSheet" spacing="true">
         <form id="form" dataContainer="importLogRecordDc" editable="false" childrenCaptionWidth="100px">
             <column width="250px">
                 <lookupField id="levelField" property="level"/>
+                <textField id="dataRowIndexField" property="dataRowIndex"/>
             </column>
             <column width="250px">
                 <dateField id="timeField" property="time"/>
+                <lookupField id="categoryField" property="category"/>
             </column>
         </form>
-        <form id="form2" dataContainer="importLogRecordDc" editable="false" childrenCaptionWidth="100px">
-            <column width="615px">
-                <textArea id="messageField" property="message" rows="5"/>
-            </column>
-        </form>
-        <textArea
-                caption="msg://de.diedavids.cuba.dataimport.entity.ImportLogRecord/ImportLogRecord.stacktrace"
-                editable="false"
-            id="stacktraceField"
-            dataContainer="importLogRecordDc"
-            property="stacktrace"
-            width="100%"
-        />
+        <tabSheet id="detailsTabSheet">
+            <tab caption="msg://de.diedavids.cuba.dataimport.entity.ImportLogRecord/ImportLogRecord.message"
+                 id="messageTab"
+                 margin="true,false,false,false"
+            >
+                <textArea
+                        editable="false"
+                        dataContainer="importLogRecordDc"
+                        property="message"
+                        width="100%"
+                        height="100%"
+                />
+            </tab>
+            <tab caption="msg://de.diedavids.cuba.dataimport.entity.ImportLogRecord/ImportLogRecord.dataRow"
+                 id="dataRowTab"
+                 margin="true,false,false,false"
+            >
+                <textArea
+                        editable="false"
+                        dataContainer="importLogRecordDc"
+                        property="dataRow"
+                        width="100%"
+                        height="100%"
+                />
+            </tab>
+            <tab caption="msg://de.diedavids.cuba.dataimport.entity.ImportLogRecord/ImportLogRecord.entityInstance"
+                 id="entityInstanceTab"
+                 margin="true,false,false,false"
+            >
+                <textArea
+                        editable="false"
+                        dataContainer="importLogRecordDc"
+                        property="entityInstance"
+                        width="100%"
+                        height="100%"
+                />
+            </tab>
+            <tab caption="msg://de.diedavids.cuba.dataimport.entity.ImportLogRecord/ImportLogRecord.stacktrace"
+                 id="stacktraceTab"
+                 margin="true,false,false,false"
+            >
+                <textArea
+                        editable="false"
+                        dataContainer="importLogRecordDc"
+                        property="stacktrace"
+                        width="100%"
+                        height="100%"
+                />
+            </tab>
+        </tabSheet>
+
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>
