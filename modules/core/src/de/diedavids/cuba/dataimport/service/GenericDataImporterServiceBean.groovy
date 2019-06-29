@@ -19,7 +19,6 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.*
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
-import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
 
@@ -143,12 +142,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             }
             catch (EntityValidationException e) {
                 def message = 'Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
-                logError(importLog, message,ImportLogRecordCategory.VALIDATION_ERROR, e)
+                logError(importLog, message,ImportLogRecordCategory.VALIDATION, e)
                 resetImportLog(importLog)
             }
             catch(PersistenceException e) {
                 def message = 'Error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
-                logError(importLog, message,ImportLogRecordCategory.PERSISTENCE_ERROR, e)
+                logError(importLog, message,ImportLogRecordCategory.PERSISTENCE, e)
                 resetImportLog(importLog)
             }
         }
@@ -360,7 +359,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importedEntities << importEntityRequest
         } else {
             importLog.entitiesPreCommitSkipped++
-            logInfo(importLog, "Entity not imported due to Pre-Commit script returned false", ImportLogRecordCategory.VALIDATION_ERROR, importEntityRequest)
+            logInfo(importLog, "Entity not imported due to Pre-Commit script returned false", ImportLogRecordCategory.VALIDATION, importEntityRequest)
         }
 
         importLog.entitiesProcessed++
@@ -379,12 +378,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         catch (EntityValidationException e) {
             importEntityRequest.constraintViolations = e.constraintViolations
             importLog.entitiesImportValidationError++
-            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, ImportLogRecordCategory.VALIDATION_ERROR, importEntityRequest, e)
+            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, ImportLogRecordCategory.VALIDATION, importEntityRequest, e)
             importLog.success = false
         }
         catch(PersistenceException e) {
             def message = 'Error while importing entity: ' + e.message
-            logWarning(importLog, message, ImportLogRecordCategory.PERSISTENCE_ERROR, importEntityRequest, e)
+            logWarning(importLog, message, ImportLogRecordCategory.PERSISTENCE, importEntityRequest, e)
             importLog.success = false
         }
     }
@@ -419,7 +418,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             return true
         }
         catch (Exception e) {
-            logError(importLog, "Pre commit script execution failed with: " + e.message, ImportLogRecordCategory.SCRIPTING_ERROR, e)
+            logError(importLog, "Pre commit script execution failed with: " + e.message, ImportLogRecordCategory.SCRIPTING, e)
             return false
         }
     }

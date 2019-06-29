@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 public enum ImportLogRecordCategory implements EnumClass<String> {
 
     UNIQUE_VIOLATION("UNIQUE_VIOLATION"),
-    VALIDATION_ERROR("VALIDATION_ERROR"),
-    PERSISTENCE_ERROR("PERSISTENCE_ERROR"),
+    VALIDATION("VALIDATION"),
+    PERSISTENCE("PERSISTENCE"),
     GENERAL("GENERAL"),
-    SCRIPTING_ERROR("SCRIPTING_ERROR");
+    SCRIPTING("SCRIPTING");
 
     private String id;
 
