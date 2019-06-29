@@ -6,6 +6,8 @@ import de.diedavids.cuba.dataimport.converter.ImportDataConverter
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 
+import java.nio.charset.StandardCharsets
+
 class ImportFileParser {
 
     ImportFileHandler importFileHandler
@@ -36,8 +38,11 @@ class ImportFileParser {
     }
 
     ImportData parseFile(FileDescriptor fileDescriptor, File file, String fileCharset) {
+
+        String chosenFileCharset = fileCharset ?: StandardCharsets.UTF_8.name()
+
         ImportDataConverter converter = dataConverterFactory.createTableDataConverter(fileDescriptor)
-        converter.convert(file, fileCharset)
+        converter.convert(file, chosenFileCharset)
     }
 
 

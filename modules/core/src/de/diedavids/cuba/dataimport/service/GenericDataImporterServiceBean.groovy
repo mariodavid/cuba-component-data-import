@@ -141,19 +141,21 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
                 importLog.entitiesImportSuccess = importedEntities.size()
             }
             catch (EntityValidationException e) {
-                def message = 'Validation error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
-                logError(importLog, message,ImportLogRecordCategory.VALIDATION, e)
+                def validationMessage = validationErrorMessage(e)
+                def additionalMessage = '\n\nImportTransactionStrategy.SINGLE_TRANSACTION: Transaction abort - no entity is stored in the database.'
+
+                logError(importLog, validationMessage + additionalMessage,ImportLogRecordCategory.VALIDATION, e)
                 resetImportLog(importLog)
             }
             catch(PersistenceException e) {
-                def message = 'Error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no Entity is written.'
-                logError(importLog, message,ImportLogRecordCategory.PERSISTENCE, e)
+                def message = 'Error while executing import with ImportTransactionStrategy.SINGLE_TRANSACTION. Transaction abort - no entity is stored in the database'
+                logError(importLog, message, ImportLogRecordCategory.PERSISTENCE, e)
                 resetImportLog(importLog)
             }
         }
 
         catch (ImportUniqueAbortException e) {
-            def message = "Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.SINGLE_TRANSACTION: no entities written."
+            def message = "Unique violation occurred with Unique Policy ABORT. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.SINGLE_TRANSACTION: no entities written."
             logError(importLog, message,ImportLogRecordCategory.UNIQUE_VIOLATION, e)
             resetImportLog(importLog)
         }
@@ -378,7 +380,7 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         catch (EntityValidationException e) {
             importEntityRequest.constraintViolations = e.constraintViolations
             importLog.entitiesImportValidationError++
-            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, ImportLogRecordCategory.VALIDATION, importEntityRequest, e)
+            logWarning(importLog, validationErrorMessage(e), ImportLogRecordCategory.VALIDATION, importEntityRequest, e)
             importLog.success = false
         }
         catch(PersistenceException e) {
@@ -387,6 +389,17 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importLog.success = false
         }
     }
+
+    private String validationErrorMessage(EntityValidationException e) {
+        def header = "Validation failed: \n\n"
+
+        def constraints = e.constraintViolations.collect {
+            "  * ${it.propertyPath}: ${it.message}, provided value: ${it.invalidValue.toString()}"
+        }.join("\n")
+
+        header + constraints
+    }
+
 
     private Binding createPreCommitBinding(
             ImportEntityRequest importEntityRequest,
