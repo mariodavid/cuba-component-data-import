@@ -39,6 +39,10 @@ create table DDCDI_IMPORT_LOG_RECORD (
     TIME_ timestamp not null,
     STACKTRACE text,
     IMPORT_LOG_ID uuid not null,
+    DATA_ROW text,
+    DATA_ROW_INDEX integer,
+    ENTITY_INSTANCE text,
+    CATEGORY varchar(50),
     --
     primary key (ID)
 )^

@@ -54,12 +54,21 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
 
     @Override
-    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues = [:]) {
+    ImportLog doDataImport(
+            ImportConfiguration importConfiguration,
+            ImportData importData,
+            Map<String, Object> defaultValues = [:]
+    ) {
         doDataImport(importConfiguration, importData, defaultValues, null)
     }
 
     @Override
-    ImportLog doDataImport(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues, Consumer<EntityImportView> importViewCustomization) {
+    ImportLog doDataImport(
+            ImportConfiguration importConfiguration,
+            ImportData importData,
+            Map<String, Object> defaultValues,
+            Consumer<EntityImportView> importViewCustomization
+    ) {
         def entities = createEntities(importConfiguration, importData, defaultValues)
 
         ImportLog importLog = createImportLog(importConfiguration)
@@ -67,7 +76,12 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importEntities(entities, importConfiguration, importLog, importViewCustomization)
     }
 
-    private ImportLog importEntities(Collection<ImportEntityRequest> entities, ImportConfiguration importConfiguration, ImportLog importLog, Consumer<EntityImportView> importViewCustomization) {
+    private ImportLog importEntities(
+            Collection<ImportEntityRequest> entities,
+            ImportConfiguration importConfiguration,
+            ImportLog importLog,
+            Consumer<EntityImportView> importViewCustomization
+    ) {
 
         def importEntityMetaClass = metadata.getClass(importConfiguration.entityClass)
         def importEntityClass = importEntityMetaClass.javaClass
@@ -90,19 +104,32 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     }
 
-    protected void importAllEntitiesInMultipleTransactions(Collection<ImportEntityRequest> entities, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
+    protected void importAllEntitiesInMultipleTransactions(
+            Collection<ImportEntityRequest> entities,
+            EntityImportView importView,
+            Collection<ImportEntityRequest> importedEntities,
+            ImportConfiguration importConfiguration,
+            ImportLog importLog
+    ) {
         try {
             entities.each { ImportEntityRequest importEntityRequest ->
                 importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importLog)
             }
         }
         catch (ImportUniqueAbortException e) {
-            log.warn("Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.TRANSACTION_PER_ENTITY: Entities up until this point were written.",e)
+            def message = "Unique violation occurred with Unique Policy ABORT for entity: ${e.importEntityRequest.entity} with data row: ${e.importEntityRequest.dataRow}. Found entity: ${e.alreadyExistingEntity}. Due to TransactionStrategy.TRANSACTION_PER_ENTITY: Entities up until this point were written."
+            logWarning(importLog, message, e)
             importLog.success = false
         }
     }
 
-    private void importAllEntitiesInOneTransaction(Collection<ImportEntityRequest> entities, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
+    private void importAllEntitiesInOneTransaction(
+            Collection<ImportEntityRequest> entities,
+            EntityImportView importView,
+            Collection<ImportEntityRequest> importedEntities,
+            ImportConfiguration importConfiguration,
+            ImportLog importLog
+    ) {
 
         try {
             entities.each { ImportEntityRequest importEntityRequest ->
@@ -132,17 +159,61 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         }
     }
 
-    void logError(ImportLog importLog, String message, Exception exception) {
+    void logError(
+            ImportLog importLog,
+            String message,
+            ImportEntityRequest importEntityRequest,
+            Exception exception = null
+    ) {
+        exception ? log.error(message, exception) : log.error(message)
+        logMessage(importLog, message, LogRecordLevel.ERROR, importEntityRequest, exception)
+    }
+
+    void logWarning(
+            ImportLog importLog,
+            String message,
+            ImportEntityRequest importEntityRequest,
+            Exception exception = null
+    ) {
+        exception ? log.warn(message, exception) : log.warn(message)
+        logMessage(importLog, message, LogRecordLevel.WARN, importEntityRequest, exception)
+    }
+
+    void logDebug(
+            ImportLog importLog,
+            String message,
+            ImportEntityRequest importEntityRequest,
+            Exception exception = null
+    ) {
+        exception ? log.debug(message, exception) : log.debug(message)
+        logMessage(importLog, message, LogRecordLevel.DEBUG, importEntityRequest, exception)
+    }
+
+    void logInfo(
+            ImportLog importLog,
+            String message,
+            ImportEntityRequest importEntityRequest,
+            Exception exception = null
+    ) {
+        exception ? log.info(message, exception) : log.info(message)
+        logMessage(importLog, message, LogRecordLevel.INFO, importEntityRequest, exception)
+    }
+
+    void logError(
+            ImportLog importLog,
+            String message,
+            Exception exception = null
+    ) {
         exception ? log.error(message, exception) : log.error(message)
         logMessage(importLog, message, LogRecordLevel.ERROR, exception)
     }
 
-    void logWarning(ImportLog importLog, String message, Exception exception) {
+    void logWarning(ImportLog importLog, String message, Exception exception = null) {
         exception ? log.warn(message, exception) : log.warn(message)
         logMessage(importLog, message, LogRecordLevel.WARN, exception)
     }
 
-    void logDebug(ImportLog importLog, String message, Exception exception) {
+    void logDebug(ImportLog importLog, String message, Exception exception = null) {
         exception ? log.debug(message, exception) : log.debug(message)
         logMessage(importLog, message, LogRecordLevel.DEBUG, exception)
     }
@@ -152,9 +223,31 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         logMessage(importLog, message, LogRecordLevel.INFO, exception)
     }
 
+    private void logMessage(ImportLog importLog, String message, LogRecordLevel level, ImportEntityRequest importEntityRequest, Exception exception) {
+        def importLogRecord = dataManager.create(ImportLogRecord)
+        importLogRecord.importLog = importLog
+
+
+        if (message.length() > 4000) {
+            importLogRecord.message = message.substring(0,3997) + "..."
+            String stacktraceMessage = message + "\n\n" + stacktraceForException(exception)
+            importLogRecord.stacktrace = stacktraceMessage
+        }
+        else {
+            importLogRecord.message = message
+            importLogRecord.stacktrace = stacktraceForException(exception)
+        }
+
+        importLogRecord.time = timeSource.currentTimestamp()
+        importLogRecord.level = level
+
+        importLog.records << importLogRecord
+    }
+
     private void logMessage(ImportLog importLog, String message, LogRecordLevel level, Exception exception) {
         def importLogRecord = dataManager.create(ImportLogRecord)
         importLogRecord.importLog = importLog
+
 
         if (message.length() > 4000) {
             importLogRecord.message = message.substring(0,3997) + "..."
@@ -173,11 +266,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private String stacktraceForException(Exception exception) {
-        if (exception) {
-            StringWriter stacktrace = new StringWriter()
-            exception.printStackTrace(new PrintWriter(stacktrace))
-            return stacktrace.toString()
+
+        if (!exception) {
+            return null
         }
+
+        StringWriter stacktrace = new StringWriter()
+        exception.printStackTrace(new PrintWriter(stacktrace))
+        return stacktrace.toString()
     }
 
     protected void resetImportLog(ImportLog importLog) {
@@ -185,9 +281,16 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importLog.success = false
     }
 
-    private void importSingleEntity(ImportEntityRequest importEntityRequest, EntityImportView importView, Collection<ImportEntityRequest> importedEntities, ImportConfiguration importConfiguration, ImportLog importLog) {
+    private void importSingleEntity(
+            ImportEntityRequest importEntityRequest,
+            EntityImportView importView,
+            Collection<ImportEntityRequest> importedEntities,
+            ImportConfiguration importConfiguration,
+            ImportLog importLog
+    ) {
 
         if (importConfiguration.uniqueConfigurations) {
+
             importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
 
                 def alreadyExistingEntity = uniqueEntityFinderService.findEntity(importEntityRequest.entity, uniqueConfiguration)
@@ -227,13 +330,18 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importedEntities << importEntityRequest
         } else {
             importLog.entitiesPreCommitSkipped++
+            logDebug(importLog, "Entity not imported due to Pre-Commit script returned false", importEntityRequest, null)
         }
 
         importLog.entitiesProcessed++
 
     }
 
-    private void tryToExecuteImport(ImportEntityRequest importEntityRequest, EntityImportView importView, ImportLog importLog) {
+    private void tryToExecuteImport(
+            ImportEntityRequest importEntityRequest,
+            EntityImportView importView,
+            ImportLog importLog
+    ) {
         try {
             entityImportExportAPI.importEntities([importEntityRequest.entity], importView, true)
             importLog.entitiesImportSuccess++
@@ -241,17 +349,21 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         catch (EntityValidationException e) {
             importEntityRequest.constraintViolations = e.constraintViolations
             importLog.entitiesImportValidationError++
-            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, e)
+            logWarning(importLog, "Validation of entity failed: " + e.constraintViolations, importEntityRequest, e)
             importLog.success = false
         }
         catch(PersistenceException e) {
             def message = 'Error while importing entity: ' + e.message
-            logWarning(importLog, message, e)
+            logWarning(importLog, message, importEntityRequest, e)
             importLog.success = false
         }
     }
 
-    private Binding createPreCommitBinding(ImportEntityRequest importEntityRequest, ImportConfiguration importConfiguration, EntityImportView importView) {
+    private Binding createPreCommitBinding(
+            ImportEntityRequest importEntityRequest,
+            ImportConfiguration importConfiguration,
+            EntityImportView importView
+    ) {
         new Binding(
                 entity: importEntityRequest.entity,
                 dataRow: importEntityRequest.dataRow,
@@ -335,19 +447,24 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importAttributeMapper.automatic && importAttributeMapper.attributeType == AttributeType.ASSOCIATION_ATTRIBUTE
     }
 
-    Collection<ImportEntityRequest> createEntities(ImportConfiguration importConfiguration, ImportData importData, Map<String, Object> defaultValues = [:]) {
-        importData.rows.collect {
-            createImportEntityRequestFromRow(importConfiguration, it, defaultValues)
+    Collection<ImportEntityRequest> createEntities(
+            ImportConfiguration importConfiguration,
+            ImportData importData,
+            Map<String, Object> defaultValues = [:]
+    ) {
+        importData.rows.withIndex(1).collect { dataRow, dataRowIndex ->
+            createImportEntityRequestFromRow(importConfiguration, dataRow, dataRowIndex, defaultValues)
         }
     }
 
-    ImportEntityRequest createImportEntityRequestFromRow(ImportConfiguration importConfiguration, DataRow dataRow, Map<String, Object> defaultValues) {
+    ImportEntityRequest createImportEntityRequestFromRow(ImportConfiguration importConfiguration, DataRow dataRow, int dataRowIndex, Map<String, Object> defaultValues) {
         Entity entityInstance = createEntityInstance(importConfiguration)
 
         new ImportEntityRequest(
                 defaultValues: defaultValues,
                 entity: bindAttributesToEntity(importConfiguration, dataRow, entityInstance, defaultValues),
-                dataRow: dataRow
+                dataRow: dataRow,
+                dataRowIndex: dataRowIndex
         )
     }
 
@@ -367,6 +484,7 @@ class ImportEntityRequest {
     Entity entity
     DataRow dataRow
     Set<ConstraintViolation> constraintViolations = []
+    int dataRowIndex
 
     boolean isSuccess() {
         constraintViolations.isEmpty()

@@ -32,6 +32,52 @@ public class ImportLogRecord extends StandardEntity {
     @JoinColumn(name = "IMPORT_LOG_ID")
     protected ImportLog importLog;
 
+    @Lob
+    @Column(name = "DATA_ROW")
+    protected String dataRow;
+
+    @Column(name = "DATA_ROW_INDEX")
+    protected Integer dataRowIndex;
+
+    @Lob
+    @Column(name = "ENTITY_INSTANCE")
+    protected String entityInstance;
+
+    @Column(name = "CATEGORY")
+    protected String category;
+
+    public ImportLogRecordCategory getCategory() {
+        return category == null ? null : ImportLogRecordCategory.fromId(category);
+    }
+
+    public void setCategory(ImportLogRecordCategory category) {
+        this.category = category == null ? null : category.getId();
+    }
+
+    public String getEntityInstance() {
+        return entityInstance;
+    }
+
+    public void setEntityInstance(String entityInstance) {
+        this.entityInstance = entityInstance;
+    }
+
+    public Integer getDataRowIndex() {
+        return dataRowIndex;
+    }
+
+    public void setDataRowIndex(Integer dataRowIndex) {
+        this.dataRowIndex = dataRowIndex;
+    }
+
+    public String getDataRow() {
+        return dataRow;
+    }
+
+    public void setDataRow(String dataRow) {
+        this.dataRow = dataRow;
+    }
+
     public void setImportLog(ImportLog importLog) {
         this.importLog = importLog;
     }
