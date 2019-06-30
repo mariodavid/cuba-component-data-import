@@ -20,6 +20,7 @@ Table of Contents
      * [Unique Configuration](#unique-configuration)
      * [Transaction strategy](#transaction-strategy)
      * [Pre-Commit Script](#pre-commit-script)
+  * [Import Log](#import-log)
   * [Default binding behavior](#default-binding-behavior)
      * [Datatype binding](#datatype-binding)
      * [Enum binding](#enum-binding)
@@ -237,7 +238,7 @@ for this Entity. In case there are multiple configurations available for this en
 import configuration to proceed.
 
 
-## Supported file types
+## Supported File Types
 
 Multiple file types are supported by this application component. Information and requirements
 for certain file types will be described below. 
@@ -291,7 +292,7 @@ Example JSON file:
 ```
 
 
-##### programmatic access to nested JSON structures
+##### Programmatic Access to Nested JSON Structures
  
 It is also possible to have nested structures in the JSON and bind it to a entity attribute. In order to do this, a [Custom attribute binding script](#custom-attribute-binding-script) has to be configured
 for the desired entity attribute.  
@@ -349,7 +350,7 @@ Example XML file:
 </roles>
 ```
 
-##### programmatic access to nested XML structures
+##### Programmatic Access to Nested XML Structures
  
 It is also possible to have nested structures in the XML and bind it to a entity attribute. In order to do this, a [Custom attribute binding script](#custom-attribute-binding-script) has to be configured
 for the desired entity attribute.  
@@ -564,6 +565,19 @@ This example will return `null`, because the `MlbPlayer.setName()` returns a `vo
 as false in groovy. *Therefore this entity will not be imported.*
 
 > NOTE: always use explicit return statements in the pre-commit script
+
+
+## Import Log
+
+When executing the data import the results of the operation will be logged as Import logs. Those import logs can be found
+in the Menu: `Administration > Data Import > Import Log`. The Import Log contains information about the import process for
+a given file. For each failing import row, it contains information the following information:
+
+* failing data row
+* the entity instance after all attributes are bound
+* error message
+* stacktrace
+
 
 ## Default Binding Behavior
 

@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.9.0] - 2019-06-28
+## [0.9.0] - 2019-06-29
 
 ### Added
 - `DataImportAPI` which provides an API of the application component for the core module. It allows to import FileDescriptor instances.
 - Ability to define the charset of the file to import (UTF-8 default)
+- Data imports are logged and persisted for identifying what data failed during import process
 
 ### Bugfix
 - Exception during Import Wizard with saving unique configurations
