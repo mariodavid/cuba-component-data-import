@@ -23,7 +23,7 @@ import java.util.function.Function
 import static org.assertj.core.api.Assertions.assertThat
 
 
-class GenericDataImporterServiceBeanDefaultValuesTest extends AbstractImportIntegrationTest {
+class GenericDataImporterServiceBeanDefaultValuesIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat
 
 
 @Ignore
-class GenericDataImporterServiceBeanImportViewTest extends AbstractImportIntegrationTest {
+class GenericDataImporterServiceBeanImportViewIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

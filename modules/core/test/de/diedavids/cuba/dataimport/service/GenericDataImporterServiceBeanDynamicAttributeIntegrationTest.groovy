@@ -24,7 +24,7 @@ import java.time.LocalDate
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class GenericDataImporterServiceBeanDynamicAttributeTest extends AbstractImportIntegrationTest {
+class GenericDataImporterServiceBeanDynamicAttributeIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

@@ -15,7 +15,7 @@ import org.junit.Test
 import static org.assertj.core.api.Assertions.assertThat
 import static org.assertj.core.api.Assertions.assertThatThrownBy
 
-class GenericDataImporterServiceBeanUniqueConfigurationTest extends AbstractImportIntegrationTest {
+class GenericDataImporterServiceBeanUniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

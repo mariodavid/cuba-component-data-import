@@ -13,7 +13,7 @@ import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class GenericDataImporterServiceBeanPreCommitScriptTest extends AbstractImportIntegrationTest {
+class GenericDataImporterServiceBeanPreCommitScriptIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

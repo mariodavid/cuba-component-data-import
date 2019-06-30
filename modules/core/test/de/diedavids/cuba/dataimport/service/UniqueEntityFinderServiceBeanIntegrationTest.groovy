@@ -11,7 +11,7 @@ import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class UniqueEntityFinderServiceBeanTest extends AbstractDbIntegrationTest {
+class UniqueEntityFinderServiceBeanIntegrationTest extends AbstractDbIntegrationTest {
 
 
     protected UniqueEntityFinderService sut
