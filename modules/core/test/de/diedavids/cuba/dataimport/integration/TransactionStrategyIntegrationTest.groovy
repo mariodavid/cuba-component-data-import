@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.service
+package de.diedavids.cuba.dataimport.integration
 
 import com.haulmont.cuba.core.global.AppBeans
 import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
@@ -10,12 +10,13 @@ import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportLog
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
+import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import org.junit.Before
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class GenericDataImporterServiceBeanTransactionStrategyIntegrationTest extends AbstractImportIntegrationTest {
+class TransactionStrategyIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut

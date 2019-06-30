@@ -8,8 +8,11 @@ import com.haulmont.cuba.core.app.importexport.EntityImportView
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity
 import com.haulmont.cuba.core.entity.Entity
+import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.EntityStates
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.core.global.PersistenceHelper
 import com.haulmont.cuba.core.global.Scripting
 import com.haulmont.cuba.core.global.TimeSource
 import com.haulmont.cuba.core.global.validation.EntityValidationException
@@ -51,6 +54,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     @Inject
     TimeSource timeSource
+
+    @Inject
+    EntityStates entityStates
 
 
     @Override
@@ -100,8 +106,20 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         importLog.finishedAt = timeSource.currentTimestamp()
 
-        importLog
+        saveImportLog(importLog)
 
+    }
+
+    private ImportLog saveImportLog(ImportLog importLog) {
+        CommitContext commitContext = new CommitContext()
+        commitContext.addInstanceToCommit(importLog)
+
+        importLog.records.each {
+            commitContext.addInstanceToCommit(it)
+        }
+        dataManager.commit(commitContext)
+
+        dataManager.reload(importLog, "importLog-with-records-view")
     }
 
     protected void importAllEntitiesInMultipleTransactions(
@@ -446,7 +464,16 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
         importLog.entitiesPreCommitSkipped = 0
         importLog.entitiesUniqueConstraintSkipped = 0
         importLog.success = true
-        importLog.configuration = importConfiguration
+
+        /*
+         a reference to the import configuration is only stored when the import configuration
+         itself is not new. In case of the ad-hoc ImportWizard the import configuration
+         is just transient and is not stored. In this case, the reference cannot be stored
+          */
+        if (!entityStates.isNew(importConfiguration)) {
+            importLog.configuration = importConfiguration
+        }
+
         importLog.records = []
         importLog
     }

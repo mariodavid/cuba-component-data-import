@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.service
+package de.diedavids.cuba.dataimport.integration
 
 import com.haulmont.cuba.core.global.AppBeans
 import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
@@ -9,13 +9,14 @@ import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import de.diedavids.cuba.dataimport.entity.example.mlb.State
+import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import org.junit.Before
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 import static org.assertj.core.api.Assertions.assertThatThrownBy
 
-class GenericDataImporterServiceBeanUniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
+class UniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut
@@ -71,7 +72,6 @@ class GenericDataImporterServiceBeanUniqueConfigurationIntegrationTest extends A
         def storedExistingBalTeam = dataManager.reload(existingBalTeam, '_local')
         assertThat(storedExistingBalTeam.state).isEqualTo(State.CA)
 
-        cont.deleteRecord(existingBalTeam)
     }
 
 
@@ -110,7 +110,6 @@ class GenericDataImporterServiceBeanUniqueConfigurationIntegrationTest extends A
         def storedExistingBalTeam = dataManager.reload(existingBalTeam, '_local')
         assertThat(storedExistingBalTeam.state).isEqualTo(State.AL)
 
-        cont.deleteRecord(existingBalTeam)
     }
 
 
@@ -157,8 +156,6 @@ class GenericDataImporterServiceBeanUniqueConfigurationIntegrationTest extends A
         // and
         assertThat(simpleDataLoader.loadAll(MlbTeam).size()).isEqualTo(1)
 
-
-        cont.deleteRecord(existingBaltimoreOrioles)
     }
 
 
@@ -198,10 +195,6 @@ class GenericDataImporterServiceBeanUniqueConfigurationIntegrationTest extends A
         def allMlbTeams = simpleDataLoader.loadAll(MlbTeam)
         assertThat(allMlbTeams.size()).isEqualTo(2)
 
-
-        allMlbTeams.each {
-            cont.deleteRecord(it)
-        }
     }
 
 

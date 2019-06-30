@@ -9,7 +9,7 @@ create table DDCDI_IMPORT_LOG (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    FILE_ID varchar(36) not null,
+    FILE_ID varchar(36),
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED integer,
@@ -18,7 +18,7 @@ create table DDCDI_IMPORT_LOG (
     ENTITIES_PRE_COMMIT_SKIPPED integer,
     ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
     SUCCESS boolean not null,
-    CONFIGURATION_ID varchar(36) not null,
+    CONFIGURATION_ID varchar(36),
     --
     primary key (ID)
 )^

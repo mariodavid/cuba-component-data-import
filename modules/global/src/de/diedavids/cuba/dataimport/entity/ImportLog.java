@@ -1,30 +1,22 @@
 package de.diedavids.cuba.dataimport.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import com.haulmont.cuba.core.entity.FileDescriptor;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.OneToMany;
 
 @Table(name = "DDCDI_IMPORT_LOG")
 @Entity(name = "ddcdi$ImportLog")
 public class ImportLog extends StandardEntity {
     private static final long serialVersionUID = -2901352797679880851L;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     protected FileDescriptor file;
 
@@ -45,8 +37,6 @@ public class ImportLog extends StandardEntity {
     protected Integer entitiesProcessed = 0;
 
 
-
-
     @Column(name = "ENTITIES_IMPORT_SUCCESS")
     protected Integer entitiesImportSuccess = 0;
 
@@ -63,7 +53,7 @@ public class ImportLog extends StandardEntity {
     @Column(name = "SUCCESS", nullable = false)
     protected Boolean success = false;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONFIGURATION_ID")
     protected ImportConfiguration configuration;
 
