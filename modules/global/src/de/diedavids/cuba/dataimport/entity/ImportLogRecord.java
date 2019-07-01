@@ -1,17 +1,10 @@
 package de.diedavids.cuba.dataimport.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Lob;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Table(name = "DDCDI_IMPORT_LOG_RECORD")
 @Entity(name = "ddcdi$ImportLogRecord")
@@ -19,7 +12,7 @@ public class ImportLogRecord extends StandardEntity {
     private static final long serialVersionUID = -8403007601995115328L;
 
     @NotNull
-    @Column(name = "MESSAGE", nullable = false)
+    @Column(name = "MESSAGE", nullable = false, length = 4000)
     protected String message;
 
     @NotNull
@@ -38,6 +31,52 @@ public class ImportLogRecord extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "IMPORT_LOG_ID")
     protected ImportLog importLog;
+
+    @Lob
+    @Column(name = "DATA_ROW")
+    protected String dataRow;
+
+    @Column(name = "DATA_ROW_INDEX")
+    protected Integer dataRowIndex;
+
+    @Lob
+    @Column(name = "ENTITY_INSTANCE")
+    protected String entityInstance;
+
+    @Column(name = "CATEGORY")
+    protected String category;
+
+    public ImportLogRecordCategory getCategory() {
+        return category == null ? null : ImportLogRecordCategory.fromId(category);
+    }
+
+    public void setCategory(ImportLogRecordCategory category) {
+        this.category = category == null ? null : category.getId();
+    }
+
+    public String getEntityInstance() {
+        return entityInstance;
+    }
+
+    public void setEntityInstance(String entityInstance) {
+        this.entityInstance = entityInstance;
+    }
+
+    public Integer getDataRowIndex() {
+        return dataRowIndex;
+    }
+
+    public void setDataRowIndex(Integer dataRowIndex) {
+        this.dataRowIndex = dataRowIndex;
+    }
+
+    public String getDataRow() {
+        return dataRow;
+    }
+
+    public void setDataRow(String dataRow) {
+        this.dataRow = dataRow;
+    }
 
     public void setImportLog(ImportLog importLog) {
         this.importLog = importLog;

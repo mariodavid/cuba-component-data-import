@@ -9,7 +9,7 @@ create table DDCDI_IMPORT_LOG (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    FILE_ID uuid not null,
+    FILE_ID uuid,
     STARTED_AT timestamp,
     FINISHED_AT timestamp,
     ENTITIES_PROCESSED integer,
@@ -18,7 +18,7 @@ create table DDCDI_IMPORT_LOG (
     ENTITIES_PRE_COMMIT_SKIPPED integer,
     ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
     SUCCESS boolean not null,
-    CONFIGURATION_ID uuid not null,
+    CONFIGURATION_ID uuid,
     --
     primary key (ID)
 )^
@@ -34,11 +34,15 @@ create table DDCDI_IMPORT_LOG_RECORD (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    MESSAGE varchar(255) not null,
+    MESSAGE varchar(4000) not null,
     LEVEL_ varchar(50) not null,
     TIME_ timestamp not null,
     STACKTRACE text,
     IMPORT_LOG_ID uuid not null,
+    DATA_ROW text,
+    DATA_ROW_INDEX integer,
+    ENTITY_INSTANCE text,
+    CATEGORY varchar(50),
     --
     primary key (ID)
 )^
@@ -60,11 +64,11 @@ create table DDCDI_IMPORT_CONFIGURATION (
     AD_HOC boolean,
     TEMPLATE_ID uuid,
     COMMENT_ text,
-    IMPORTER_BEAN_NAME varchar(255),
     DATE_FORMAT varchar(255),
     BOOLEAN_TRUE_VALUE varchar(255),
     BOOLEAN_FALSE_VALUE varchar(255),
     PRE_COMMIT_SCRIPT text,
+    FILE_CHARSET varchar(255),
     --
     primary key (ID)
 )^

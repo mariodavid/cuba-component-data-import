@@ -2,9 +2,9 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="data-import"
           insertBefore="sys$Category.browse">
-        <item screen="ddcdi$ImportLog.browse"/>
         <item screen="ddcdi$ImportConfiguration.browse"/>
         <item openType="DIALOG"
               screen="ddcdi$import-wizard"/>
+        <item screen="ddcdi$ImportLog.browse"/>
     </menu>
 </menu-config>

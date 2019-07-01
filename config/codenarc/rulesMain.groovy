@@ -21,11 +21,11 @@ ruleset {
 
 
     MethodSize {
-        maxLines = 25
+        maxLines = 40
         priority = 1
     }
     MethodCount {
-        maxMethods = 25
+        maxMethods = 35
         priority = 1
     }
     CatchError { priority = 1 }
@@ -52,7 +52,7 @@ ruleset {
     ClassNameSameAsSuperclass { priority = 1 }
     AssignCollectionSort { priority = 1 }
     AssignCollectionUnique { priority = 1 }
-    ParameterCount { maxParameters = 5 }
+    ParameterCount { maxParameters = 6 }
     CollectAllIsDeprecated { priority = 1 }
     ConfusingMultipleReturns { priority = 1 }
     ExplicitArrayListInstantiation { priority = 1 }
@@ -276,5 +276,5 @@ ruleset {
     RemoveAllOnSelf { priority = 1 }
     UnnecessaryBigDecimalInstantiation { priority = 1 }
 
-    ClassSize { maxLines = 300 }
+    ClassSize { maxLines = 600 }
 }
