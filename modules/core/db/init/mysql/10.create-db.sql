@@ -9,7 +9,7 @@ create table DDCDI_IMPORT_LOG (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     --
-    FILE_ID varchar(32) not null,
+    FILE_ID varchar(32),
     STARTED_AT datetime(3),
     FINISHED_AT datetime(3),
     ENTITIES_PROCESSED integer,
@@ -18,7 +18,7 @@ create table DDCDI_IMPORT_LOG (
     ENTITIES_PRE_COMMIT_SKIPPED integer,
     ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
     SUCCESS boolean not null,
-    CONFIGURATION_ID varchar(32) not null,
+    CONFIGURATION_ID varchar(32),
     --
     primary key (ID)
 )^
@@ -34,11 +34,15 @@ create table DDCDI_IMPORT_LOG_RECORD (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     --
-    MESSAGE varchar(255) not null,
+    MESSAGE varchar(4000) not null,
     LEVEL_ varchar(50) not null,
     TIME_ datetime(3) not null,
     STACKTRACE longtext,
     IMPORT_LOG_ID varchar(32) not null,
+    DATA_ROW longtext,
+    DATA_ROW_INDEX integer,
+    ENTITY_INSTANCE longtext,
+    CATEGORY varchar(50),
     --
     primary key (ID)
 )^

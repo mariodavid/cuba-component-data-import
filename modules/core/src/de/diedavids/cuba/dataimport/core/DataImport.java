@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -62,11 +63,12 @@ public class DataImport implements DataImportAPI {
 
         byte[] fileBytes = fileStorageAPI.loadFile(fileToImport);
         String fileCharset = importConfiguration.getFileCharset();
+        String chosenFileCharset = fileCharset != null ? fileCharset : StandardCharsets.UTF_8.name();
 
         ImportDataConverter converter = dataConverterFactory.createTableDataConverter(fileToImport);
 
         try {
-            String fileContentString = new String(fileBytes, fileCharset);
+            String fileContentString = new String(fileBytes, chosenFileCharset);
             ImportData importData = converter.convert(fileContentString);
             return genericDataImporterService.doDataImport(
                     importConfiguration,
@@ -75,7 +77,7 @@ public class DataImport implements DataImportAPI {
                     importViewCustomization
             );
         } catch (UnsupportedEncodingException e) {
-            log.error("provided file charset of import configuration is not supported: " + fileCharset, e);
+            log.error("provided file charset of import configuration is not supported: " + chosenFileCharset, e);
             return createFailedImportLog(importConfiguration);
         }
     }

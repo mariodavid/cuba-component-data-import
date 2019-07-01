@@ -9,6 +9,7 @@ public enum LogRecordLevel implements EnumClass<String> {
 
     ERROR("error"),
     WARN("warn"),
+    INFO("info"),
     DEBUG("debug");
 
     private String id;
