@@ -11,7 +11,7 @@ before_install:
 install:
 - "./gradlew --no-daemon createTestDb"
 script:
-- "./gradlew --no-daemon check"
+- "./gradlew --no-daemon check --info"
 deploy:
   provider: script
   script: "./gradlew clean assemble bintrayUpload --debug"
