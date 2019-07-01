@@ -33,6 +33,7 @@ class UniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
         simpleDataLoader = AppBeans.get(SimpleDataLoader.NAME)
 
 
+        clearTable("DDCDI_MLB_PLAYER")
         clearTable("DDCDI_MLB_TEAM")
     }
 
