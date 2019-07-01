@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 @Table(name = "DDCDI_IMPORT_LOG")
-@Entity(name = "ddcdi$ImportLog")
-public class ImportLog extends StandardEntity {
+@Entity(name = "ddcdi$ImportExecution")
+public class ImportExecution extends StandardEntity {
     private static final long serialVersionUID = -2901352797679880851L;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,7 +22,7 @@ public class ImportLog extends StandardEntity {
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "importLog")
+    @OneToMany(mappedBy = "importExecution")
     protected List<ImportLogRecord> records;
 
     @Temporal(TemporalType.TIMESTAMP)

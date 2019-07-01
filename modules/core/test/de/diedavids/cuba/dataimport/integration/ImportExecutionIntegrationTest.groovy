@@ -5,20 +5,19 @@ import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.ImportLogRecord
 import de.diedavids.cuba.dataimport.entity.ImportLogRecordCategory
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
-import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import org.junit.Before
 import org.junit.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class ImportLogIntegrationTest extends AbstractImportIntegrationTest {
+class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
 
 
     protected GenericDataImporterService sut
@@ -60,15 +59,15 @@ class ImportLogIntegrationTest extends AbstractImportIntegrationTest {
         ])
 
         // when:
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
 
         // then:
-        ImportLog persistedImportLog = simpleDataLoader.load(ImportLog, importLog.getId(), "importLog-with-records-view")
+        ImportExecution persistedImportLog = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-records-view")
         assertThat(persistedImportLog.records.size()).isEqualTo(1)
 
         // and:
-        ImportLogRecord importLogRecord = persistedImportLog.records[0]
-        assertThat(importLogRecord.category).isEqualTo(ImportLogRecordCategory.VALIDATION)
+        ImportLogRecord importExecutionRecord = persistedImportLog.records[0]
+        assertThat(importExecutionRecord.category).isEqualTo(ImportLogRecordCategory.VALIDATION)
     }
 
 }

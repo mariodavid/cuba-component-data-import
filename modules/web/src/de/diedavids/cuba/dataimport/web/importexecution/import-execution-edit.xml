@@ -2,20 +2,20 @@
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
         focusComponent="form"
-        messagesPack="de.diedavids.cuba.dataimport.web.importlog">
+        messagesPack="de.diedavids.cuba.dataimport.web.importexecution">
     <data>
-        <instance id="importLogDc"
-                  class="de.diedavids.cuba.dataimport.entity.ImportLog"
-                  view="importLog-with-records-view">
+        <instance id="importExecutionDc"
+                  class="de.diedavids.cuba.dataimport.entity.ImportExecution"
+                  view="importExecution-with-records-view">
             <loader/>
             <collection id="recordsDc" property="records"/>
         </instance>
-        <collection id="importLogRecordsDc"
+        <collection id="importExecutionRecordsDc"
                     class="de.diedavids.cuba.dataimport.entity.ImportLogRecord"
                     view="_local">
-            <loader id="importLogRecordsDl">
+            <loader id="importExecutionRecordsDl">
                 <query>
-                    <![CDATA[select e from ddcdi$ImportLogRecord e where e.importLog = :importLog]]>
+                    <![CDATA[select e from ddcdi$ImportLogRecord e where e.importExecution = :importExecution]]>
                 </query>
             </loader>
         </collection>
@@ -27,7 +27,7 @@
             <tab id="overviewTab"
                  caption="msg://overview"
                  margin="true,false,false,false">
-                <form id="form" editable="false" dataContainer="importLogDc">
+                <form id="form" editable="false" dataContainer="importExecutionDc">
                     <column width="250px">
                         <pickerField id="configurationField" property="configuration">
                             <actions>
@@ -49,14 +49,14 @@
                 </form>
             </tab>
             <tab id="recordsTab"
-            caption="msg://de.diedavids.cuba.dataimport.entity.ImportLog/ImportLog.records"
+            caption="msg://de.diedavids.cuba.dataimport.entity.ImportExecution/ImportExecution.records"
                  margin="true,false,false,false" expand="recordsTable" spacing="true">
                 <filter id="filter"
                         applyTo="recordsTable"
-                        dataLoader="importLogRecordsDl">
+                        dataLoader="importExecutionRecordsDl">
                     <properties include=".*"/>
                 </filter>
-                <groupTable id="recordsTable" dataContainer="importLogRecordsDc" width="100%" height="100%">
+                <groupTable id="recordsTable" dataContainer="importExecutionRecordsDc" width="100%" height="100%">
                     <actions>
                         <action id="edit" type="edit"/>
                     </actions>

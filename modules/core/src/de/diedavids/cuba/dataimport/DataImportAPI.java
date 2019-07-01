@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.app.importexport.EntityImportView;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.FileStorageException;
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
-import de.diedavids.cuba.dataimport.entity.ImportLog;
+import de.diedavids.cuba.dataimport.entity.ImportExecution;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -24,7 +24,7 @@ public interface DataImportAPI {
      * @return the import log containing information about the import process
      * @throws FileStorageException in case an error occurred during reading the file
      */
-    ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport) throws FileStorageException;
+    ImportExecution importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport) throws FileStorageException;
 
 
     /**
@@ -36,7 +36,7 @@ public interface DataImportAPI {
      * @return the import log containing information about the import process
      * @throws FileStorageException in case an error occurred during reading the file
      */
-    ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues) throws FileStorageException;
+    ImportExecution importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues) throws FileStorageException;
 
     /**
      * imports data from a file descriptor configured by the import configuration with default values
@@ -49,5 +49,5 @@ public interface DataImportAPI {
      * @return the import log containing information about the import process
      * @throws FileStorageException in case an error occurred during reading the file
      */
-    ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues, Consumer<EntityImportView> importViewCustomization) throws FileStorageException;
+    ImportExecution importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues, Consumer<EntityImportView> importViewCustomization) throws FileStorageException;
 }

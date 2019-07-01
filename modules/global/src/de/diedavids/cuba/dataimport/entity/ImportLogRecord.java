@@ -30,7 +30,7 @@ public class ImportLogRecord extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "IMPORT_LOG_ID")
-    protected ImportLog importLog;
+    protected ImportExecution importExecution;
 
     @Lob
     @Column(name = "DATA_ROW")
@@ -78,12 +78,12 @@ public class ImportLogRecord extends StandardEntity {
         this.dataRow = dataRow;
     }
 
-    public void setImportLog(ImportLog importLog) {
-        this.importLog = importLog;
+    public void setImportExecution(ImportExecution importExecution) {
+        this.importExecution = importExecution;
     }
 
-    public ImportLog getImportLog() {
-        return importLog;
+    public ImportExecution getImportExecution() {
+        return importExecution;
     }
 
 

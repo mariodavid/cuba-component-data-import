@@ -7,7 +7,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
@@ -57,14 +57,14 @@ class TransactionStrategyIntegrationTest extends AbstractImportIntegrationTest {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
 
         assertThat(mlbTeams.size()).isEqualTo(0)
 
 
         //and:
-        assertThat(importLog.entitiesImportSuccess).isEqualTo(0)
+        assertThat(importExecution.entitiesImportSuccess).isEqualTo(0)
     }
 
 
@@ -87,16 +87,16 @@ class TransactionStrategyIntegrationTest extends AbstractImportIntegrationTest {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
 
         assertThat(mlbTeams.size()).isEqualTo(2)
 
 
         //and:
-        assertThat(importLog.entitiesProcessed).isEqualTo(2)
-        assertThat(importLog.entitiesImportSuccess).isEqualTo(2)
-        assertThat(importLog.entitiesImportValidationError).isEqualTo(0)
+        assertThat(importExecution.entitiesProcessed).isEqualTo(2)
+        assertThat(importExecution.entitiesImportSuccess).isEqualTo(2)
+        assertThat(importExecution.entitiesImportValidationError).isEqualTo(0)
     }
 
 
@@ -119,7 +119,7 @@ class TransactionStrategyIntegrationTest extends AbstractImportIntegrationTest {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
         def baltimoreTeam = mlbTeams.first()
 
@@ -129,9 +129,9 @@ class TransactionStrategyIntegrationTest extends AbstractImportIntegrationTest {
         assertThat(baltimoreTeam.code).isEqualTo("BAL")
 
         //and:
-        assertThat(importLog.entitiesProcessed).isEqualTo(2)
-        assertThat(importLog.entitiesImportSuccess).isEqualTo(1)
-        assertThat(importLog.entitiesImportValidationError).isEqualTo(1)
+        assertThat(importExecution.entitiesProcessed).isEqualTo(2)
+        assertThat(importExecution.entitiesImportSuccess).isEqualTo(1)
+        assertThat(importExecution.entitiesImportValidationError).isEqualTo(1)
     }
 
 

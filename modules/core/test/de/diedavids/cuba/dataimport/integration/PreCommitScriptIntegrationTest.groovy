@@ -61,7 +61,7 @@ else {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
         def baltimoreTeam = mlbTeams.first()
 
@@ -71,7 +71,7 @@ else {
 
 
         //and:
-        assertThat(importLog.entitiesPreCommitSkipped).isEqualTo(1)
+        assertThat(importExecution.entitiesPreCommitSkipped).isEqualTo(1)
     }
 
 
@@ -93,12 +93,12 @@ else {
                 [name: 'Baltimore Orioles', code: 'BAL']
         ])
 
-        ImportLog importLog = sut.doDataImport(importConfiguration, importData)
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
 
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
 
         assertThat(mlbTeams.size()).isEqualTo(2)
-        assertThat(importLog.entitiesPreCommitSkipped).isEqualTo(0)
+        assertThat(importExecution.entitiesPreCommitSkipped).isEqualTo(0)
     }
 
 }

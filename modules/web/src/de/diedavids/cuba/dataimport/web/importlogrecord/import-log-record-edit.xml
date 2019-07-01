@@ -4,7 +4,7 @@
         focusComponent="form"
         messagesPack="de.diedavids.cuba.dataimport.web.importlogrecord">
     <data>
-        <instance id="importLogRecordDc"
+        <instance id="importExecutionRecordDc"
                   class="de.diedavids.cuba.dataimport.entity.ImportLogRecord"
                   view="_local">
             <loader/>
@@ -14,7 +14,7 @@
                 forceDialog="true"
                 width="800"/>
     <layout expand="detailsTabSheet" spacing="true">
-        <form id="form" dataContainer="importLogRecordDc" editable="false" childrenCaptionWidth="100px">
+        <form id="form" dataContainer="importExecutionRecordDc" editable="false" childrenCaptionWidth="100px">
             <column width="250px">
                 <lookupField id="levelField" property="level"/>
                 <textField id="dataRowIndexField" property="dataRowIndex"/>
@@ -31,7 +31,7 @@
             >
                 <textArea
                         editable="false"
-                        dataContainer="importLogRecordDc"
+                        dataContainer="importExecutionRecordDc"
                         property="message"
                         width="100%"
                         height="100%"
@@ -43,7 +43,7 @@
             >
                 <textArea
                         editable="false"
-                        dataContainer="importLogRecordDc"
+                        dataContainer="importExecutionRecordDc"
                         property="dataRow"
                         width="100%"
                         height="100%"
@@ -55,7 +55,7 @@
             >
                 <textArea
                         editable="false"
-                        dataContainer="importLogRecordDc"
+                        dataContainer="importExecutionRecordDc"
                         property="entityInstance"
                         width="100%"
                         height="100%"
@@ -67,7 +67,7 @@
             >
                 <textArea
                         editable="false"
-                        dataContainer="importLogRecordDc"
+                        dataContainer="importExecutionRecordDc"
                         property="stacktrace"
                         width="100%"
                         height="100%"

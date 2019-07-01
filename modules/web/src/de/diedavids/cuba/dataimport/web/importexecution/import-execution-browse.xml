@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://browseCaption"
-        focusComponent="importLogsTable"
-        messagesPack="de.diedavids.cuba.dataimport.web.importlog">
+        focusComponent="importExecutionsTable"
+        messagesPack="de.diedavids.cuba.dataimport.web.importexecution">
     <data readOnly="true">
-        <collection id="importLogsDc"
-                    class="de.diedavids.cuba.dataimport.entity.ImportLog"
-                    view="importLog-view">
-            <loader id="importLogsDl">
+        <collection id="importExecutionsDc"
+                    class="de.diedavids.cuba.dataimport.entity.ImportExecution"
+                    view="importExecution-view">
+            <loader id="importExecutionsDl">
                 <query>
-                    <![CDATA[select e from ddcdi$ImportLog e]]>
+                    <![CDATA[select e from ddcdi$ImportExecution e]]>
                 </query>
             </loader>
         </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="importLogsTable"
+    <layout expand="importExecutionsTable"
             spacing="true">
         <filter id="filter"
-                applyTo="importLogsTable"
-                dataLoader="importLogsDl">
+                applyTo="importExecutionsTable"
+                dataLoader="importExecutionsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="importLogsTable"
+        <groupTable id="importExecutionsTable"
                     width="100%"
-                    dataContainer="importLogsDc">
+                    dataContainer="importExecutionsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
@@ -43,9 +43,9 @@
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="importLogsTable.create"/>
-                <button id="editBtn" action="importLogsTable.edit"/>
-                <button id="removeBtn" action="importLogsTable.remove"/>
+                <button id="createBtn" action="importExecutionsTable.create"/>
+                <button id="editBtn" action="importExecutionsTable.edit"/>
+                <button id="removeBtn" action="importExecutionsTable.remove"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

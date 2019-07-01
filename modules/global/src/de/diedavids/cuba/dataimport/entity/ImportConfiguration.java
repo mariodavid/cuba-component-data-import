@@ -16,7 +16,6 @@ import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class ImportConfiguration extends StandardEntity {
     protected Boolean reuse;
 
     @OneToMany(mappedBy = "configuration")
-    protected List<ImportLog> logs;
+    protected List<ImportExecution> logs;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEMPLATE_ID")
@@ -178,11 +177,11 @@ public class ImportConfiguration extends StandardEntity {
     }
 
 
-    public void setLogs(List<ImportLog> logs) {
+    public void setLogs(List<ImportExecution> logs) {
         this.logs = logs;
     }
 
-    public List<ImportLog> getLogs() {
+    public List<ImportExecution> getLogs() {
         return logs;
     }
 
