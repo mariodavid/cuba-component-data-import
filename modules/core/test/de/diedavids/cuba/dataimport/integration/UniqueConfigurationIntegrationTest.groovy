@@ -72,6 +72,7 @@ class UniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
         def storedExistingBalTeam = dataManager.reload(existingBalTeam, '_local')
         assertThat(storedExistingBalTeam.state).isEqualTo(State.CA)
 
+        cont.deleteRecord(existingBalTeam)
     }
 
 
@@ -109,7 +110,7 @@ class UniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
 
         def storedExistingBalTeam = dataManager.reload(existingBalTeam, '_local')
         assertThat(storedExistingBalTeam.state).isEqualTo(State.AL)
-
+        cont.deleteRecord(existingBalTeam)
     }
 
 
@@ -156,6 +157,7 @@ class UniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
         // and
         assertThat(simpleDataLoader.loadAll(MlbTeam).size()).isEqualTo(1)
 
+        cont.deleteRecord(existingBaltimoreOrioles)
     }
 
 
@@ -195,6 +197,9 @@ class UniqueConfigurationIntegrationTest extends AbstractImportIntegrationTest {
         def allMlbTeams = simpleDataLoader.loadAll(MlbTeam)
         assertThat(allMlbTeams.size()).isEqualTo(2)
 
+        allMlbTeams.each {
+            cont.deleteRecord(it)
+        }
     }
 
 
