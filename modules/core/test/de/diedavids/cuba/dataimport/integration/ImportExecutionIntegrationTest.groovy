@@ -7,7 +7,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.ImportLogRecord
-import de.diedavids.cuba.dataimport.entity.ImportLogRecordCategory
+import de.diedavids.cuba.dataimport.entity.ImportExecutionRecordCategory
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
@@ -67,7 +67,7 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
 
         // and:
         ImportLogRecord importExecutionRecord = persistedImportLog.records[0]
-        assertThat(importExecutionRecord.category).isEqualTo(ImportLogRecordCategory.VALIDATION)
+        assertThat(importExecutionRecord.category).isEqualTo(ImportExecutionRecordCategory.VALIDATION)
     }
 
 }

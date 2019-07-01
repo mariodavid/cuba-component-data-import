@@ -46,11 +46,11 @@ public class ImportLogRecord extends StandardEntity {
     @Column(name = "CATEGORY")
     protected String category;
 
-    public ImportLogRecordCategory getCategory() {
-        return category == null ? null : ImportLogRecordCategory.fromId(category);
+    public ImportExecutionRecordCategory getCategory() {
+        return category == null ? null : ImportExecutionRecordCategory.fromId(category);
     }
 
-    public void setCategory(ImportLogRecordCategory category) {
+    public void setCategory(ImportExecutionRecordCategory category) {
         this.category = category == null ? null : category.getId();
     }
 
