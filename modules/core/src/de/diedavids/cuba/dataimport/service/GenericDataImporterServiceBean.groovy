@@ -258,28 +258,28 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     }
 
     private void logMessage(ImportExecution importExecution, String message, LogRecordLevel level, ImportExecutionRecordCategory category, ImportEntityRequest importEntityRequest, Exception exception) {
-        def importExecutionRecord = dataManager.create(ImportLogRecord)
-        importExecutionRecord.importExecution = importExecution
+        def importExecutionDetail = dataManager.create(ImportExecutionDetail)
+        importExecutionDetail.importExecution = importExecution
         if (importEntityRequest) {
-            importExecutionRecord.dataRowIndex = importEntityRequest.dataRowIndex
-            importExecutionRecord.dataRow = importEntityRequest.dataRow
-            importExecutionRecord.entityInstance = entityInstance(importEntityRequest)
+            importExecutionDetail.dataRowIndex = importEntityRequest.dataRowIndex
+            importExecutionDetail.dataRow = importEntityRequest.dataRow
+            importExecutionDetail.entityInstance = entityInstance(importEntityRequest)
         }
-        importExecutionRecord.category = category
+        importExecutionDetail.category = category
 
         if (message.length() > 4000) {
-            importExecutionRecord.message = message[0..3997] + '...'
+            importExecutionDetail.message = message[0..3997] + '...'
             String stacktraceMessage = message + '\n\n' + stacktraceForException(exception)
-            importExecutionRecord.stacktrace = stacktraceMessage
+            importExecutionDetail.stacktrace = stacktraceMessage
         } else {
-            importExecutionRecord.message = message
-            importExecutionRecord.stacktrace = stacktraceForException(exception)
+            importExecutionDetail.message = message
+            importExecutionDetail.stacktrace = stacktraceForException(exception)
         }
 
-        importExecutionRecord.time = timeSource.currentTimestamp()
-        importExecutionRecord.level = level
+        importExecutionDetail.time = timeSource.currentTimestamp()
+        importExecutionDetail.level = level
 
-        importExecution.records << importExecutionRecord
+        importExecution.records << importExecutionDetail
     }
 
     private String entityInstance(ImportEntityRequest importEntityRequest) {

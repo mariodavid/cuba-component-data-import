@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.global.Sort;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import de.diedavids.cuba.dataimport.entity.ImportExecution;
-import de.diedavids.cuba.dataimport.entity.ImportLogRecord;
+import de.diedavids.cuba.dataimport.entity.ImportExecutionDetail;
 
 import javax.inject.Inject;
 
@@ -15,13 +15,13 @@ import javax.inject.Inject;
 public class ImportExecutionEdit extends StandardEditor<ImportExecution> {
 
     @Inject
-    protected CollectionLoader<ImportLogRecord> importExecutionRecordsDl;
+    protected CollectionLoader<ImportExecutionDetail> importExecutionDetailsDl;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
-        importExecutionRecordsDl.setParameter("importExecution", getEditedEntity());
-        importExecutionRecordsDl.setSort(Sort.by(Sort.Order.asc("time")));
-        importExecutionRecordsDl.load();
+        importExecutionDetailsDl.setParameter("importExecution", getEditedEntity());
+        importExecutionDetailsDl.setSort(Sort.by(Sort.Order.asc("time")));
+        importExecutionDetailsDl.load();
     }
 
 }

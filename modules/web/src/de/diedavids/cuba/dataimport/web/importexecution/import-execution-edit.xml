@@ -11,11 +11,11 @@
             <collection id="recordsDc" property="records"/>
         </instance>
         <collection id="importExecutionRecordsDc"
-                    class="de.diedavids.cuba.dataimport.entity.ImportLogRecord"
+                    class="de.diedavids.cuba.dataimport.entity.ImportExecutionDetail"
                     view="_local">
-            <loader id="importExecutionRecordsDl">
+            <loader id="importExecutionDetailsDl">
                 <query>
-                    <![CDATA[select e from ddcdi$ImportLogRecord e where e.importExecution = :importExecution]]>
+                    <![CDATA[select e from ddcdi$ImportExecutionDetail e where e.importExecution = :importExecution]]>
                 </query>
             </loader>
         </collection>
@@ -27,6 +27,8 @@
             <tab id="overviewTab"
                  caption="msg://overview"
                  margin="true,false,false,false">
+                <hbox width="100%" spacing="true">
+                <groupBox id="summaryGroupBox" caption="msg://summary">
                 <form id="form" editable="false" dataContainer="importExecutionDc">
                     <column width="250px">
                         <pickerField id="configurationField" property="configuration">
@@ -39,6 +41,10 @@
                         <dateField id="startedAtField" property="startedAt"/>
                         <dateField id="finishedAtField" property="finishedAt"/>
                     </column>
+                </form>
+                </groupBox>
+                <groupBox id="entitiesSummaryGroupBox" caption="msg://summaryEntities">
+                <form id="entitiesSummaryForm" editable="false" dataContainer="importExecutionDc">
                     <column width="250px">
                         <textField id="entitiesProcessedField" property="entitiesProcessed"/>
                         <textField id="entitiesImportSuccessField" property="entitiesImportSuccess"/>
@@ -47,13 +53,15 @@
                         <textField id="entitiesUniqueConstraintSkippedField" property="entitiesUniqueConstraintSkipped"/>
                     </column>
                 </form>
+                </groupBox>
+                </hbox>
             </tab>
             <tab id="recordsTab"
             caption="msg://de.diedavids.cuba.dataimport.entity.ImportExecution/ImportExecution.records"
                  margin="true,false,false,false" expand="recordsTable" spacing="true">
                 <filter id="filter"
                         applyTo="recordsTable"
-                        dataLoader="importExecutionRecordsDl">
+                        dataLoader="importExecutionDetailsDl">
                     <properties include=".*"/>
                 </filter>
                 <groupTable id="recordsTable" dataContainer="importExecutionRecordsDc" width="100%" height="100%">

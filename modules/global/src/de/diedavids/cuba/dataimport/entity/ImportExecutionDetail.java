@@ -7,8 +7,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "DDCDI_IMPORT_LOG_RECORD")
-@Entity(name = "ddcdi$ImportLogRecord")
-public class ImportLogRecord extends StandardEntity {
+@Entity(name = "ddcdi$ImportExecutionDetail")
+public class ImportExecutionDetail extends StandardEntity {
     private static final long serialVersionUID = -8403007601995115328L;
 
     @NotNull

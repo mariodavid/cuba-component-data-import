@@ -23,7 +23,7 @@ public class ImportExecution extends StandardEntity {
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "importExecution")
-    protected List<ImportLogRecord> records;
+    protected List<ImportExecutionDetail> records;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "STARTED_AT")
@@ -110,11 +110,11 @@ public class ImportExecution extends StandardEntity {
     }
 
 
-    public void setRecords(List<ImportLogRecord> records) {
+    public void setRecords(List<ImportExecutionDetail> records) {
         this.records = records;
     }
 
-    public List<ImportLogRecord> getRecords() {
+    public List<ImportExecutionDetail> getRecords() {
         return records;
     }
 

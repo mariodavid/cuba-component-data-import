@@ -20,7 +20,7 @@ Table of Contents
      * [Unique Configuration](#unique-configuration)
      * [Transaction strategy](#transaction-strategy)
      * [Pre-Commit Script](#pre-commit-script)
-  * [Import Log](#import-log)
+  * [Import Execution](#import-execution)
   * [Default binding behavior](#default-binding-behavior)
      * [Datatype binding](#datatype-binding)
      * [Enum binding](#enum-binding)
@@ -567,12 +567,14 @@ as false in groovy. *Therefore this entity will not be imported.*
 > NOTE: always use explicit return statements in the pre-commit script
 
 
-## Import Log
+## Import Execution Logging
 
-When executing the data import the results of the operation will be logged as Import logs. Those import logs can be found
-in the Menu: `Administration > Data Import > Import Log`. The Import Log contains information about the import process for
-a given file. For each failing import row, it contains information the following information:
+When executing the data import the results of the operation will be logged as Import execution. Those import executions can be found
+in the Menu: `Administration > Data Import > Import Executions`. The Import Execution contains information about the import process for
+a given file. For each failing import row, it contains detailed information the following information:
 
+* Category
+* Level
 * failing data row
 * the entity instance after all attributes are bound
 * error message
