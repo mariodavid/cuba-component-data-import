@@ -34,8 +34,8 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         simpleDataLoader = AppBeans.get(SimpleDataLoader.NAME)
 
         clearTable("DDCDI_MLB_TEAM")
-        clearTable("DDCDI_IMPORT_LOG_RECORD")
-        clearTable("DDCDI_IMPORT_LOG")
+        clearTable("DDCDI_IMPORT_EXEC_DETAIL")
+        clearTable("DDCDI_IMPORT_EXEC")
     }
 
 
