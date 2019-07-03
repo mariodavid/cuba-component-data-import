@@ -170,14 +170,6 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
         ImportExecution importExecution = genericDataImporterService.doDataImport(importConfigurationDs.item, importData, defaultValues)
         importExecutionDs.item = importExecution
         importExecutionDs.item.file = importFileHandler.saveFile()
-
-        CommitContext commitContext = new CommitContext()
-        commitContext.addInstanceToCommit(importExecution)
-
-        importExecution.records.each {
-            commitContext.addInstanceToCommit(it)
-        }
-        dataManager.commit(commitContext)
         toStep3()
     }
 
