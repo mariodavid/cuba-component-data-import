@@ -298,7 +298,7 @@ configure(coreModule) {
         host = 'localhost'
         dbUser = 'sa'
         dbPassword = ''
-    }
+        }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbName = 'ddcdi4'
@@ -306,7 +306,7 @@ configure(coreModule) {
         host = 'localhost'
         dbUser = 'sa'
         dbPassword = ''
-    }
+        }
 
 
     task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
