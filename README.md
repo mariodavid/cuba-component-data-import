@@ -2,7 +2,7 @@
 [ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/cuba-component-data-import/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/cuba-component-data-import/_latestVersion)
 [![license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
-# CUBA Platform Component - Data import
+# CUBA Platform Application Component - Data Import
 
 This application component let's you easily import data into your application from various sources.
 
