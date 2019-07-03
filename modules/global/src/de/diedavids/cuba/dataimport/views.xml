@@ -2,10 +2,10 @@
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
     <view class="de.diedavids.cuba.dataimport.entity.ImportExecution"
           extends="_local"
-          name="importExecution-with-records-view">
+          name="importExecution-with-details-view">
         <property name="file"
                   view="_minimal"/>
-        <property name="records"
+        <property name="details"
                   view="_local"/>
         <property name="configuration"
                   view="_minimal"/>
@@ -22,7 +22,7 @@
           extends="_local"
           name="importConfiguration-view">
         <property name="logs"
-                  view="importExecution-with-records-view"/>
+                  view="importExecution-with-details-view"/>
         <property name="template"
                   view="_minimal"/>
         <property name="importAttributeMappers"

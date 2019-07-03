@@ -7,7 +7,7 @@ import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.ImportExecutionDetail
-import de.diedavids.cuba.dataimport.entity.ImportExecutionRecordCategory
+import de.diedavids.cuba.dataimport.entity.ImportExecutionDetailCategory
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
@@ -62,12 +62,12 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
 
         // then:
-        ImportExecution persistedImportLog = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-records-view")
-        assertThat(persistedImportLog.records.size()).isEqualTo(1)
+        ImportExecution persistedImportLog = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-details-view")
+        assertThat(persistedImportLog.details.size()).isEqualTo(1)
 
         // and:
-        ImportExecutionDetail importExecutionDetail = persistedImportLog.records[0]
-        assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionRecordCategory.VALIDATION)
+        ImportExecutionDetail importExecutionDetail = persistedImportLog.details[0]
+        assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionDetailCategory.VALIDATION)
     }
 
 }

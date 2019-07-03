@@ -5,7 +5,7 @@ import com.haulmont.chile.core.datatypes.impl.EnumClass;
 import javax.annotation.Nullable;
 
 
-public enum ImportExecutionRecordCategory implements EnumClass<String> {
+public enum ImportExecutionDetailCategory implements EnumClass<String> {
 
     UNIQUE_VIOLATION("UNIQUE_VIOLATION"),
     VALIDATION("VALIDATION"),
@@ -15,7 +15,7 @@ public enum ImportExecutionRecordCategory implements EnumClass<String> {
 
     private String id;
 
-    ImportExecutionRecordCategory(String value) {
+    ImportExecutionDetailCategory(String value) {
         this.id = value;
     }
 
@@ -24,8 +24,8 @@ public enum ImportExecutionRecordCategory implements EnumClass<String> {
     }
 
     @Nullable
-    public static ImportExecutionRecordCategory fromId(String id) {
-        for (ImportExecutionRecordCategory at : ImportExecutionRecordCategory.values()) {
+    public static ImportExecutionDetailCategory fromId(String id) {
+        for (ImportExecutionDetailCategory at : ImportExecutionDetailCategory.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }

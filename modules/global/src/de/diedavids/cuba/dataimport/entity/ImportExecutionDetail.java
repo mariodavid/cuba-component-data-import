@@ -46,11 +46,11 @@ public class ImportExecutionDetail extends StandardEntity {
     @Column(name = "CATEGORY")
     protected String category;
 
-    public ImportExecutionRecordCategory getCategory() {
-        return category == null ? null : ImportExecutionRecordCategory.fromId(category);
+    public ImportExecutionDetailCategory getCategory() {
+        return category == null ? null : ImportExecutionDetailCategory.fromId(category);
     }
 
-    public void setCategory(ImportExecutionRecordCategory category) {
+    public void setCategory(ImportExecutionDetailCategory category) {
         this.category = category == null ? null : category.getId();
     }
 
