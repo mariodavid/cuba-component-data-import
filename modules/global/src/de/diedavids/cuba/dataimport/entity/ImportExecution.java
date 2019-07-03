@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "DDCDI_IMPORT_LOG")
+@Table(name = "DDCDI_IMPORT_EXEC")
 @Entity(name = "ddcdi$ImportExecution")
 public class ImportExecution extends StandardEntity {
     private static final long serialVersionUID = -2901352797679880851L;

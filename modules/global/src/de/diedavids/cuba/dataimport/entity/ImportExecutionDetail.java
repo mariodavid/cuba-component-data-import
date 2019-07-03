@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Table(name = "DDCDI_IMPORT_LOG_RECORD")
+@Table(name = "DDCDI_IMPORT_EXEC_DETAIL")
 @Entity(name = "ddcdi$ImportExecutionDetail")
 public class ImportExecutionDetail extends StandardEntity {
     private static final long serialVersionUID = -8403007601995115328L;
@@ -29,7 +29,7 @@ public class ImportExecutionDetail extends StandardEntity {
     protected String stacktrace;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IMPORT_LOG_ID")
+    @JoinColumn(name = "IMPORT_EXEC_ID")
     protected ImportExecution importExecution;
 
     @Lob
