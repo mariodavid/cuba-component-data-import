@@ -11,9 +11,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "DDCDI_IMPORT_LOG")
-@Entity(name = "ddcdi$ImportLog")
-public class ImportLog extends StandardEntity {
+@Table(name = "DDCDI_IMPORT_EXEC")
+@Entity(name = "ddcdi$ImportExecution")
+public class ImportExecution extends StandardEntity {
     private static final long serialVersionUID = -2901352797679880851L;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,8 +22,8 @@ public class ImportLog extends StandardEntity {
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "importLog")
-    protected List<ImportLogRecord> records;
+    @OneToMany(mappedBy = "importExecution")
+    protected List<ImportExecutionDetail> records;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "STARTED_AT")
@@ -110,11 +110,11 @@ public class ImportLog extends StandardEntity {
     }
 
 
-    public void setRecords(List<ImportLogRecord> records) {
+    public void setRecords(List<ImportExecutionDetail> records) {
         this.records = records;
     }
 
-    public List<ImportLogRecord> getRecords() {
+    public List<ImportExecutionDetail> getRecords() {
         return records;
     }
 

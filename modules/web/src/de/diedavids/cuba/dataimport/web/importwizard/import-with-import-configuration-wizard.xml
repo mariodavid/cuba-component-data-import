@@ -15,8 +15,8 @@
                 <collectionDatasource id="entityAttributesDs" property="entityAttributes" />
             </collectionDatasource>
         </datasource>
-        <datasource id="importLogDs"
-                    class="de.diedavids.cuba.dataimport.entity.ImportLog"/>
+        <datasource id="importExecutionDs"
+                    class="de.diedavids.cuba.dataimport.entity.ImportExecution"/>
     </dsContext>
     <actions>
         <action id="cancelWizardAction"
@@ -84,7 +84,7 @@
                  margin="true"
                  spacing="true">
                 <fieldGroup id="importSummaryFieldGroup"
-                            datasource="importLogDs">
+                            datasource="importExecutionDs">
                     <field property="success"
                            editable="false"/>
                     <field property="entitiesProcessed"

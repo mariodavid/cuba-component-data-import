@@ -1,0 +1,1 @@
+drop table DDCDI_IMPORT_LOG_RECORD__U67463 if exists cascade ;

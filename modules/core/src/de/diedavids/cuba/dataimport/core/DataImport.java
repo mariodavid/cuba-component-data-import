@@ -10,7 +10,7 @@ import de.diedavids.cuba.dataimport.converter.DataConverterFactory;
 import de.diedavids.cuba.dataimport.converter.ImportDataConverter;
 import de.diedavids.cuba.dataimport.dto.ImportData;
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
-import de.diedavids.cuba.dataimport.entity.ImportLog;
+import de.diedavids.cuba.dataimport.entity.ImportExecution;
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,17 +38,17 @@ public class DataImport implements DataImportAPI {
     private DataConverterFactory dataConverterFactory;
 
     @Override
-    public ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport) throws FileStorageException {
+    public ImportExecution importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport) throws FileStorageException {
         return importFromFile(importConfiguration, fileToImport, Collections.emptyMap());
     }
 
     @Override
-    public ImportLog importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues) throws FileStorageException {
+    public ImportExecution importFromFile(ImportConfiguration importConfiguration, FileDescriptor fileToImport, Map<String, Object> defaultValues) throws FileStorageException {
         return importFromFile(importConfiguration, fileToImport, Collections.emptyMap(),null);
     }
 
     @Override
-    public ImportLog importFromFile(
+    public ImportExecution importFromFile(
             ImportConfiguration importConfiguration,
             FileDescriptor fileToImport,
             Map<String, Object> defaultValues,
@@ -78,16 +78,16 @@ public class DataImport implements DataImportAPI {
             );
         } catch (UnsupportedEncodingException e) {
             log.error("provided file charset of import configuration is not supported: " + chosenFileCharset, e);
-            return createFailedImportLog(importConfiguration);
+            return createFailedImportExecution(importConfiguration);
         }
     }
 
 
-    private ImportLog createFailedImportLog(ImportConfiguration importConfiguration) {
-        ImportLog importLog = metadata.create(ImportLog.class);
-        importLog.setConfiguration(importConfiguration);
-        importLog.setSuccess(false);
-        return importLog;
+    private ImportExecution createFailedImportExecution(ImportConfiguration importConfiguration) {
+        ImportExecution importExecution = metadata.create(ImportExecution.class);
+        importExecution.setConfiguration(importConfiguration);
+        importExecution.setSuccess(false);
+        return importExecution;
     }
 
 }

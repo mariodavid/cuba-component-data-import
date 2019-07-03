@@ -6,9 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Table(name = "DDCDI_IMPORT_LOG_RECORD")
-@Entity(name = "ddcdi$ImportLogRecord")
-public class ImportLogRecord extends StandardEntity {
+@Table(name = "DDCDI_IMPORT_EXEC_DETAIL")
+@Entity(name = "ddcdi$ImportExecutionDetail")
+public class ImportExecutionDetail extends StandardEntity {
     private static final long serialVersionUID = -8403007601995115328L;
 
     @NotNull
@@ -29,8 +29,8 @@ public class ImportLogRecord extends StandardEntity {
     protected String stacktrace;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "IMPORT_LOG_ID")
-    protected ImportLog importLog;
+    @JoinColumn(name = "IMPORT_EXEC_ID")
+    protected ImportExecution importExecution;
 
     @Lob
     @Column(name = "DATA_ROW")
@@ -46,11 +46,11 @@ public class ImportLogRecord extends StandardEntity {
     @Column(name = "CATEGORY")
     protected String category;
 
-    public ImportLogRecordCategory getCategory() {
-        return category == null ? null : ImportLogRecordCategory.fromId(category);
+    public ImportExecutionRecordCategory getCategory() {
+        return category == null ? null : ImportExecutionRecordCategory.fromId(category);
     }
 
-    public void setCategory(ImportLogRecordCategory category) {
+    public void setCategory(ImportExecutionRecordCategory category) {
         this.category = category == null ? null : category.getId();
     }
 
@@ -78,12 +78,12 @@ public class ImportLogRecord extends StandardEntity {
         this.dataRow = dataRow;
     }
 
-    public void setImportLog(ImportLog importLog) {
-        this.importLog = importLog;
+    public void setImportExecution(ImportExecution importExecution) {
+        this.importExecution = importExecution;
     }
 
-    public ImportLog getImportLog() {
-        return importLog;
+    public ImportExecution getImportExecution() {
+        return importExecution;
     }
 
 

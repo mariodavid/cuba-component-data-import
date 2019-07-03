@@ -1,0 +1,1 @@
+drop table if exists DDCDI_IMPORT_LOG__U32279 cascade ;

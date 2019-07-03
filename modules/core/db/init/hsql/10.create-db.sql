@@ -1,52 +1,3 @@
--- begin DDCDI_IMPORT_LOG
-create table DDCDI_IMPORT_LOG (
-    ID varchar(36) not null,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    FILE_ID varchar(36),
-    STARTED_AT timestamp,
-    FINISHED_AT timestamp,
-    ENTITIES_PROCESSED integer,
-    ENTITIES_IMPORT_SUCCESS integer,
-    ENTITIES_IMPORT_VAL_ERROR integer,
-    ENTITIES_PRE_COMMIT_SKIPPED integer,
-    ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
-    SUCCESS boolean not null,
-    CONFIGURATION_ID varchar(36),
-    --
-    primary key (ID)
-)^
--- end DDCDI_IMPORT_LOG
--- begin DDCDI_IMPORT_LOG_RECORD
-create table DDCDI_IMPORT_LOG_RECORD (
-    ID varchar(36) not null,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    MESSAGE varchar(4000) not null,
-    LEVEL_ varchar(50) not null,
-    TIME_ timestamp not null,
-    STACKTRACE longvarchar,
-    IMPORT_LOG_ID varchar(36) not null,
-    DATA_ROW longvarchar,
-    DATA_ROW_INDEX integer,
-    ENTITY_INSTANCE longvarchar,
-    CATEGORY varchar(50),
-    --
-    primary key (ID)
-)^
--- end DDCDI_IMPORT_LOG_RECORD
 -- begin DDCDI_IMPORT_CONFIGURATION
 create table DDCDI_IMPORT_CONFIGURATION (
     ID varchar(36) not null,
@@ -130,3 +81,52 @@ create table DDCDI_UNIQUE_CONFIGURATION (
     primary key (ID)
 )^
 -- end DDCDI_UNIQUE_CONFIGURATION
+-- begin DDCDI_IMPORT_EXEC_DETAIL
+create table DDCDI_IMPORT_EXEC_DETAIL (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    MESSAGE varchar(4000) not null,
+    LEVEL_ varchar(50) not null,
+    TIME_ timestamp not null,
+    STACKTRACE longvarchar,
+    IMPORT_EXEC_ID varchar(36) not null,
+    DATA_ROW longvarchar,
+    DATA_ROW_INDEX integer,
+    ENTITY_INSTANCE longvarchar,
+    CATEGORY varchar(50),
+    --
+    primary key (ID)
+)^
+-- end DDCDI_IMPORT_EXEC_DETAIL
+-- begin DDCDI_IMPORT_EXEC
+create table DDCDI_IMPORT_EXEC (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    FILE_ID varchar(36),
+    STARTED_AT timestamp,
+    FINISHED_AT timestamp,
+    ENTITIES_PROCESSED integer,
+    ENTITIES_IMPORT_SUCCESS integer,
+    ENTITIES_IMPORT_VAL_ERROR integer,
+    ENTITIES_PRE_COMMIT_SKIPPED integer,
+    ENTITIES_UNIQUE_CONSTRAINT_SKIPPED integer,
+    SUCCESS boolean not null,
+    CONFIGURATION_ID varchar(36),
+    --
+    primary key (ID)
+)^
+-- end DDCDI_IMPORT_EXEC

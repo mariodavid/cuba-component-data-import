@@ -7,7 +7,7 @@ import de.diedavids.cuba.dataimport.AbstractImportIntegrationTest
 import de.diedavids.cuba.dataimport.DataImportAPI
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
@@ -66,16 +66,16 @@ CAL,"California Angels",OH
         fileStorageAPI.saveFile(persistedFileDescriptor, bytes)
 
         //when:
-        ImportLog importLog = sut.importFromFile(importConfiguration, persistedFileDescriptor)
+        ImportExecution importExecution = sut.importFromFile(importConfiguration, persistedFileDescriptor)
 
         //then:
         def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
         assertThat(mlbTeams.size()).isEqualTo(3)
 
         //and:
-        assertThat(importLog.entitiesProcessed).isEqualTo(3)
-        assertThat(importLog.entitiesImportSuccess).isEqualTo(3)
-        assertThat(importLog.entitiesImportValidationError).isEqualTo(0)
+        assertThat(importExecution.entitiesProcessed).isEqualTo(3)
+        assertThat(importExecution.entitiesImportSuccess).isEqualTo(3)
+        assertThat(importExecution.entitiesImportValidationError).isEqualTo(0)
     }
 
     private FileDescriptor createFileDescriptorForFile(byte[] bytes) {

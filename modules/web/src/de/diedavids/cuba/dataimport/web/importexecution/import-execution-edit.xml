@@ -2,20 +2,20 @@
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
         focusComponent="form"
-        messagesPack="de.diedavids.cuba.dataimport.web.importlog">
+        messagesPack="de.diedavids.cuba.dataimport.web.importexecution">
     <data>
-        <instance id="importLogDc"
-                  class="de.diedavids.cuba.dataimport.entity.ImportLog"
-                  view="importLog-with-records-view">
+        <instance id="importExecutionDc"
+                  class="de.diedavids.cuba.dataimport.entity.ImportExecution"
+                  view="importExecution-with-records-view">
             <loader/>
             <collection id="recordsDc" property="records"/>
         </instance>
-        <collection id="importLogRecordsDc"
-                    class="de.diedavids.cuba.dataimport.entity.ImportLogRecord"
+        <collection id="importExecutionDetailsDc"
+                    class="de.diedavids.cuba.dataimport.entity.ImportExecutionDetail"
                     view="_local">
-            <loader id="importLogRecordsDl">
+            <loader id="importExecutionDetailsDl">
                 <query>
-                    <![CDATA[select e from ddcdi$ImportLogRecord e where e.importLog = :importLog]]>
+                    <![CDATA[select e from ddcdi$ImportExecutionDetail e where e.importExecution = :importExecution]]>
                 </query>
             </loader>
         </collection>
@@ -27,7 +27,9 @@
             <tab id="overviewTab"
                  caption="msg://overview"
                  margin="true,false,false,false">
-                <form id="form" editable="false" dataContainer="importLogDc">
+                <hbox width="100%" spacing="true">
+                <groupBox id="summaryGroupBox" caption="msg://summary">
+                <form id="form" editable="false" dataContainer="importExecutionDc">
                     <column width="250px">
                         <pickerField id="configurationField" property="configuration">
                             <actions>
@@ -39,6 +41,10 @@
                         <dateField id="startedAtField" property="startedAt"/>
                         <dateField id="finishedAtField" property="finishedAt"/>
                     </column>
+                </form>
+                </groupBox>
+                <groupBox id="entitiesSummaryGroupBox" caption="msg://summaryEntities">
+                <form id="entitiesSummaryForm" editable="false" dataContainer="importExecutionDc">
                     <column width="250px">
                         <textField id="entitiesProcessedField" property="entitiesProcessed"/>
                         <textField id="entitiesImportSuccessField" property="entitiesImportSuccess"/>
@@ -47,16 +53,18 @@
                         <textField id="entitiesUniqueConstraintSkippedField" property="entitiesUniqueConstraintSkipped"/>
                     </column>
                 </form>
+                </groupBox>
+                </hbox>
             </tab>
             <tab id="recordsTab"
-            caption="msg://de.diedavids.cuba.dataimport.entity.ImportLog/ImportLog.records"
+            caption="msg://de.diedavids.cuba.dataimport.entity.ImportExecution/ImportExecution.records"
                  margin="true,false,false,false" expand="recordsTable" spacing="true">
                 <filter id="filter"
                         applyTo="recordsTable"
-                        dataLoader="importLogRecordsDl">
+                        dataLoader="importExecutionDetailsDl">
                     <properties include=".*"/>
                 </filter>
-                <groupTable id="recordsTable" dataContainer="importLogRecordsDc" width="100%" height="100%">
+                <groupTable id="recordsTable" dataContainer="importExecutionDetailsDc" width="100%" height="100%">
                     <actions>
                         <action id="edit" type="edit"/>
                     </actions>

@@ -6,7 +6,7 @@ import com.haulmont.cuba.core.global.DataManager
 import de.diedavids.cuba.dataimport.data.EntityAttributeValueFactory
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.UniqueConfiguration
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
 import org.springframework.stereotype.Service
@@ -31,7 +31,7 @@ class ImportWizardServiceBean implements ImportWizardService {
             ImportConfiguration importConfiguration,
             Collection<ImportAttributeMapper> importAttributeMapper,
             Collection<UniqueConfiguration> uniqueConfigurations,
-            ImportLog importLog
+            ImportExecution importExecution
     ) {
 
         CommitContext commitContext = new CommitContext()
@@ -42,10 +42,10 @@ class ImportWizardServiceBean implements ImportWizardService {
 
         addUniqueConfiguration(uniqueConfigurations, importConfiguration, commitContext)
 
-        importConfiguration.logs = [importLog]
-        importLog.configuration = importConfiguration
+        importConfiguration.logs = [importExecution]
+        importExecution.configuration = importConfiguration
 
-        commitContext.addInstanceToCommit(importLog)
+        commitContext.addInstanceToCommit(importExecution)
 
         dataManager.commit(commitContext)
     }

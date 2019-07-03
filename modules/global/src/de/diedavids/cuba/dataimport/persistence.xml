@@ -3,8 +3,8 @@
              version="2.0">
     <persistence-unit name="cuba-component-data-import"
                       transaction-type="RESOURCE_LOCAL">
-        <class>de.diedavids.cuba.dataimport.entity.ImportLog</class>
-        <class>de.diedavids.cuba.dataimport.entity.ImportLogRecord</class>
+        <class>de.diedavids.cuba.dataimport.entity.ImportExecution</class>
+        <class>de.diedavids.cuba.dataimport.entity.ImportExecutionDetail</class>
         <class>de.diedavids.cuba.dataimport.entity.ImportConfiguration</class>
         <class>de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper</class>
         <class>de.diedavids.cuba.dataimport.entity.UniqueConfigurationAttribute</class>

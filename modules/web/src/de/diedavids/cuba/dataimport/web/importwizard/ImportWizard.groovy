@@ -13,7 +13,7 @@ import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.converter.ImportAttributeMapperCreator
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.entity.UniqueConfiguration
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeMapperMode
 import de.diedavids.cuba.dataimport.entity.attributemapper.ImportAttributeMapper
@@ -90,7 +90,7 @@ class ImportWizard extends AbstractWindow {
     MetadataSelector metadataSelector
 
     @Inject
-    Datasource<ImportLog> importLogDs
+    Datasource<ImportExecution> importExecutionDs
 
     @Named('reuseFieldGroup.name')
     TextField nameField
@@ -232,13 +232,13 @@ class ImportWizard extends AbstractWindow {
 
     void closeWizard() {
         if (importConfigurationDs.item.reuse) {
-            importLogDs.item.file = importFileHandler.saveFile()
+            importExecutionDs.item.file = importFileHandler.saveFile()
 
             importWizardService.saveImportConfiguration(
                     importConfigurationDs.item,
                     importAttributeMappersDatasource.items,
                     uniqueConfigurationDs.items,
-                    importLogDs.item
+                    importExecutionDs.item
             )
         }
         close(CLOSE_ACTION_ID, true)
@@ -257,8 +257,8 @@ class ImportWizard extends AbstractWindow {
 
     void startImport() {
         try {
-            ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
-            importLogDs.item = importLog
+            ImportExecution importExecution = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
+            importExecutionDs.item = importExecution
             toStep5()
         } catch (Exception e) {
             log.error('An Error occurred during import', e)

@@ -1,6 +1,6 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
-import com.haulmont.cuba.core.global.CommitContext
+
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
@@ -9,7 +9,7 @@ import com.haulmont.cuba.gui.upload.FileUploadingAPI
 import de.diedavids.cuba.dataimport.converter.DataConverterFactory
 import de.diedavids.cuba.dataimport.dto.ImportData
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration
-import de.diedavids.cuba.dataimport.entity.ImportLog
+import de.diedavids.cuba.dataimport.entity.ImportExecution
 import de.diedavids.cuba.dataimport.service.GenericDataImporterService
 import de.diedavids.cuba.dataimport.service.ImportWizardService
 import de.diedavids.cuba.dataimport.web.datapreview.DynamicTableCreator
@@ -67,7 +67,7 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
     DataManager dataManager
 
     @Inject
-    Datasource<ImportLog> importLogDs
+    Datasource<ImportExecution> importExecutionDs
 
     @Inject
     ImportWizardService importWizardService
@@ -167,17 +167,9 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
 
 
     void startImport() {
-        ImportLog importLog = genericDataImporterService.doDataImport(importConfigurationDs.item, importData, defaultValues)
-        importLogDs.item = importLog
-        importLogDs.item.file = importFileHandler.saveFile()
-
-        CommitContext commitContext = new CommitContext()
-        commitContext.addInstanceToCommit(importLog)
-
-        importLog.records.each {
-            commitContext.addInstanceToCommit(it)
-        }
-        dataManager.commit(commitContext)
+        ImportExecution importExecution = genericDataImporterService.doDataImport(importConfigurationDs.item, importData, defaultValues)
+        importExecutionDs.item = importExecution
+        importExecutionDs.item.file = importFileHandler.saveFile()
         toStep3()
     }
 
