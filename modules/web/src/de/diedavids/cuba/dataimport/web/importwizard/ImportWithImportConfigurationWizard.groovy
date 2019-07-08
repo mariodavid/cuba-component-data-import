@@ -1,6 +1,6 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
-import com.haulmont.cuba.core.global.CommitContext
+
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
