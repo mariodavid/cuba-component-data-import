@@ -1,6 +1,6 @@
 package de.diedavids.cuba.dataimport.web.importwizard
 
-
+import com.haulmont.cuba.core.global.CommitContext
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.components.*
@@ -170,6 +170,8 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
         ImportExecution importExecution = genericDataImporterService.doDataImport(importConfigurationDs.item, importData, defaultValues)
         importExecutionDs.item = importExecution
         importExecutionDs.item.file = importFileHandler.saveFile()
+        dataManager.commit(importExecution)
+
         toStep3()
     }
 

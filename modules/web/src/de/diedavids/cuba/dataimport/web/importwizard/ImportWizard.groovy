@@ -259,6 +259,9 @@ class ImportWizard extends AbstractWindow {
         try {
             ImportExecution importExecution = genericDataImporterService.doDataImport(importConfigurationDs.item, importData)
             importExecutionDs.item = importExecution
+            importExecutionDs.item.file = importFileHandler.saveFile()
+            dataManager.commit(importExecution)
+
             toStep5()
         } catch (Exception e) {
             log.error('An Error occurred during import', e)

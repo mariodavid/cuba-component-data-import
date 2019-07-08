@@ -356,11 +356,10 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importedEntities << importEntityRequest
         } else {
             importExecution.entitiesPreCommitSkipped++
-            logInfo(importExecution, 'Entity not imported due to Pre-Commit script returned false', ImportExecutionDetailCategory.VALIDATION, importEntityRequest)
+            logWarning(importExecution, 'Entity not imported due to pre-commit script veto', ImportExecutionDetailCategory.VALIDATION, importEntityRequest)
         }
 
         importExecution.entitiesProcessed++
-
     }
 
     private void tryToExecuteImport(
@@ -426,7 +425,8 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             return true
         }
         catch (Exception e) {
-            logError(importExecution, 'Pre commit script execution failed with: ' + e.message, ImportExecutionDetailCategory.SCRIPTING, e)
+            logError(importExecution, 'Pre commit script execution failed with: ' + e.message, ImportExecutionDetailCategory.SCRIPTING, importEntityRequest, e)
+            resetImportExecution(importExecution)
             return false
         }
     }
