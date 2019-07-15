@@ -40,7 +40,7 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
 
 
     @Test
-    void "doDataImport stores the import log and returns the value"() {
+    void "doDataImport stores the import execution and returns the value"() {
 
         // given:
         importConfiguration = new ImportConfiguration(
@@ -62,12 +62,73 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
 
         // then:
-        ImportExecution persistedImportLog = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-details-view")
-        assertThat(persistedImportLog.details.size()).isEqualTo(1)
+        ImportExecution persistedImportExecution = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-details-view")
+        assertThat(persistedImportExecution.details.size()).isEqualTo(1)
 
         // and:
-        ImportExecutionDetail importExecutionDetail = persistedImportLog.details[0]
+        ImportExecutionDetail importExecutionDetail = persistedImportExecution.details[0]
         assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionDetailCategory.VALIDATION)
+    }
+
+    @Test
+    void "doDataImport stores an exception in the execution due to a mismatch between import mappers and import data"() {
+
+        // given:
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+        // and:
+        ImportData importData = createData([
+                [invalidColumn: null, code: 'BSN'],
+                [invalidColumn: 'Baltimore Orioles', code: 'BAL']
+        ])
+
+        // when:
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
+
+        // then:
+        ImportExecution persistedImportExecution = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-details-view")
+        assertThat(persistedImportExecution.details.size()).isEqualTo(1)
+
+        // and:
+        ImportExecutionDetail importExecutionDetail = persistedImportExecution.details[0]
+        assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionDetailCategory.DATA_BINDING)
+    }
+    @Test
+    void "doDataImport stores an exception in the execution due to a type mismatch between import mappers and import data"() {
+
+        // given:
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+        // and:
+        ImportData importData = createData([
+                [name: 1],
+                [name: 2]
+        ])
+
+        // when:
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
+
+        // then:
+        ImportExecution persistedImportExecution = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-details-view")
+        assertThat(persistedImportExecution.details.size()).isEqualTo(1)
+
+        // and:
+        ImportExecutionDetail importExecutionDetail = persistedImportExecution.details[0]
+        assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionDetailCategory.DATA_BINDING)
     }
 
 }

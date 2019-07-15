@@ -11,7 +11,8 @@ public enum ImportExecutionDetailCategory implements EnumClass<String> {
     VALIDATION("VALIDATION"),
     PERSISTENCE("PERSISTENCE"),
     GENERAL("GENERAL"),
-    SCRIPTING("SCRIPTING");
+    SCRIPTING("SCRIPTING"),
+    DATA_BINDING("DATA_BINDING");
 
     private String id;
 

@@ -69,11 +69,26 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             Map<String, Object> defaultValues,
             Consumer<EntityImportView> importViewCustomization
     ) {
-        def entities = createEntities(importConfiguration, importData, defaultValues)
 
         ImportExecution importExecution = createImportExecution(importConfiguration)
 
-        importEntities(entities, importConfiguration, importExecution, importViewCustomization)
+        try {
+            Collection<ImportEntityRequest> entities = createEntities(importConfiguration, importData, defaultValues)
+
+            try {
+                return importEntities(entities, importConfiguration, importExecution, importViewCustomization)
+            }
+            catch (Exception e) {
+                logError(importExecution, 'Error while importing the data: ' + e.message, ImportExecutionDetailCategory.GENERAL, e)
+                resetImportExecution(importExecution)
+                return saveImportExecution(importExecution)
+            }
+        }
+        catch (Exception e) {
+            logError(importExecution, 'Error while binding the data: ' + e.message, ImportExecutionDetailCategory.DATA_BINDING, e)
+            resetImportExecution(importExecution)
+            return saveImportExecution(importExecution)
+        }
     }
 
     private ImportExecution importEntities(
@@ -98,13 +113,14 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
             importAllEntitiesInOneTransaction(entities, importView, importedEntities, importConfiguration, importExecution)
         }
 
-        importExecution.finishedAt = timeSource.currentTimestamp()
 
         saveImportExecution(importExecution)
-
     }
 
     private ImportExecution saveImportExecution(ImportExecution importExecution) {
+
+        importExecution.finishedAt = timeSource.currentTimestamp()
+
         CommitContext commitContext = new CommitContext()
         commitContext.addInstanceToCommit(importExecution)
 
