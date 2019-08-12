@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -61,25 +64,35 @@ public class DataImport implements DataImportAPI {
             throw new FileStorageException(FileStorageException.Type.FILE_NOT_FOUND, "File descriptor does not exist");
         }
 
-        byte[] fileBytes = fileStorageAPI.loadFile(fileToImport);
         String fileCharset = importConfiguration.getFileCharset();
         String chosenFileCharset = fileCharset != null ? fileCharset : StandardCharsets.UTF_8.name();
 
         ImportDataConverter converter = dataConverterFactory.createTableDataConverter(fileToImport);
 
         try {
-            String fileContentString = new String(fileBytes, chosenFileCharset);
-            ImportData importData = converter.convert(fileContentString);
+            ImportData importData = converter.convert(
+                    tempFileFromFileDescriptor(fileToImport),
+                    chosenFileCharset
+            );
             return genericDataImporterService.doDataImport(
                     importConfiguration,
                     importData,
                     defaultValues,
                     importViewCustomization
             );
-        } catch (UnsupportedEncodingException e) {
+        } catch (IOException e) {
             log.error("provided file charset of import configuration is not supported: " + chosenFileCharset, e);
             return createFailedImportExecution(importConfiguration);
         }
+    }
+
+    private File tempFileFromFileDescriptor(FileDescriptor fileToImport) throws FileStorageException, IOException {
+        byte[] fileBytes = fileStorageAPI.loadFile(fileToImport);
+        File tempFile = File.createTempFile("tempImportFile", "tmp");
+        FileOutputStream fos = new FileOutputStream(tempFile);
+        fos.write(fileBytes);
+
+        return tempFile;
     }
 
 
