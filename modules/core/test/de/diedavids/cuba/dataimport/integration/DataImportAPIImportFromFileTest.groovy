@@ -1,4 +1,4 @@
-package de.diedavids.cuba.dataimport.core
+package de.diedavids.cuba.dataimport.integration
 
 import com.haulmont.cuba.core.app.FileStorageAPI
 import com.haulmont.cuba.core.entity.FileDescriptor
@@ -61,7 +61,9 @@ ANA,"Los Angeles Angels of Anaheim",WA
 CAL,"California Angels",OH
 '''
         def bytes = fileContent.bytes
-        FileDescriptor persistedFileDescriptor = dataManager.commit(createFileDescriptorForFile(bytes))
+        FileDescriptor persistedFileDescriptor = dataManager.commit(
+                createFileDescriptorForFile(bytes, "mlb_teams.csv", "csv")
+        )
 
         fileStorageAPI.saveFile(persistedFileDescriptor, bytes)
 
@@ -78,13 +80,52 @@ CAL,"California Angels",OH
         assertThat(importExecution.entitiesImportValidationError).isEqualTo(0)
     }
 
-    private FileDescriptor createFileDescriptorForFile(byte[] bytes) {
+
+    @Test
+    void "importFromFile reads the file from the file descriptor, parses them and imports them correctly for an excel file"() {
+
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 1),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION,
+                fileCharset: StandardCharsets.UTF_8.name()
+        )
+
+        def bytes = getExcelFile("mlb_teams.xlsx").getBytes()
+        FileDescriptor persistedFileDescriptor = dataManager.commit(
+                createFileDescriptorForFile(bytes, "mlb_teams.xlsx", "xlsx")
+        )
+
+        fileStorageAPI.saveFile(persistedFileDescriptor, bytes)
+
+        //when:
+        ImportExecution importExecution = sut.importFromFile(importConfiguration, persistedFileDescriptor)
+
+        //then:
+        def mlbTeams = simpleDataLoader.loadAll(MlbTeam)
+        assertThat(mlbTeams.size()).isEqualTo(3)
+
+        //and:
+        assertThat(importExecution.entitiesProcessed).isEqualTo(3)
+        assertThat(importExecution.entitiesImportSuccess).isEqualTo(3)
+        assertThat(importExecution.entitiesImportValidationError).isEqualTo(0)
+    }
+
+    private FileDescriptor createFileDescriptorForFile(byte[] bytes, String filename, String fileExtension) {
         FileDescriptor fileDescriptor = dataManager.create(FileDescriptor.class)
-        fileDescriptor.setName("mlb_teams.csv")
-        fileDescriptor.setExtension("csv")
+        fileDescriptor.setName(filename)
+        fileDescriptor.setExtension(fileExtension)
         fileDescriptor.setSize(bytes.length)
         fileDescriptor.setCreateDate(new Date())
         fileDescriptor
+    }
+
+    private File getExcelFile(String filename) {
+        def resource = this.getClass().getResource("/de/diedavids/cuba/dataimport/integration/example_data/$filename")
+        new File(resource.getFile())
     }
 
 }
