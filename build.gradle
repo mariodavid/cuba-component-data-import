@@ -96,7 +96,7 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.9.0-SNAPSHOT")
+    appComponent('de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.9.0')
 
 }
 
