@@ -35,7 +35,7 @@ class DatatypeFactory {
             return Integer.parseInt(rawValue)
         }
         catch (NumberFormatException e) {
-            log.warn("Number could not be read: '$rawValue' for field [] in [$dataRow]. Will be ignored.")
+            log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
         }
     }
 
@@ -44,7 +44,7 @@ class DatatypeFactory {
             return Long.parseLong(rawValue)
         }
         catch (NumberFormatException e) {
-            log.warn("Number could not be read: '$rawValue' for field [] in [$dataRow]. Will be ignored.")
+            log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
         }
     }
 
