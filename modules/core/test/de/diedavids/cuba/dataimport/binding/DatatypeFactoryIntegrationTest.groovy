@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import static org.assertj.core.api.Assertions.assertThat
 
@@ -68,7 +69,7 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         assertThat(result).isEqualTo(expectedBindingValue)
 
     }
-    
+
     @Test
     void "getValue can parse an Double value correctly"() {
 
@@ -108,6 +109,29 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         // then:
         assertThat(result).isInstanceOf(Date)
         assertThat(result).isEqualTo(expectedBindingValue)
+
+    }
+
+    @Test
+    void "getValue can parse a LocalDate value correctly"() {
+
+        // given:
+        importAttributeMapper = attributeMapperFor('birthdayLocalDate')
+        importConfiguration = importConfigurationFor('ddcdi$MlbPlayer', importAttributeMapper)
+        def dateFormat = "yyyy-MM-dd"
+        importConfiguration.dateFormat = dateFormat
+
+        // and:
+        def expectedBindingValue = '1985-07-09'
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthdayLocalDate: expectedBindingValue])
+
+        // when:
+        def result = sut.getValue(bindRequest)
+
+        // then:
+        assertThat(result).isInstanceOf(LocalDate)
+        def resultAsString = result.format(DateTimeFormatter.ofPattern(dateFormat));
+        assertThat(resultAsString).isEqualTo(expectedBindingValue)
 
     }
 
@@ -154,7 +178,49 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
 
     }
 
-    
+    @Test
+    void "getValue can parse a Long value correctly"() {
+
+        // given:
+        importAttributeMapper = attributeMapperFor('annualSalaryLong')
+        importConfiguration = importConfigurationFor('ddcdi$MlbPlayer', importAttributeMapper)
+
+        // and:
+        def expectedBindingValue = 1000L
+
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [annualSalaryLong: expectedBindingValue])
+
+        // when:
+        def result = sut.getValue(bindRequest)
+
+        // then:
+        assertThat(result).isInstanceOf(Long)
+        assertThat(result).isEqualTo(Long.valueOf(1000L))
+
+    }
+
+
+    @Test
+    void "getValue can parse a Float value correctly"() {
+
+        // given:
+        importAttributeMapper = attributeMapperFor('annualSalaryLong')
+        importConfiguration = importConfigurationFor('ddcdi$MlbPlayer', importAttributeMapper)
+
+        // and:
+        def expectedBindingValue = 1000L
+
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [annualSalaryLong: expectedBindingValue])
+
+        // when:
+        def result = sut.getValue(bindRequest)
+
+        // then:
+        assertThat(result).isInstanceOf(Long)
+        assertThat(result).isEqualTo(Long.valueOf(1000L))
+
+    }
+
     @Test
     void "getValue can parse a Enum value correctly"() {
 
