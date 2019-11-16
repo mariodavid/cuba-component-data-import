@@ -201,27 +201,6 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
 
 
     @Test
-    void "getValue can parse a Float value correctly"() {
-
-        // given:
-        importAttributeMapper = attributeMapperFor('annualSalaryLong')
-        importConfiguration = importConfigurationFor('ddcdi$MlbPlayer', importAttributeMapper)
-
-        // and:
-        def expectedBindingValue = 1000L
-
-        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [annualSalaryLong: expectedBindingValue])
-
-        // when:
-        def result = sut.getValue(bindRequest)
-
-        // then:
-        assertThat(result).isInstanceOf(Long)
-        assertThat(result).isEqualTo(Long.valueOf(1000L))
-
-    }
-
-    @Test
     void "getValue can parse a Enum value correctly"() {
 
         // given:

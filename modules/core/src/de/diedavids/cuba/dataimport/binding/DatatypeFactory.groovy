@@ -82,10 +82,8 @@ class DatatypeFactory {
 
     @SuppressWarnings('SimpleDateFormatMissingLocale')
     private LocalDate getLocalDateValue(ImportConfiguration importConfiguration, String rawValue) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(importConfiguration.dateFormat);
-        //convert String to LocalDate
-        LocalDate localDate = LocalDate.parse(rawValue, formatter);
-        return localDate
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(importConfiguration.dateFormat)
+        LocalDate.parse(rawValue, formatter)
     }
 
     private Double getDoubleValue(String rawValue, DataRow dataRow) {
