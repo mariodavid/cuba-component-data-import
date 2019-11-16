@@ -59,8 +59,10 @@ create table DDCDI_MLB_PLAYER (
     WEIGHT integer,
     AGE double precision,
     BIRTHDAY date,
+    BIRTHDAY_LOCAL_DATE date,
     LEFT_HANDED boolean,
     ANNUAL_SALARY decimal(19, 2),
+    ANNUAL_SALARY_LONG bigint,
     --
     primary key (ID)
 )^
