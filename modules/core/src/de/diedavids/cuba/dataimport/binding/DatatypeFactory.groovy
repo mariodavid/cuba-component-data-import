@@ -7,6 +7,8 @@ import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Component
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Slf4j
 @Component('ddcdi_DatatypeFactory')
@@ -17,8 +19,10 @@ class DatatypeFactory {
     Object getValue(AttributeBindRequest bindRequest) {
         switch (bindRequest.javaType) {
             case Integer: return getIntegerValue(bindRequest.rawValue, bindRequest.dataRow)
+            case Long: return getLongValue(bindRequest.rawValue, bindRequest.dataRow)
             case Double: return getDoubleValue(bindRequest.rawValue, bindRequest.dataRow)
             case Date: return getDateValue(bindRequest.importConfiguration, bindRequest.rawValue)
+            case LocalDate: return getLocalDateValue(bindRequest.importConfiguration, bindRequest.rawValue)
             case Boolean: return getBooleanValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
             case BigDecimal: return getBigDecimalValue(bindRequest.rawValue, bindRequest.dataRow)
             case String: return getStringValue(bindRequest.rawValue)
@@ -29,6 +33,15 @@ class DatatypeFactory {
     private Integer getIntegerValue(String rawValue, DataRow dataRow) {
         try {
             return Integer.parseInt(rawValue)
+        }
+        catch (NumberFormatException e) {
+            log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
+    }
+
+    private Long getLongValue(String rawValue, DataRow dataRow) {
+        try {
+            return Long.parseLong(rawValue)
         }
         catch (NumberFormatException e) {
             log.warn("Number could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
@@ -65,6 +78,12 @@ class DatatypeFactory {
     private Date getDateValue(ImportConfiguration importConfiguration, String rawValue) {
         SimpleDateFormat formatter = new SimpleDateFormat(importConfiguration.dateFormat)
         formatter.parse(rawValue)
+    }
+
+    @SuppressWarnings('SimpleDateFormatMissingLocale')
+    private LocalDate getLocalDateValue(ImportConfiguration importConfiguration, String rawValue) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(importConfiguration.dateFormat)
+        LocalDate.parse(rawValue, formatter)
     }
 
     private Double getDoubleValue(String rawValue, DataRow dataRow) {

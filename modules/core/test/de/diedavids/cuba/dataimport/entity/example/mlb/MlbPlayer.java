@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,17 +35,39 @@ public class MlbPlayer extends StandardEntity {
     @Column(name = "BIRTHDAY")
     protected Date birthday;
 
+    @Column(name = "BIRTHDAY_LOCAL_DATE")
+    protected LocalDate birthdayLocalDate;
+
     @Column(name = "LEFT_HANDED")
     protected Boolean leftHanded;
 
     @Column(name = "ANNUAL_SALARY")
     protected BigDecimal annualSalary;
 
+    @Column(name = "ANNUAL_SALARY_LONG")
+    protected Long annualSalaryLong;
+
     @JoinTable(name = "DDCDI_MLB_PLAYER_BASEBALL_STRENGTH_LINK",
-        joinColumns = @JoinColumn(name = "MLB_PLAYER_ID"),
-        inverseJoinColumns = @JoinColumn(name = "BASEBALL_STRENGTH_ID"))
+            joinColumns = @JoinColumn(name = "MLB_PLAYER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "BASEBALL_STRENGTH_ID"))
     @ManyToMany
     protected List<BaseballStrength> strengths;
+
+    public LocalDate getBirthdayLocalDate() {
+        return birthdayLocalDate;
+    }
+
+    public void setBirthdayLocalDate(LocalDate birthdayLocalDate) {
+        this.birthdayLocalDate = birthdayLocalDate;
+    }
+
+    public Long getAnnualSalaryLong() {
+        return annualSalaryLong;
+    }
+
+    public void setAnnualSalaryLong(Long annualSalaryLong) {
+        this.annualSalaryLong = annualSalaryLong;
+    }
 
     public void setStrengths(List<BaseballStrength> strengths) {
         this.strengths = strengths;
