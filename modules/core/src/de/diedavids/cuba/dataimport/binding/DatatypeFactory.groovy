@@ -6,6 +6,7 @@ import de.diedavids.cuba.dataimport.entity.ImportConfiguration
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Component
 
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -21,8 +22,8 @@ class DatatypeFactory {
             case Integer: return getIntegerValue(bindRequest.rawValue, bindRequest.dataRow)
             case Long: return getLongValue(bindRequest.rawValue, bindRequest.dataRow)
             case Double: return getDoubleValue(bindRequest.rawValue, bindRequest.dataRow)
-            case Date: return getDateValue(bindRequest.importConfiguration, bindRequest.rawValue)
-            case LocalDate: return getLocalDateValue(bindRequest.importConfiguration, bindRequest.rawValue)
+            case Date: return getDateValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
+            case LocalDate: return getLocalDateValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
             case Boolean: return getBooleanValue(bindRequest.importConfiguration, bindRequest.rawValue, bindRequest.dataRow)
             case BigDecimal: return getBigDecimalValue(bindRequest.rawValue, bindRequest.dataRow)
             case String: return getStringValue(bindRequest.rawValue)
@@ -75,15 +76,23 @@ class DatatypeFactory {
     }
 
     @SuppressWarnings('SimpleDateFormatMissingLocale')
-    private Date getDateValue(ImportConfiguration importConfiguration, String rawValue) {
-        SimpleDateFormat formatter = new SimpleDateFormat(importConfiguration.dateFormat)
-        formatter.parse(rawValue)
+    private Date getDateValue(ImportConfiguration importConfiguration, String rawValue, DataRow dataRow) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(importConfiguration.dateFormat)
+            formatter.parse(rawValue)
+        } catch (ParseException e) {
+            log.warn("Date could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
     }
 
     @SuppressWarnings('SimpleDateFormatMissingLocale')
-    private LocalDate getLocalDateValue(ImportConfiguration importConfiguration, String rawValue) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(importConfiguration.dateFormat)
-        LocalDate.parse(rawValue, formatter)
+    private LocalDate getLocalDateValue(ImportConfiguration importConfiguration, String rawValue, DataRow dataRow) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(importConfiguration.dateFormat)
+            LocalDate.parse(rawValue, formatter)
+        } catch (java.time.format.DateTimeParseException e) {
+            log.warn("LocalDate could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+        }
     }
 
     private Double getDoubleValue(String rawValue, DataRow dataRow) {
