@@ -113,6 +113,26 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
     }
 
     @Test
+    void "getValue can parse a missing Date value correctly"() {
+
+        // given:
+        importAttributeMapper = attributeMapperFor('birthday')
+        importConfiguration = importConfigurationFor('ddcdi$MlbPlayer', importAttributeMapper)
+        def dateFormat = "yyyy-MM-dd"
+        importConfiguration.dateFormat = dateFormat
+
+        // and:
+        def expectedBindingValue = null
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthday: expectedBindingValue])
+
+        // when:
+        def result = sut.getValue(bindRequest)
+
+        // then:
+        assertThat(result).isEqualTo(expectedBindingValue)
+    }
+
+    @Test
     void "getValue can parse a LocalDate value correctly"() {
 
         // given:
@@ -132,6 +152,28 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         assertThat(result).isInstanceOf(LocalDate)
         def resultAsString = result.format(DateTimeFormatter.ofPattern(dateFormat));
         assertThat(resultAsString).isEqualTo(expectedBindingValue)
+
+    }
+
+
+    @Test
+    void "getValue can parse a Missing LocalDate value correctly"() {
+
+        // given:
+        importAttributeMapper = attributeMapperFor('birthdayLocalDate')
+        importConfiguration = importConfigurationFor('ddcdi$MlbPlayer', importAttributeMapper)
+        def dateFormat = "yyyy-MM-dd"
+        importConfiguration.dateFormat = dateFormat
+
+        // and:
+        def expectedBindingValue = null
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthdayLocalDate: expectedBindingValue])
+
+        // when:
+        def result = sut.getValue(bindRequest)
+
+        // then:
+        assertThat(result).isEqualTo(expectedBindingValue)
 
     }
 
