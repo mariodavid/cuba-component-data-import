@@ -122,7 +122,6 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         importConfiguration.dateFormat = dateFormat
 
         // and:
-        def expectedBindingValue = null
         def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthday: expectedBindingValue])
 
         // when:
