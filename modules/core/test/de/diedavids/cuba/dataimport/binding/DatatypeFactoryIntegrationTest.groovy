@@ -128,7 +128,7 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         def result = sut.getValue(bindRequest)
 
         // then:
-        assertThat(result).isEqualTo(expectedBindingValue)
+        assertThat(result).isNull()
     }
 
     @Test
