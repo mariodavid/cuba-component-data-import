@@ -122,7 +122,7 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         importConfiguration.dateFormat = dateFormat
 
         // and:
-        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthday: expectedBindingValue])
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthday: null])
 
         // when:
         def result = sut.getValue(bindRequest)
@@ -165,7 +165,7 @@ class DatatypeFactoryIntegrationTest extends AbstractEntityBinderIntegrationTest
         importConfiguration.dateFormat = dateFormat
 
         // and:
-        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthdayLocalDate: expectedBindingValue])
+        def bindRequest = bindRequestFor(importConfiguration, importAttributeMapper, [birthdayLocalDate: null])
 
         // when:
         def result = sut.getValue(bindRequest)
