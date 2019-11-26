@@ -81,7 +81,7 @@ class DatatypeFactory {
             SimpleDateFormat formatter = new SimpleDateFormat(importConfiguration.dateFormat)
             formatter.parse(rawValue)
         } catch (ParseException e) {
-            log.warn("Date could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+            log.warn("Date could not be read: '$rawValue' in [$dataRow], because it does not match the configured date format: '${importConfiguration.dateFormat}'. Will be ignored.")
         }
     }
 
