@@ -91,7 +91,7 @@ class DatatypeFactory {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(importConfiguration.dateFormat)
             LocalDate.parse(rawValue, formatter)
         } catch (java.time.format.DateTimeParseException e) {
-            log.warn("LocalDate could not be read: '$rawValue' in [$dataRow]. Will be ignored.")
+            log.warn("LocalDate could not be read: '$rawValue' in [$dataRow], because it does not match the configured date format: '${importConfiguration.dateFormat}'. Will be ignored.")
         }
     }
 
