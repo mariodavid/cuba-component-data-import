@@ -157,7 +157,7 @@ class ImportViewIntegrationTest extends AbstractImportIntegrationTest {
         assertThat(updatedMlbPlayers.size()).isEqualTo(1)
 
         //and:
-        assertThat(updatedPaul.team.name).isEqualTo(balTeam.name)
+        assertThat(updatedPaul.team).isEqualTo(balTeam)
     }
 
     private void storeHowTeam() {
