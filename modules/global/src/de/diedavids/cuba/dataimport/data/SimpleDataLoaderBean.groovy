@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.LoadContext
 import com.haulmont.cuba.core.global.Metadata
+import com.haulmont.cuba.core.global.View
 import groovy.transform.CompileStatic
 import org.springframework.stereotype.Component
 
@@ -118,7 +119,17 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
     }
 
     @Override
-    def <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues, String view) {
+    <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues, String view) {
+        LoadContext.Query query = createQueryByEntityAttributeValues(getMetaClassName(entityClass), entityAttributeValues)
+        LoadContext loadContext = getLoadContext(entityClass)
+                .setQuery(query)
+                .setView(view)
+
+        dataManager.loadList(loadContext) as Collection<E>
+    }
+
+    @Override
+    <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues, View view) {
         LoadContext.Query query = createQueryByEntityAttributeValues(getMetaClassName(entityClass), entityAttributeValues)
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)

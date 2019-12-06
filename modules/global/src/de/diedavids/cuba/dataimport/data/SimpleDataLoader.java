@@ -1,6 +1,7 @@
 package de.diedavids.cuba.dataimport.data;
 
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.View;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public interface SimpleDataLoader {
 
     <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues);
     <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues, String view);
+    <E extends Entity> Collection<E> loadAllByAttributes(Class<E> entityClass, Collection<EntityAttributeValue> entityAttributeValues, View view);
 
     <E extends Entity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue);
     <E extends Entity> Collection<E> loadAllByProperty(Class<E> entityClass, String propertyPath, Object propertyValue, String view);

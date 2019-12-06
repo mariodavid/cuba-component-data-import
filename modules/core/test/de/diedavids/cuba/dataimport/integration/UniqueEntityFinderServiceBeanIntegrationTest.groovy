@@ -1,6 +1,8 @@
 package de.diedavids.cuba.dataimport.integration
 
 import com.haulmont.cuba.core.global.AppBeans
+import com.haulmont.cuba.core.global.View
+import com.haulmont.cuba.core.global.ViewRepository
 import de.diedavids.cuba.dataimport.AbstractDbIntegrationTest
 import de.diedavids.cuba.dataimport.entity.*
 import de.diedavids.cuba.dataimport.entity.attributemapper.AttributeType
@@ -9,15 +11,18 @@ import de.diedavids.cuba.dataimport.entity.example.mlb.MlbTeam
 import de.diedavids.cuba.dataimport.service.UniqueEntityFinderService
 import org.junit.Before
 import org.junit.Test
+import spock.lang.Subject
 
 import static org.assertj.core.api.Assertions.assertThat
 
 class UniqueEntityFinderServiceBeanIntegrationTest extends AbstractDbIntegrationTest {
 
 
-    protected UniqueEntityFinderService sut
+    @Subject
+    UniqueEntityFinderService sut
 
-    protected ImportConfiguration importConfiguration
+    ImportConfiguration importConfiguration
+    ViewRepository viewRepository
 
     @Before
     void setUp() throws Exception {
@@ -26,6 +31,7 @@ class UniqueEntityFinderServiceBeanIntegrationTest extends AbstractDbIntegration
         super.setUp()
 
         sut = AppBeans.get(UniqueEntityFinderService.NAME)
+        viewRepository = AppBeans.get(ViewRepository)
 
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbPlayer',
@@ -45,13 +51,20 @@ class UniqueEntityFinderServiceBeanIntegrationTest extends AbstractDbIntegration
     @Test
     void "findUniqueEntity finds an existing entity that fulfills the unique configurations with a given entity"() {
 
+        //given:
         MlbTeam existingBalTeam = createAndStoreMlbTeam('Baltimore Orioles', 'BAL')
         MlbTeam entityToBeImported = createMlbTeam('Baltimore Orioles', 'BAL')
 
         List<UniqueConfiguration> uniqueConfigurations = createCodeAndNameUniqueConfiguration()
 
-        MlbTeam existingUniqueEntityResult = sut.findEntity(entityToBeImported, uniqueConfigurations) as MlbTeam
+        //when:
+        MlbTeam existingUniqueEntityResult = sut.findEntity(
+                entityToBeImported,
+                uniqueConfigurations,
+                viewRepository.getView(metadata.getClass(MlbTeam), View.LOCAL)
+        ) as MlbTeam
 
+        //then:
         assertThat(existingUniqueEntityResult).isNotNull()
         assertThat(existingUniqueEntityResult).isEqualTo(existingBalTeam)
 
@@ -67,7 +80,11 @@ class UniqueEntityFinderServiceBeanIntegrationTest extends AbstractDbIntegration
 
         List<UniqueConfiguration> uniqueConfigurations = createCodeAndNameUniqueConfiguration()
 
-        MlbTeam existingUniqueEntityResult = sut.findEntity(entityToBeImported, uniqueConfigurations) as MlbTeam
+        MlbTeam existingUniqueEntityResult = sut.findEntity(
+                entityToBeImported,
+                uniqueConfigurations,
+                viewRepository.getView(metadata.getClass(MlbTeam), View.LOCAL)
+        ) as MlbTeam
 
         assertThat(existingUniqueEntityResult).isNull()
 
