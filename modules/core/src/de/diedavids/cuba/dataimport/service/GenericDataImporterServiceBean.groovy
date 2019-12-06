@@ -24,6 +24,7 @@ import javax.persistence.PersistenceException
 import javax.validation.ConstraintViolation
 import java.util.function.Consumer
 
+@SuppressWarnings('MethodSize')
 @Slf4j
 @Service(GenericDataImporterService.NAME)
 class GenericDataImporterServiceBean implements GenericDataImporterService {
@@ -51,6 +52,9 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
     @Inject
     EntityStates entityStates
+
+    @Inject
+    EntityImportViewToViewConverter entityImportViewToViewConverter
 
 
     @Override
@@ -161,7 +165,13 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
         try {
             entities.each { ImportEntityRequest importEntityRequest ->
-                importSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importExecution)
+                importSingleEntity(
+                        importEntityRequest,
+                        importView,
+                        importedEntities,
+                        importConfiguration,
+                        importExecution
+                )
             }
             try {
                 entityImportExportAPI.importEntities(importedEntities*.entity, importView, true)
@@ -334,26 +344,64 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
 
             importConfiguration.uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
 
-                def alreadyExistingEntity = uniqueEntityFinderService.findEntity(importEntityRequest.entity, uniqueConfiguration)
+                View targetView = entityImportViewToViewConverter.convert(importView)
+                def alreadyExistingEntity = uniqueEntityFinderService.findEntity(
+                        importEntityRequest.entity,
+                        uniqueConfiguration,
+                        targetView
+                )
 
                 if (!alreadyExistingEntity) {
-                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importExecution)
+                    doImportSingleEntity(
+                            importEntityRequest,
+                            importView,
+                            importedEntities,
+                            importConfiguration,
+                            importExecution
+                    )
                 } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.UPDATE) {
-                    importEntityRequest.entity = bindAttributesToEntity(importConfiguration, importEntityRequest.dataRow, alreadyExistingEntity, importEntityRequest.defaultValues)
 
-                    doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importExecution)
+                    importEntityRequest.entity = bindAttributesToEntity(
+                            importConfiguration,
+                            importEntityRequest.dataRow,
+                            alreadyExistingEntity,
+                            importEntityRequest.defaultValues
+                    )
+
+                    doImportSingleEntity(
+                            importEntityRequest,
+                            importView,
+                            importedEntities,
+                            importConfiguration,
+                            importExecution
+                    )
                 } else if (alreadyExistingEntity && uniqueConfiguration.policy == UniquePolicy.ABORT) {
-                    throw new ImportUniqueAbortException(importEntityRequest: importEntityRequest, alreadyExistingEntity: alreadyExistingEntity)
+                    throw new ImportUniqueAbortException(
+                            importEntityRequest: importEntityRequest,
+                            alreadyExistingEntity: alreadyExistingEntity
+                    )
 
                 } else {
                     importExecution.entitiesUniqueConstraintSkipped++
-                    logInfo(importExecution, 'Entity not imported since it is already existing and Unique policy is set to SKIP', ImportExecutionDetailCategory.UNIQUE_VIOLATION, importEntityRequest)
+                    logInfo(
+                            importExecution,
+                            'Entity not imported since it is already existing and Unique policy is set to SKIP',
+                            ImportExecutionDetailCategory.UNIQUE_VIOLATION,
+                            importEntityRequest
+                    )
                 }
             }
         } else {
-            doImportSingleEntity(importEntityRequest, importView, importedEntities, importConfiguration, importExecution)
+            doImportSingleEntity(
+                    importEntityRequest,
+                    importView,
+                    importedEntities,
+                    importConfiguration,
+                    importExecution
+            )
         }
     }
+
 
     private void doImportSingleEntity(
             ImportEntityRequest importEntityRequest,

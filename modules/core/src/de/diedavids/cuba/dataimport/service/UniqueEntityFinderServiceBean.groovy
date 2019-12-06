@@ -2,6 +2,7 @@ package de.diedavids.cuba.dataimport.service
 
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.DataManager
+import com.haulmont.cuba.core.global.View
 import de.diedavids.cuba.dataimport.data.EntityAttributeValue
 import de.diedavids.cuba.dataimport.data.EntityAttributeValueFactory
 import de.diedavids.cuba.dataimport.data.SimpleDataLoader
@@ -24,12 +25,12 @@ class UniqueEntityFinderServiceBean implements UniqueEntityFinderService {
 
 
     @Override
-    Entity findEntity(Entity entity, Collection<UniqueConfiguration> uniqueConfigurations) {
+    Entity findEntity(Entity entity, Collection<UniqueConfiguration> uniqueConfigurations, View targetView) {
 
         Entity foundEntity = null
 
         uniqueConfigurations.each { UniqueConfiguration uniqueConfiguration ->
-            Collection<Entity> foundEntities = findUniqueEntities(entity, uniqueConfiguration)
+            Collection<Entity> foundEntities = findUniqueEntities(entity, uniqueConfiguration, targetView)
 
             if (foundEntities) {
                 foundEntity = foundEntities.first()
@@ -39,11 +40,11 @@ class UniqueEntityFinderServiceBean implements UniqueEntityFinderService {
     }
 
     @Override
-    Entity findEntity(Entity entity, UniqueConfiguration uniqueConfiguration) {
+    Entity findEntity(Entity entity, UniqueConfiguration uniqueConfiguration, View targetView) {
 
         Entity foundEntity = null
 
-        Collection<Entity> foundEntities = findUniqueEntities(entity, uniqueConfiguration)
+        Collection<Entity> foundEntities = findUniqueEntities(entity, uniqueConfiguration, targetView)
 
         if (foundEntities) {
             foundEntity = foundEntities.first()
@@ -51,9 +52,9 @@ class UniqueEntityFinderServiceBean implements UniqueEntityFinderService {
         foundEntity
     }
 
-    private Collection<Entity> findUniqueEntities(Entity entity, UniqueConfiguration uniqueConfiguration) {
+    private Collection<Entity> findUniqueEntities(Entity entity, UniqueConfiguration uniqueConfiguration, View requiredView) {
         Collection<EntityAttributeValue> entityAttributeValues = createEntityAttributeValues(entity, uniqueConfiguration)
-        simpleDataLoader.loadAllByAttributes(entity.class, entityAttributeValues)
+        simpleDataLoader.loadAllByAttributes(entity.class, entityAttributeValues, requiredView)
     }
 
     private Collection<EntityAttributeValue> createEntityAttributeValues(Entity entity, UniqueConfiguration uniqueConfiguration) {
