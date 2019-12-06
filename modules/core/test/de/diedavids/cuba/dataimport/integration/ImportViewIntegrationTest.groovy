@@ -23,15 +23,14 @@ import spock.lang.Issue
 import static org.assertj.core.api.Assertions.assertThat
 
 
-//@Ignore
 class ImportViewIntegrationTest extends AbstractImportIntegrationTest {
 
 
-    protected GenericDataImporterService sut
+    GenericDataImporterService sut
 
-    protected ImportConfiguration importConfiguration
+    ImportConfiguration importConfiguration
 
-    protected SimpleDataLoader simpleDataLoader
+    SimpleDataLoader simpleDataLoader
 
     @Before
     void setUp() throws Exception {
