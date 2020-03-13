@@ -74,6 +74,8 @@ The following databases are supported by this application component:
 * PostgreSQL
 * MySQL
 
+All other DBMS systems are also possible to work with by the fact that CUBA studio generates the corresponding init / update scripts within the application.
+
 ## Using the application component
 
 The `data-import` application component helps you import data into your application from different files.
