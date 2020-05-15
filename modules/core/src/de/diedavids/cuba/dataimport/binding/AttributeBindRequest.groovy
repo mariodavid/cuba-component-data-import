@@ -74,7 +74,7 @@ class AttributeBindRequest {
     }
 
     boolean isDatatypeBindingRequest() {
-        metaProperty?.type == MetaProperty.Type.DATATYPE
+        metaProperty?.type == MetaProperty.Type.DATATYPE && metadata.tools.isPersistent(metaProperty)
     }
 
     boolean isEnumBindingRequest() {
