@@ -5,7 +5,7 @@ import com.haulmont.cuba.core.app.importexport.EntityImportViewProperty
 import com.haulmont.cuba.core.global.View
 import org.springframework.stereotype.Component
 
-@Component('ddcd    i_EntityImportViewToViewConverter')
+@Component('ddcdi_EntityImportViewToViewConverter')
 class EntityImportViewToViewConverter {
 
     View convert(EntityImportView entityImportView) {
