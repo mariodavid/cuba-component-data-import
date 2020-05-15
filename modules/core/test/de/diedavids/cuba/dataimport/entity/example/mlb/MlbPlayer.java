@@ -1,5 +1,6 @@
 package de.diedavids.cuba.dataimport.entity.example.mlb;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
@@ -52,6 +53,19 @@ public class MlbPlayer extends StandardEntity {
             inverseJoinColumns = @JoinColumn(name = "BASEBALL_STRENGTH_ID"))
     @ManyToMany
     protected List<BaseballStrength> strengths;
+
+
+
+    /*
+    this attributed is used to test how the import behaves for transient properties
+    without a field and a setter method
+     */
+    @Transient
+    @MetaProperty(related = {"name", "age"})
+    public String getPlayerDescription() {
+        return String.format(".%s (#%s)", getName(), getAge());
+    }
+
 
     public LocalDate getBirthdayLocalDate() {
         return birthdayLocalDate;

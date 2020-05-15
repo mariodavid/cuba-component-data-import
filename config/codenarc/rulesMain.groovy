@@ -25,7 +25,7 @@ ruleset {
         priority = 1
     }
     MethodCount {
-        maxMethods = 35
+        maxMethods = 40
         priority = 1
     }
     CatchError { priority = 1 }

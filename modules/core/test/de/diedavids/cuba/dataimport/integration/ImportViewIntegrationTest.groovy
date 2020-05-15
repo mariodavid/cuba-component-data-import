@@ -46,7 +46,7 @@ class ImportViewIntegrationTest extends AbstractImportIntegrationTest {
 
 
     @Test
-    void "doDataImport adds all local properties to the import view"() {
+    void "doDataImport adds all persistent local properties to the import view"() {
 
         //given:
         importConfiguration = new ImportConfiguration(
@@ -157,6 +157,79 @@ class ImportViewIntegrationTest extends AbstractImportIntegrationTest {
 
         //and:
         assertThat(updatedPaul.team).isEqualTo(balTeam)
+    }
+
+    /**
+     * Given: I have a transient field in an entity
+     * When: I perform an import with an import config containing the transient attribute
+     * Then: the attribute should be excluded
+     */
+    @Issue("https://github.com/mariodavid/cuba-component-data-import/issues/155")
+    @Test
+    void "a transient field in an entity is excluded from binding"() {
+
+        //given:
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'age', fileColumnAlias: 'age', fileColumnNumber: 1),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'playerDescription', fileColumnAlias: 'playerDescription', fileColumnNumber: 2),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+        //and:
+        ImportData importData = createData([
+                [name: 'Adam Donachie', age: 34, playerDescription: "should not be imported"],
+                [name: 'Paul Bako', age: 30, playerDescription: "should not be imported"]
+        ])
+
+        //when:
+        sut.doDataImport(importConfiguration, importData)
+
+
+        //then:
+        def mlbPlayers = simpleDataLoader.loadAll(MlbPlayer)
+        assertThat(mlbPlayers.size()).isEqualTo(2)
+        assertThat(mlbPlayers[0].getPlayerDescription())
+            .isNotEqualTo("should not be imported")
+
+    }
+    /**
+     * Given: I have a transient field in an entity
+     * When: I perform an import _without_ an import config containing the transient attribute
+     * Then: the attribute should be excluded
+     */
+    @Issue("https://github.com/mariodavid/cuba-component-data-import/issues/155")
+    @Test
+    void "a transient field in an entity is excluded from import"() {
+
+        //given:
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbPlayer',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'age', fileColumnAlias: 'age', fileColumnNumber: 1),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'playerDescription', fileColumnAlias: 'playerDescription', fileColumnNumber: 2),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+        //and:
+        ImportData importData = createData([
+                [name: 'Adam Donachie', age: 34],
+                [name: 'Paul Bako', age: 30]
+        ])
+
+        //when:
+        sut.doDataImport(importConfiguration, importData)
+
+
+        //then:
+        def mlbPlayers = simpleDataLoader.loadAll(MlbPlayer)
+        assertThat(mlbPlayers.size()).isEqualTo(2)
+
     }
 
     private void storeHowTeam() {
