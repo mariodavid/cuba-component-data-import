@@ -529,13 +529,10 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     private void addLocalPropertiesToImportView(Class<? extends Entity> importEntityClass, EntityImportView importView) {
         def importEntityMetaClass = metadata.getClass(importEntityClass)
         Collection<String> persistentProperties = importEntityMetaClass
-                .getProperties()
-                .findAll { property -> metadata.tools.isPersistent(property) }
-                .collect { it.name }
+                .properties
+                .findAll { property -> metadata.tools.isPersistent(property) }*.name
 
-        def persistentPropertyNames = persistentProperties
-
-        importView.addProperties(persistentPropertyNames as String[])
+        importView.addProperties(persistentProperties as String[])
     }
 
     private void addAssociationPropertiesToImportView(ImportConfiguration importConfiguration, EntityImportView importView) {
