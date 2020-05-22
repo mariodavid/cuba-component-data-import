@@ -40,6 +40,7 @@ class ImportAttributeMapperCreator {
         result.attributeType = attrType
         result.fileColumnAlias = column
         result.fileColumnNumber = fileColumnNumber
+        result.isRequiredColumn = true
         result
     }
 

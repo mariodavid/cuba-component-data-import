@@ -43,14 +43,18 @@ class DataRowImpl implements DataRow {
         if (index != null) {
             values[index]
         } else {
-            throw new MissingPropertyException(name)
+            ''
         }
+    }
+
+    def hasProperty(String name) {
+        def index = columns[name]
+        index != null
     }
 
     def getAt(Integer index) {
         values[index]
     }
-
 
     String toString() {
         columns.collect { key, index -> "$key: ${values[index]}" }.join(', ')

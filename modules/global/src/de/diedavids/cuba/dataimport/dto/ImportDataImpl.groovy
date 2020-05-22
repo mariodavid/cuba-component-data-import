@@ -7,9 +7,15 @@ class ImportDataImpl implements ImportData {
     List<String> columns = []
 
     @Override
-    boolean isCompatibleWith(List<ImportAttributeMapper> attributeMappers) {
-        attributeMappers.every { attributeMapper ->
-            attributeMapper.isRequiredColumn ? columns.contains(attributeMapper.fileColumnAlias) : true
-        }
+    ColumnValidationResult isCompatibleWith(List<ImportAttributeMapper> attributeMappers) {
+        List<String> invalidColumns = attributeMappers
+                .findAll { attributeMapper -> validateColumn(attributeMapper)}
+                .collect { it.fileColumnAlias }
+
+        new ColumnValidationResult(invalidColumns.isEmpty(), invalidColumns)
+    }
+
+    private boolean validateColumn(ImportAttributeMapper attributeMapper) {
+        attributeMapper.isRequiredColumn && !columns.contains(attributeMapper.fileColumnAlias)
     }
 }
