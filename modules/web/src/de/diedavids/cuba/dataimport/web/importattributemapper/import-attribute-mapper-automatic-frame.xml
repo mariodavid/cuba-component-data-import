@@ -32,6 +32,7 @@
                        property="associationLookupAttribute"/>
                 <field property="fileColumnNumber"/>
                 <field property="fileColumnAlias"/>
+                <field property="isRequiredColumn"/>
             </column>
         </fieldGroup>
     </layout>

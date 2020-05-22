@@ -42,6 +42,7 @@ create table DDCDI_IMPORT_ATTRIBUTE_MAPPER (
     ASSOCIATION_LOOKUP_ATTRIBUTE varchar(255),
     FILE_COLUMN_NUMBER integer not null,
     FILE_COLUMN_ALIAS varchar(255),
+    IS_REQUIRED_COLUMN boolean,
     CUSTOM_ATTRIBUTE_BIND_SCRIPT longvarchar,
     --
     primary key (ID)

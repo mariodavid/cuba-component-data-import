@@ -9,7 +9,7 @@ class ImportDataImpl implements ImportData {
     @Override
     boolean isCompatibleWith(List<ImportAttributeMapper> attributeMappers) {
         attributeMappers.every { attributeMapper ->
-            columns[attributeMapper.fileColumnNumber] == attributeMapper.fileColumnAlias
+            attributeMapper.isRequiredColumn ? columns.contains(attributeMapper.fileColumnAlias) : true
         }
     }
 }
