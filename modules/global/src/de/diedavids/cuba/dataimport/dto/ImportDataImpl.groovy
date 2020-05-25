@@ -9,13 +9,13 @@ class ImportDataImpl implements ImportData {
     @Override
     ColumnValidationResult isCompatibleWith(List<ImportAttributeMapper> attributeMappers) {
         List<String> invalidColumns = attributeMappers
-                .findAll { attributeMapper -> validateColumn(attributeMapper)}
+                .findAll { attributeMapper -> isInvalidColumn(attributeMapper)}
                 .collect { it.fileColumnAlias }
 
         new ColumnValidationResult(invalidColumns.isEmpty(), invalidColumns)
     }
 
-    private boolean validateColumn(ImportAttributeMapper attributeMapper) {
+    private boolean isInvalidColumn(ImportAttributeMapper attributeMapper) {
         attributeMapper.isRequiredColumn && !columns.contains(attributeMapper.fileColumnAlias)
     }
 }
