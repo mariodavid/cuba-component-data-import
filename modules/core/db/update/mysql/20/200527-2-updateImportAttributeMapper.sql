@@ -1,0 +1,1 @@
+alter table DDCDI_IMPORT_ATTRIBUTE_MAPPER add column IS_REQUIRED_COLUMN boolean ;
