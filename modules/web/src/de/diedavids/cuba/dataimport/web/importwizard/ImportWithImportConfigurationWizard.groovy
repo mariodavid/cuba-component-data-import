@@ -159,10 +159,15 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
             log.error(e.message, e)
 
             startImport.enabled = false
-            showNotification(e.getMessage(), Frame.NotificationType.ERROR)
+            showNotification(getConfigurationMatchExceptionMessage(e), Frame.NotificationType.ERROR)
 
             toStep1()
         }
+    }
+
+    private String getConfigurationMatchExceptionMessage(ImportDataImportConfigurationMatchException e) {
+        formatMessage('uploadFileDoesNotMatchExpectedStructure',
+                e.getResult().getColumns().join(", "))
     }
 
 
