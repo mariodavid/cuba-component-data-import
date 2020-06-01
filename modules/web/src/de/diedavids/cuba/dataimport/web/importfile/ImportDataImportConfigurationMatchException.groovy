@@ -12,11 +12,7 @@ class ImportDataImportConfigurationMatchException extends RuntimeException {
         this.result = result
     }
 
-    ColumnValidationResult getResult() {
-        return result
-    }
-
-    void setResult(ColumnValidationResult result) {
-        this.result = result
+    String getResult() {
+        return result.getColumns().join(", ")
     }
 }
