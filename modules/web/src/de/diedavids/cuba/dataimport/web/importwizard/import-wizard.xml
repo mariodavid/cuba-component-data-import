@@ -115,6 +115,7 @@
                         <column id="fileColumnAlias"/>
                         <column id="attributeType"/>
                         <column id="entityAttribute"/>
+                        <column id="isRequiredColumn"/>
                     </columns>
                     <buttonsPanel id="buttonsPanel"
                                   alwaysVisible="true">
