@@ -406,6 +406,9 @@ An attribute mapping contains the following information:
 * column name in the import file
 * column number (only relevant for CSV / Excel)
 * entity attribute
+* column required flag
+
+When column required flag is set to true, addon validates that the column name exists in the imported file. It doesn't check their content, so you still need to validate that additionally. 
 
 #### Auto Detection of Entity Attribute Mappings
 
