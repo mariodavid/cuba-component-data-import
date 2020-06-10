@@ -159,12 +159,12 @@ class ImportWithImportConfigurationWizard extends AbstractEditor<ImportConfigura
             log.error(e.message, e)
 
             startImport.enabled = false
-            showNotification(formatMessage('uploadFileDoesNotMatchExpectedStructure'), Frame.NotificationType.ERROR)
+            showNotification(formatMessage('uploadFileDoesNotMatchExpectedStructure', e.getResult()),
+                    Frame.NotificationType.ERROR)
 
             toStep1()
         }
     }
-
 
     void startImport() {
         ImportExecution importExecution = genericDataImporterService.doDataImport(importConfigurationDs.item, importData, defaultValues)

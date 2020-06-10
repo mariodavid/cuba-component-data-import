@@ -22,6 +22,7 @@
 
                 <field property="fileColumnNumber"/>
                 <field property="fileColumnAlias"/>
+                <field property="isColumnRequired"/>
             </column>
         </fieldGroup>
         <sourceCodeEditor id="customAttributeBindScriptEditor"

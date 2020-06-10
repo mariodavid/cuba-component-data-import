@@ -87,6 +87,7 @@
                         <column id="fileColumnAlias"/>
                         <column id="attributeType"/>
                         <column id="entityAttribute"/>
+                        <column id="isRequiredColumn"/>
                     </columns>
                     <rows datasource="importAttributeMappersDs"/>
                     <buttonsPanel>

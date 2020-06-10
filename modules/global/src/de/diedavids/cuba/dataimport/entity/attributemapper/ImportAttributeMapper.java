@@ -1,20 +1,17 @@
 package de.diedavids.cuba.dataimport.entity.attributemapper;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-
-import com.haulmont.chile.core.datatypes.FormatStrings;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import de.diedavids.cuba.dataimport.entity.ImportConfiguration;
-import de.diedavids.cuba.dataimport.entity.ImportTransactionStrategy;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "DDCDI_IMPORT_ATTRIBUTE_MAPPER")
 @Entity(name = "ddcdi$ImportAttributeMapper")
@@ -48,10 +45,20 @@ public class ImportAttributeMapper extends StandardEntity {
     protected String fileColumnAlias;
 
 
+    @Column(name = "IS_REQUIRED_COLUMN")
+    protected Boolean isRequiredColumn;
 
     @Lob
     @Column(name = "CUSTOM_ATTRIBUTE_BIND_SCRIPT")
     protected String customAttributeBindScript;
+
+    public Boolean getIsRequiredColumn() {
+        return isRequiredColumn;
+    }
+
+    public void setIsRequiredColumn(Boolean isRequiredColumn) {
+        this.isRequiredColumn = isRequiredColumn;
+    }
 
     public void setMapperMode(AttributeMapperMode mapperMode) {
         this.mapperMode = mapperMode == null ? null : mapperMode.getId();

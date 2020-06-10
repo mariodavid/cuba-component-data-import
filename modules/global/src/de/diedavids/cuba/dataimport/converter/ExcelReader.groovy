@@ -46,7 +46,7 @@ class ExcelReader {
         def linesRead = 0
 
         if (params.labels) {
-            labels = rowIterator.next().collect { it.toString().toLowerCase() }
+            labels = rowIterator.next().collect { it.toString().toLowerCase().replace('.', '') }
         }
         offset.times { rowIterator.next() }
 
