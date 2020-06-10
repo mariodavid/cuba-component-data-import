@@ -29,10 +29,12 @@ class AttributeBindRequest {
 
     String getRawValue() {
         def alias = importAttributeMapper.fileColumnAlias
-        if (importAttributeMapper.isRequiredColumn && !dataRow.hasProperty(alias))
+        if (importAttributeMapper.isRequiredColumn && !dataRow.hasProperty(alias)) {
             throw new MissingPropertyException(alias)
+        }
 
-        ((String) dataRow[alias]).trim()
+        def columnValue = dataRow[alias] ?: ''
+        ((String) columnValue).trim()
     }
 
     String getImportEntityClassName() {
