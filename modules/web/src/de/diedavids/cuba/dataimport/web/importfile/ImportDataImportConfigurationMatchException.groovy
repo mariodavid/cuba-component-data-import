@@ -4,7 +4,7 @@ import de.diedavids.cuba.dataimport.dto.ColumnValidationResult
 
 class ImportDataImportConfigurationMatchException extends RuntimeException {
 
-    public static final String DELIMITER = ','
+    public static final String DELIMITER = ', '
     final private ColumnValidationResult result
 
     ImportDataImportConfigurationMatchException(ColumnValidationResult result) {
