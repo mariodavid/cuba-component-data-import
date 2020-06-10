@@ -32,6 +32,9 @@ class AttributeBindRequest {
         if (importAttributeMapper.isRequiredColumn && !dataRow.hasProperty(alias))
             throw new MissingPropertyException(alias)
 
+        if (dataRow[alias] == null)
+            return dataRow[alias]
+
         ((String) dataRow[alias]).trim()
     }
 

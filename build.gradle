@@ -46,7 +46,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'de.diedavids.cuba.dataimport'
-version = project.properties['version'].replaceAll('-SNAPSHOT', '')
+        version = project.properties['version'].replaceAll('-SNAPSHOT', '')
         isSnapshot = project.properties['version'].contains('-SNAPSHOT')
     }
     tomcat {
@@ -131,7 +131,6 @@ cobertura {
 test.dependsOn(subprojects.collect { ":${it.name}:test" })
 test.finalizedBy(project.tasks.cobertura)
 test.finalizedBy(project.tasks.coberturaCheck)
-
 
 
 configure([globalModule, coreModule, guiModule, webModule]) {
@@ -304,7 +303,7 @@ configure(coreModule) {
         host = 'localhost'
         dbUser = 'sa'
         dbPassword = ''
-        }
+    }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbName = 'ddcdi4'
@@ -312,7 +311,7 @@ configure(coreModule) {
         host = 'localhost'
         dbUser = 'sa'
         dbPassword = ''
-        }
+    }
 
 
     task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
@@ -381,9 +380,6 @@ configure(webModule) {
         appJars(modulePrefix + '-global', modulePrefix + '-gui', modulePrefix + '-web')
     }
 }
-
-
-
 
 
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {

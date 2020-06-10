@@ -46,8 +46,8 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0, 'isRequiredColumn': true),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1, 'isRequiredColumn': true),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -77,8 +77,8 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0, 'isRequiredColumn': true),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1, 'isRequiredColumn': true),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -100,6 +100,7 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         ImportExecutionDetail importExecutionDetail = persistedImportExecution.details[0]
         assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionDetailCategory.DATA_BINDING)
     }
+
     @Test
     void "doDataImport stores an exception in the execution due to a type mismatch between import mappers and import data"() {
 
@@ -107,8 +108,8 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         importConfiguration = new ImportConfiguration(
                 entityClass: 'ddcdi$MlbTeam',
                 importAttributeMappers: [
-                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0),
-                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0, 'isRequiredColumn': true),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1, 'isRequiredColumn': true),
                 ],
                 transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
         )
@@ -129,6 +130,34 @@ class ImportExecutionIntegrationTest extends AbstractImportIntegrationTest {
         // and:
         ImportExecutionDetail importExecutionDetail = persistedImportExecution.details[0]
         assertThat(importExecutionDetail.category).isEqualTo(ImportExecutionDetailCategory.DATA_BINDING)
+    }
+
+
+    @Test
+    void "doDataImport passes the execution when import mappers contains optional columns and import data is missing columns"() {
+
+        // given:
+        importConfiguration = new ImportConfiguration(
+                entityClass: 'ddcdi$MlbTeam',
+                importAttributeMappers: [
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'name', fileColumnAlias: 'name', fileColumnNumber: 0, 'isRequiredColumn': true),
+                        new ImportAttributeMapper(attributeType: AttributeType.DIRECT_ATTRIBUTE, entityAttribute: 'code', fileColumnAlias: 'code', fileColumnNumber: 1, 'isRequiredColumn': false),
+                ],
+                transactionStrategy: ImportTransactionStrategy.SINGLE_TRANSACTION
+        )
+
+        // and:
+        ImportData importData = createData([
+                [name: 1],
+                [name: 2]
+        ])
+
+        // when:
+        ImportExecution importExecution = sut.doDataImport(importConfiguration, importData)
+
+        // then:
+        ImportExecution persistedImportExecution = simpleDataLoader.load(ImportExecution, importExecution.getId(), "importExecution-with-details-view")
+        assertThat(persistedImportExecution.entitiesImportSuccess).isEqualTo(2)
     }
 
 }
