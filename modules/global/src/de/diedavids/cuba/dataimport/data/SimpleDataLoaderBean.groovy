@@ -28,6 +28,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext<E> loadContext = getLoadContext(entityClass)
                 .setId(id)
                 .setView(view) as LoadContext<E>
+        loadContext.setLoadDynamicAttributes(true)
 
         dataManager.load(loadContext) as E
     }
@@ -40,6 +41,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         def loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
+        loadContext.setLoadDynamicAttributes(true)
 
         dataManager.load(loadContext) as E
     }
@@ -51,6 +53,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         def loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
+        loadContext.setLoadDynamicAttributes(true)
 
         dataManager.load(loadContext) as E
     }
@@ -62,6 +65,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
+        loadContext.setLoadDynamicAttributes(true)
         dataManager.loadList(loadContext) as Collection<E>
     }
 
@@ -71,6 +75,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
+        loadContext.setLoadDynamicAttributes(true)
         dataManager.loadList(loadContext) as Collection<E>
     }
 
@@ -114,6 +119,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext.Query query = createQueryByEntityAttributeValues(getMetaClassName(entityClass), entityAttributeValues)
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
+        loadContext.setLoadDynamicAttributes(true)
 
         dataManager.loadList(loadContext) as Collection<E>
     }
@@ -124,6 +130,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
+        loadContext.setLoadDynamicAttributes(true)
 
         dataManager.loadList(loadContext) as Collection<E>
     }
@@ -134,6 +141,7 @@ class SimpleDataLoaderBean implements SimpleDataLoader {
         LoadContext loadContext = getLoadContext(entityClass)
                 .setQuery(query)
                 .setView(view)
+        loadContext.setLoadDynamicAttributes(true)
 
         dataManager.loadList(loadContext) as Collection<E>
     }
