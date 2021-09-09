@@ -63,7 +63,7 @@ dependencies {
 
 ### CHANGELOG
 
-Information on changes that happen through the different versions of the application component can be found in the [CHANGELOG](https://github.com/mariodavid/cuba-component-data-import/blob/master/CHANGELOG.md).
+Information on changes that happen through the different versions of the application component can be found in the [CHANGELOG](https://github.com/mariodavid/cuba-component-data-import/tree/master/CHANGELOG.md).
 The Changelog also contains information about breaking changes and tips on how to resolve them.
 
 ## Supported DBMS
@@ -145,7 +145,7 @@ In the core module, there is an API available for programmatic interacting with 
 `DataImportAPI` takes a `FileDescriptor` together with a `ImportConfiguration` and imports the content of the file according
 to the given configuration.
 
-An example usage can be found in the [MlbTeamImportService](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/modules/global/src/de/diedavids/ddcdit/service/MlbTeamImportService.java) in the example application.
+An example usage can be found in the [MlbTeamImportService](https://github.com/mariodavid/cuba-example-using-data-import/tree/master/modules/global/src/de/diedavids/ddcdit/service/MlbTeamImportService.java) in the example application.
 
 
 ## Integrate Import Wizard into screens
@@ -247,7 +247,7 @@ import configuration to proceed.
 Multiple file types are supported by this application component. Information and requirements
 for certain file types will be described below. 
 
-Example files can be found in the [example-data](https://github.com/mariodavid/cuba-component-data-import/blob/master/example-data) subdirectory. 
+Example files can be found in the [example-data](https://github.com/mariodavid/cuba-component-data-import/tree/master/example-data) subdirectory. 
 
 ### Excel - .xlsx
 
@@ -736,11 +736,11 @@ An example use case can be found in the example project [cuba-example-using-data
 
 There the following example shows the behavior of M:N association binding: `MlbPlayer -- M:N --> BaseballStrength`.
 
-In particular there are the following example configuration within the directory [example-data/mlb/mlb-players-with-strengths](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths):
+In particular there are the following example configuration within the directory [example-data/mlb/mlb-players-with-strengths](https://github.com/mariodavid/cuba-example-using-data-import/tree/master/example-data/mlb/mlb-players-with-strengths):
 
-* [MlbPlayer Import Configuration with custom strengths binding (ImportConfiguration-mlb-player-with-strengths.json)](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths/import-configurations/ImportConfiguration-mlb-player-with-strengths.json)
-* [MlbPlayer Import Attribute Mapper with custom strengths binding (ImportAttributeMapper-mlb-player-with-strengths.json)](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths/import-configurations/ImportAttributeMapper-mlb-player-with-strengths.json)
-* [MlbPlayer CSV Import file (mlb_players-with-strengths.csv)](https://github.com/mariodavid/cuba-example-using-data-import/blob/master/example-data/mlb/mlb-players-with-strengths/mlb_players-with-strengths.csv)
+* [MlbPlayer Import Configuration with custom strengths binding (ImportConfiguration-mlb-player-with-strengths.json)](https://github.com/mariodavid/cuba-example-using-data-import/tree/master/example-data/mlb/mlb-players-with-strengths/import-configurations/ImportConfiguration-mlb-player-with-strengths.json)
+* [MlbPlayer Import Attribute Mapper with custom strengths binding (ImportAttributeMapper-mlb-player-with-strengths.json)](https://github.com/mariodavid/cuba-example-using-data-import/tree/master/example-data/mlb/mlb-players-with-strengths/import-configurations/ImportAttributeMapper-mlb-player-with-strengths.json)
+* [MlbPlayer CSV Import file (mlb_players-with-strengths.csv)](https://github.com/mariodavid/cuba-example-using-data-import/tree/master/example-data/mlb/mlb-players-with-strengths/mlb_players-with-strengths.csv)
 
 Note: The Baseball Strengths master data file has to be imported first.
 
@@ -789,7 +789,7 @@ A few examples of those limitations for the data-import application component ar
 
 In case custom parsing behavior of the original file is needed, that cannot be configured via the import configuration UI, it is oftentimes still possible to do it programmatically.
 
-There is an example project: [cuba-example-data-import-custom-parsing-logic](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic) that shows how to switch the separator character in the CSV import case to `;`. More information can be found in the corresponding [README](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic/blob/master/README.md).
+There is an example project: [cuba-example-data-import-custom-parsing-logic](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic) that shows how to switch the separator character in the CSV import case to `;`. More information can be found in the corresponding [README](https://github.com/mariodavid/cuba-example-data-import-custom-parsing-logic/tree/master/README.md).
 
 ### Entity Staging Area
 
