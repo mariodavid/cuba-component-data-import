@@ -522,6 +522,13 @@ class GenericDataImporterServiceBean implements GenericDataImporterService {
     private EntityImportView createEntityImportView(Class importEntityClass, ImportConfiguration importConfiguration) {
         EntityImportView importView = new EntityImportView(importEntityClass)
         addLocalPropertiesToImportView(importEntityClass, importView)
+        
+        // Remove properties that are readonly as they cannot be imported
+        for (property in importEntityClass.metaClass.properties) {
+            if (property.properties.get("setter") == null) // If no setter, this is a readonly property
+                importView.removeProperty(property.name)
+        }
+        
         addAssociationPropertiesToImportView(importConfiguration, importView)
         importView
     }
