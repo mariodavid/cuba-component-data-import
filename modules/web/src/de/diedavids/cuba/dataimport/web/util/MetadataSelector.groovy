@@ -55,7 +55,7 @@ class MetadataSelector {
         Collection<CategoryAttribute> dynamicAttributesForImportConfiguration = dynamicAttributes.getAttributesForMetaClass(entityMetaClass)
 
         dynamicAttributesForImportConfiguration.collectEntries {
-            ["${it.name} (${it.code})".toString(), it.name]
+            ["${it.name} (${it.code})".toString(), "+"+it.name]
         }
     }
     Map<String, Object> getDirectAttributesLookupFieldOptions(MetaClass entityMetaClass) {
